@@ -1,0 +1,90 @@
+import utility
+import random
+
+class lstmNeuron(object):
+    """Class defines a single neuron of long-short term memory type."""
+    def __init__(self, window):
+        self.weights = [[] for i in range(4)]
+        self.bias_weights = []
+        self.suma_in, self.suma_out, self.suma_mem, self.suma_forget = 0, 0, 0, 0
+        self.y_in, self.y_forget, self.state, self.y_out = 0, 0, 0, 0
+        self.bias_in, self.bias_out, self.bias_forget, self.bias_mem = 1, 1, 1, 1
+        self.mem = 0
+        self.output = 0
+        for j in range(4):
+            for i in range(window):
+                self.weights[j][i].append(1 / random.randint(1, 4 * window))
+            self.bias_weights.append(1 / random.randint(1, 4 * window))
+        self.y_prev = 0
+        self.waga_prev = 1 / random.randint(1, 4 * window)
+
+    def calculate(self, input=[]):
+        """Executes a single forward pass on a neuron."""
+        self.y_prev = self.output
+        self.state = self.mem
+        # ?? self.stan += self.mem
+        self.suma_in = 0
+        for i in range(len(input)):
+            self.suma_in += input[i] * self.weights[0][i]
+        self.suma_in += self.bias_weights[0] * self.bias_in
+        self.y_in = utility.sigmoid(self.suma_in)
+
+        self.suma_forget = 0
+        for i in range(len(input)):
+            self.suma_forget += input[i] * self.weights[1][i]
+        self.suma_forget += self.bias_weights[1] * self.bias_forget
+        self.y_forget = utility.sigmoid(self.suma_forget)
+
+        self.suma_mem = 0
+        for i in range(len(input)):
+            self.suma_mem += input[i] * self.weights[2][i]
+        self.suma_mem += self.bias_weights[2] * self.bias_mem
+        self.suma_mem += self.y_prev * self.waga_prev
+        self.mem = self.y_forget * self.state + self.y_in * utility.tanh(self.suma_mem)
+
+        self.suma_out = 0
+        for i in range(len(input)):
+            self.suma_out += input[i] * self.weights[3][i]
+        self.suma_out += self.bias_weights[3] * self.bias_out
+        self.y_out = utility.sigmoid(self.suma_out)
+
+        self.output = utility.tanh(self.mem) * self.y_out
+
+        return self.output
+
+    def learn(self, target, learning_lambda, input=[]):
+        """Executes a single learning pass on a neuron."""
+        self.d_wagi = [[] for i in range(4)]
+        for j in range(4):
+            for i in range(len(input)):
+                self.d_wagi[j].append(0)
+
+        for i in range(len(input)):
+            self.d_wagi[0][i] = target * self.y_out * utility.derivative_tanh(
+                self.mem) * self.y_forget * utility.derivative_tanh(
+                self.suma_mem) * utility.derivative_sigmoid(self.suma_in) * input[i]
+            self.d_wagi[1][i] = target * self.y_out * utility.derivative_tanh(
+                self.mem) * self.y_in * utility.derivative_tanh(self.suma_mem) * utility.derivative_sigmoid(
+                self.suma_forget) * input[i]
+            self.d_wagi[2][i] = target * self.y_out * utility.derivative_tanh(
+                self.mem) * self.y_forget * self.y_in * utility.derivative_tanh(self.suma_mem) * input[i]
+            self.d_wagi[3][i] = target * utility.derivative_tanh(self.mem) * utility.derivative_sigmoid(
+                self.suma_out) * input[i]
+        self.bias_weights[0] = learning_lambda * target * self.y_out * utility.derivative_tanh(
+            self.mem) * self.y_forget * utility.derivative_tanh(self.suma_mem) * utility.derivative_sigmoid(
+            self.suma_in) * self.bias_in
+        self.bias_weights[1] = learning_lambda * target * self.y_out * utility.derivative_tanh(
+            self.mem) * self.y_in * utility.derivative_tanh(self.suma_mem) * utility.derivative_sigmoid(
+            self.suma_forget) * self.bias_out
+        self.bias_weights[2] = learning_lambda * target * self.y_out * utility.derivative_tanh(
+            self.mem) * self.y_forget * self.y_in * utility.derivative_tanh(self.suma_mem) * self.bias_mem
+        self.bias_weights[3] = learning_lambda * target * utility.derivative_tanh(self.mem) * utility.derivative_sigmoid(
+            self.suma_out) * self.bias_forget
+        self.waga_prev += learning_lambda * target * self.y_out * utility.derivative_tanh(
+            self.mem) * self.y_forget * self.y_in * utility.derivative_tanh(self.suma_mem) * self.y_prev
+
+        for i in range(len(input)):
+            self.weights[0][i] += learning_lambda * self.d_wagi[0][i]
+            self.weights[1][i] += learning_lambda * self.d_wagi[1][i]
+            self.weights[2][i] += learning_lambda * self.d_wagi[2][i]
+            self.weights[3][i] += learning_lambda * self.d_wagi[3][i]
