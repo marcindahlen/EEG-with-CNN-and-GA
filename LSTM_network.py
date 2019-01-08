@@ -17,8 +17,7 @@ class NeuralNetwork(object):
         """matrix = [[1, 2], [3,4], [5,6], [7,8]]
             transpose = [[row[i] for row in matrix] for i in range(2)]
             [[1, 3, 5, 7], [2, 4, 6, 8]]"""
-        self.topology = [[LstmNeuron for neuron in range(Variables.network_topology[layer])] for layer in Variables.network_topology]
-        self.save_state_text(Variables.network_dnas_path)
+        self.topology = [[LstmNeuron(Variables.network_input_window if layer-1 >= 0 else Variables.network_topology[layer-1]) for neuron in range(Variables.network_topology[layer])] for layer in Variables.network_topology]
 
     def forward_pass(self, alpha_wave_data):
         """Given prepared and normalized data
