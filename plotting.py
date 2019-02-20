@@ -5,7 +5,7 @@ import plotly.graph_objs as graph
 
 data_output_dir = "C:/marcin/psychologia_badania/EEG_csv_x32/out_wykresy"
 
-def rysuj_wykres_kropki(dane, dziedzina, nazwa):
+def makeDotsChart(dane, dziedzina, nazwa):
     """Given the data and chart file name,
     method automates plotting simple scatter chart"""
     trace_A = graph.Scatter(
