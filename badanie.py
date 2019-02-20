@@ -1,4 +1,6 @@
-"""Klasa opisuje przebieg pojedynczego badania.
+"""
+Klasa opisuje przebieg pojedynczego badania.
+
 Pojedyncze badanie to próba nauki sieci neuronowej
 (unsupervised - genetic algorithm)
 klasyfikacji wejściowego strumienia danych EEG do
@@ -8,29 +10,35 @@ i uczona jest osobna sieć dla testów takich jak RavenSPP
 czy IVE-Impulsywnosc.
 
 Idealnie, wynikiem pojedynczego badania są:
-plik graficzny ilustrujący postęp nauki
-kolejnych generacji sieci,
-plik z przewidywanymi klasyfikacjami grupy testowej
-dokonanymi przez najlepszą sieć,
-plik (@TODO czy pliki?)
-binarny z zapisem stanu ostatniej generacji sieci."""
+→   plik graficzny ilustrujący postęp nauki
+    kolejnych generacji sieci,
+→   plik z przewidywanymi klasyfikacjami grupy testowej
+    dokonanymi przez najlepszą sieć,
+→   plik (@TODO czy pliki?)
+    binarny z zapisem stanu ostatniej generacji sieci.
+"""
 
+import variables
 import pandas
-
+import numpy
+import os
+import os.path
 
 class Badanie(object):
 
-    def __init__(self, input_csv_folder_path, target_data_path):
-        pass
+    def __init__(self):
+        self.input_examined = dict()
+        self.files_list = [name for name in os.listdir(variables.in_raw_path) if os.path.isfile(name)]
+        self.files_no = len(self.files_list)
 
-    def prepare_input(self, input_csv_path):
+    def prepare_input(self):
         """From raw csv trim useless frequencies.
         → https://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.tolist.html
         :return pandas labeled dataframe
         """
         pass
 
-    def prepare_target(self, target_data_path):
+    def prepare_target(self):
         """From excel file with two columns:
         [[badany]] and [[test_score]]
         → https://www.mantidproject.org/Working_With_Functions:_Return_Values
