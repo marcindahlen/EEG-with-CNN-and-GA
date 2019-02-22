@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="590de310-510e-4141-a334-2e611d243ca7" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/badanie.py" beforeDir="false" afterPath="$PROJECT_DIR$/badanie.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/variables.py" beforeDir="false" afterPath="$PROJECT_DIR$/variables.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fourier.py" beforeDir="false" afterPath="$PROJECT_DIR$/fourier.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_fourier.py" beforeDir="false" afterPath="$PROJECT_DIR$/test_fourier.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -23,14 +23,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/badanie.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="680">
-              <caret line="49" column="188" selection-start-line="49" selection-start-column="188" selection-end-line="49" selection-end-column="188" />
-              <folding>
-                <element signature="e#813#829#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="272">
+              <caret line="25" column="14" selection-start-line="25" selection-start-column="14" selection-end-line="25" selection-end-column="14" />
             </state>
           </provider>
         </entry>
@@ -47,8 +44,20 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fourier.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="17" column="12" selection-start-line="17" selection-start-column="12" selection-end-line="17" selection-end-column="12" />
+            <state relative-caret-position="153">
+              <caret line="9" column="61" selection-start-line="9" selection-start-column="61" selection-end-line="9" selection-end-column="61" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/test_fourier.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="68">
+              <caret line="4" column="12" lean-forward="true" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="12" />
+              <folding>
+                <element signature="e#41#53#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -117,9 +126,7 @@
         <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/fourierTest" />
         <option value="$PROJECT_DIR$/neuron_LSTM.py" />
-        <option value="$PROJECT_DIR$/fourier.py" />
         <option value="$PROJECT_DIR$/utility.py" />
-        <option value="$PROJECT_DIR$/test_fourier.py" />
         <option value="$PROJECT_DIR$/LSTM_neuron.py" />
         <option value="$PROJECT_DIR$/LSTM_network.py" />
         <option value="$PROJECT_DIR$/badanie_przebieg.py" />
@@ -127,6 +134,8 @@
         <option value="$PROJECT_DIR$/badanie_MAIN.py" />
         <option value="$PROJECT_DIR$/variables.py" />
         <option value="$PROJECT_DIR$/badanie.py" />
+        <option value="$PROJECT_DIR$/fourier.py" />
+        <option value="$PROJECT_DIR$/test_fourier.py" />
       </list>
     </option>
   </component>
@@ -171,7 +180,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in test_fourier.py">
+  <component name="RunManager" selected="Python.test_fourier">
     <configuration name="hilberts" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="przewidywanie_z_eeg" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -214,6 +223,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="test_fourier" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="przewidywanie_z_eeg" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test_fourier.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest in test_fourier.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="przewidywanie_z_eeg" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -233,9 +263,11 @@
       <item itemvalue="Python.hilberts" />
       <item itemvalue="Python.main" />
       <item itemvalue="Python tests.pytest in test_fourier.py" />
+      <item itemvalue="Python.test_fourier" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.test_fourier" />
         <item itemvalue="Python tests.pytest in test_fourier.py" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.hilberts" />
@@ -262,6 +294,9 @@
     <history-entry file="pytest_in_test_fourier_py - 2019.01.02 at 13h 13m 20s.xml">
       <configuration name="pytest in test_fourier.py" configurationId="tests" />
     </history-entry>
+    <history-entry file="pytest_in_test_fourier_py - 2019.02.22 at 14h 29m 53s.xml">
+      <configuration name="pytest in test_fourier.py" configurationId="tests" />
+    </history-entry>
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -276,12 +311,12 @@
     <frame x="1912" y="-8" width="1936" height="1176" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2365648" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2365648" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32981783" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.49291784" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.4928092" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -322,16 +357,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test_fourier.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" column="16" selection-start-line="14" selection-start-column="16" selection-end-line="14" selection-end-column="16" />
-          <folding>
-            <element signature="e#41#53#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/utility.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="918">
@@ -355,13 +380,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="391">
           <caret line="23" selection-start-line="23" selection-end-line="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fourier.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" column="12" selection-start-line="17" selection-start-column="12" selection-end-line="17" selection-end-column="12" />
         </state>
       </provider>
     </entry>
@@ -401,10 +419,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/badanie.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="680">
-          <caret line="49" column="188" selection-start-line="49" selection-start-column="188" selection-end-line="49" selection-end-column="188" />
+        <state relative-caret-position="272">
+          <caret line="25" column="14" selection-start-line="25" selection-start-column="14" selection-end-line="25" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fourier.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="61" selection-start-line="9" selection-start-column="61" selection-end-line="9" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test_fourier.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="12" lean-forward="true" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="12" />
           <folding>
-            <element signature="e#813#829#0" expanded="true" />
+            <element signature="e#41#53#0" expanded="true" />
           </folding>
         </state>
       </provider>

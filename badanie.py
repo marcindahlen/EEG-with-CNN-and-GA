@@ -23,6 +23,7 @@ Idealnie, wynikiem pojedynczego badania są:
 """
 
 import variables
+import fourier
 import pandas
 import numpy
 import os
