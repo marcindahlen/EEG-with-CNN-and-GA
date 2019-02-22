@@ -9,6 +9,9 @@ For each feature of each test there should
 be separate network to classify examined's EEG.
 The total number of features is 17.
 Each network is trained by genetic algorithm.
+That means, many networks are spawn to select
+those with best performance and evolve them
+further.
 
 Idealnie, wynikiem pojedynczego badania są:
 →   plik graficzny ilustrujący postęp nauki
@@ -25,23 +28,27 @@ import numpy
 import os
 import os.path
 
+
 class Badanie(object):
 
     def __init__(self):
         self.input_examined = dict()
         self.files_list = [name for name in os.listdir(variables.in_raw_path) if os.path.isfile(name)]
         self.files_no = len(self.files_list)
+        self.prepare_input()
 
     def prepare_input(self):
         """From raw csv trim useless frequencies.
-        → https://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.tolist.html
-        :return pandas labeled dataframe
+        :return void
         """
-        pass
+        for file in self.files_list:
+            self.input_examined[file] = numpy.genfromtxt(variables.in_raw_path + file, delimiter=',')
+            self.input_examined[file] = numpy.delete(self.input_examined[file], variables.how_many_to_drop, axis=None)
 
     def prepare_target(self):
-        """From excel file with two columns:
-        [[badany]] and [[test_score]]
+        """From excel file with columns:
+        badany,	SPP,	SPH,	RPN,	Raven_A,	Raven_B,	Raven_C,	Raven_D,	Raven_E,	Raven_WO,	IVE_Impulsywnosc,	IVE_Ryzyko,	IVE_Empatia,	SSZ,	SSE,	SSU,	ACZ,	PKT
+
         → https://www.mantidproject.org/Working_With_Functions:_Return_Values
         :return minmaxed pandas series as train data
                 AND second pandas series as test data
