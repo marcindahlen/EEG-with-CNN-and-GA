@@ -54,7 +54,7 @@ class Badanie(object):
         :return minmaxed pandas series as train data
                 AND second pandas series as test data
                 """
-        pass
+        target_data = pandas.read_excel(variables.out_raw_filepath)
 
     def initialize_networks(self):
         """Create if not exists a new binary files (plural!!)

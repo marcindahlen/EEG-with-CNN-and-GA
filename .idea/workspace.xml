@@ -3,8 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="590de310-510e-4141-a334-2e611d243ca7" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/badanie.py" beforeDir="false" afterPath="$PROJECT_DIR$/badanie.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fourier.py" beforeDir="false" afterPath="$PROJECT_DIR$/fourier.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test_fourier.py" beforeDir="false" afterPath="$PROJECT_DIR$/test_fourier.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/variables.py" beforeDir="false" afterPath="$PROJECT_DIR$/variables.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -23,11 +23,14 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/badanie.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="25" column="14" selection-start-line="25" selection-start-column="14" selection-end-line="25" selection-end-column="14" />
+            <state relative-caret-position="493">
+              <caret line="56" column="67" lean-forward="true" selection-start-line="56" selection-start-column="67" selection-end-line="56" selection-end-column="67" />
+              <folding>
+                <element signature="e#813#829#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -35,8 +38,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/variables.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
+            <state relative-caret-position="238">
+              <caret line="14" column="46" selection-start-line="14" selection-start-column="46" selection-end-line="14" selection-end-column="46" />
             </state>
           </provider>
         </entry>
@@ -50,11 +53,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test_fourier.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="4" column="12" lean-forward="true" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="12" />
+            <state>
+              <caret column="48" selection-start-column="48" selection-end-column="48" />
               <folding>
                 <element signature="e#41#53#0" expanded="true" />
               </folding>
@@ -65,7 +68,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/plotting.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
+            <state relative-caret-position="379">
               <caret line="23" selection-start-line="23" selection-end-line="23" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
@@ -132,10 +135,10 @@
         <option value="$PROJECT_DIR$/badanie_przebieg.py" />
         <option value="$PROJECT_DIR$/plotting.py" />
         <option value="$PROJECT_DIR$/badanie_MAIN.py" />
-        <option value="$PROJECT_DIR$/variables.py" />
-        <option value="$PROJECT_DIR$/badanie.py" />
         <option value="$PROJECT_DIR$/fourier.py" />
         <option value="$PROJECT_DIR$/test_fourier.py" />
+        <option value="$PROJECT_DIR$/variables.py" />
+        <option value="$PROJECT_DIR$/badanie.py" />
       </list>
     </option>
   </component>
@@ -316,7 +319,7 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32981783" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.4928092" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.4928092" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -383,16 +386,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plotting.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="23" selection-start-line="23" selection-end-line="23" />
-          <folding>
-            <element signature="e#0#21#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/LSTM_network.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
@@ -410,20 +403,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/variables.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/badanie.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="25" column="14" selection-start-line="25" selection-start-column="14" selection-end-line="25" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fourier.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
@@ -433,10 +412,37 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test_fourier.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="12" lean-forward="true" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="12" />
+        <state>
+          <caret column="48" selection-start-column="48" selection-end-column="48" />
           <folding>
             <element signature="e#41#53#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plotting.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="379">
+          <caret line="23" selection-start-line="23" selection-end-line="23" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/variables.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="46" selection-start-line="14" selection-start-column="46" selection-end-line="14" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/badanie.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="493">
+          <caret line="56" column="67" lean-forward="true" selection-start-line="56" selection-start-column="67" selection-end-line="56" selection-end-column="67" />
+          <folding>
+            <element signature="e#813#829#0" expanded="true" />
           </folding>
         </state>
       </provider>

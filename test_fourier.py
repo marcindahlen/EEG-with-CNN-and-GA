@@ -1,4 +1,4 @@
-#@TODO testy fouriera forward + inverse
+#@TODO testy fouriera forward + inverse + plotly
 
 import cmath
 #import fourier
