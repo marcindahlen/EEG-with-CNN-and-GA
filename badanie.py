@@ -1,13 +1,14 @@
 """
-Klasa opisuje przebieg pojedynczego badania.
+The class describes a single examination.
 
-Pojedyncze badanie to próba nauki sieci neuronowej
-(unsupervised - genetic algorithm)
-klasyfikacji wejściowego strumienia danych EEG do
-jednej z ocen w danym badaniu testowym. Przykładowo,
-dla każdego pliku wejściowego danych z EGG tworzona
-i uczona jest osobna sieć dla testów takich jak RavenSPP
-czy IVE-Impulsywnosc.
+A single examination is a process of unsupervised
+training of one LSTM neural network which takes
+as input alpha waves recording and predict
+the classification to a particular psychology test.
+For each feature of each test there should
+be separate network to classify examined's EEG.
+The total number of features is 17.
+Each network is trained by genetic algorithm.
 
 Idealnie, wynikiem pojedynczego badania są:
 →   plik graficzny ilustrujący postęp nauki
