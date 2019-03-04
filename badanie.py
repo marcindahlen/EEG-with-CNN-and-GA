@@ -37,9 +37,14 @@ class Badanie(object):
         self.files_list = [name for name in os.listdir(variables.in_raw_path) if os.path.isfile(name)]
         self.files_no = len(self.files_list)
         self.prepare_input()
+        self.prepare_target()
 
     def prepare_input(self):
-        """From raw csv trim useless frequencies.
+        """
+        From raw csv trim useless frequencies,
+        select proper channel,
+        standardise data.
+        @TODO is normalization needed?
         :return void
         """
         for file in self.files_list:
@@ -49,11 +54,11 @@ class Badanie(object):
     def prepare_target(self):
         """From excel file with columns:
         badany,	SPP,	SPH,	RPN,	Raven_A,	Raven_B,	Raven_C,	Raven_D,	Raven_E,	Raven_WO,	IVE_Impulsywnosc,	IVE_Ryzyko,	IVE_Empatia,	SSZ,	SSE,	SSU,	ACZ,	PKT
+        read data,
 
         → https://www.mantidproject.org/Working_With_Functions:_Return_Values
-        :return minmaxed pandas series as train data
-                AND second pandas series as test data
-                """
+        :return void
+        """
         target_data = pandas.read_excel(variables.out_raw_filepath)
 
     def initialize_networks(self):
