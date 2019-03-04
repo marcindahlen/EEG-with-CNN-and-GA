@@ -23,7 +23,6 @@ Idealnie, wynikiem pojedynczego badania są:
 """
 
 import variables
-import fourier
 import pandas
 import numpy
 import os
@@ -32,17 +31,17 @@ import os.path
 
 class Badanie(object):
 
-    def __init__(self):
+    def __init__(self, examination_no):
         self.input_examined = dict()
         self.files_list = [name for name in os.listdir(variables.in_raw_path)]
         self.files_no = len(self.files_list)
         self.prepare_input()
-        self.prepare_target()
+        self.prepare_target(examination_no)
 
     def prepare_input(self):
         """
         From raw csv trim useless frequencies,
-        select proper channel,
+        select proper channel, @TODO or channels - proper network could read all channels simultaneously?
         standardise data.
         @TODO is normalization needed?
         :return void
@@ -50,9 +49,12 @@ class Badanie(object):
         for file in self.files_list:
             self.input_examined[file] = numpy.genfromtxt(variables.in_raw_path + file, delimiter=',')
             self.input_examined[file] = numpy.delete(self.input_examined[file], variables.how_many_to_drop, axis=None)
+            channel_size = self.count_channel_size(self.input_examined[file])
+            
 
-    def prepare_target(self):
-        """From excel file with columns:
+    def prepare_target(self, examination_no):
+        """
+        From excel file with columns:
         badany,	SPP,	SPH,	RPN,	Raven_A,	Raven_B,	Raven_C,	Raven_D,	Raven_E,	Raven_WO,	IVE_Impulsywnosc,	IVE_Ryzyko,	IVE_Empatia,	SSZ,	SSE,	SSU,	ACZ,	PKT
         read data,
 
@@ -61,8 +63,26 @@ class Badanie(object):
         """
         target_data = pandas.read_excel(variables.out_raw_filepath)
 
+    def count_channel_size(self, eeg):
+        """
+        For each eeg recording there are 17 channels of streamed data,
+        all stored in single file channel after channel.
+        This method counts length of a single channel
+        in a particular file, so channels could be extracted.
+        :return int
+        """
+        i = len(eeg)
+        flag_rised = True
+        min = min(eeg)
+        while flag_rised:
+            i -= 1
+            if eeg[i] - eeg[i+1] < min:
+                flag_rised = False
+                return len(eeg) - i
+
     def initialize_networks(self):
-        """Create if not exists a new binary files (plural!!)
+        """
+        Create if not exists a new binary files (plural!!)
         → https://stackoverflow.com/questions/807863/how-to-output-list-of-floats-to-a-binary-file-in-python
         describing initial wages for
         LSTM networks to be trained.
@@ -76,7 +96,8 @@ class Badanie(object):
         pass
 
     def single_pass_one_network(self, network):
-        """Given a single network from the list
+        """
+        Given a single network from the list
         it is run on all examined person's EEG,
         procuring an <0, 1> output for each (EEG).
         Produced list of outputs is compared with
@@ -90,7 +111,8 @@ class Badanie(object):
         pass
 
     def forward_pass_all_networks(self, networks):
-        """On given list of networks
+        """
+        On given list of networks
         (all networks of same type and size,
         they vary only in weights)
         each network calculates in single pass
@@ -110,7 +132,8 @@ class Badanie(object):
         pass
 
     def repopulate_network_generation(self, networks):
-        """ @TODO czy sieć nie powinna sama przechowywać swojego score?
+        """
+        @TODO czy sieć nie powinna sama przechowywać swojego score?
         → https://stackoverflow.com/questions/403421/how-to-sort-a-list-of-objects-based-on-an-attribute-of-the-objects
         Given all networks were scored based on their
         performance and remember their score,
