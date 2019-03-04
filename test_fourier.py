@@ -20,7 +20,7 @@ for y in x:
 trace = plotly.graph_objs.Scatter(x=x, y=numpy.real(test_data))
 plot_data = [trace]
 figure = plotly.graph_objs.Figure(data=plot_data)
-plotly.offline.plot(figure, filename=variables.out_charts_path + "sin" + '.html', auto_open=False)
+plotly.offline.plot(figure, filename=variables.out_charts_path + "test" + '.html', auto_open=False)
 
 test_data = numpy.fft.fft(test_data)
 trace = plotly.graph_objs.Scatter(x=x, y=numpy.real(test_data))
@@ -29,6 +29,7 @@ figure = plotly.graph_objs.Figure(data=plot_data)
 plotly.offline.plot(figure, filename=variables.out_charts_path + "fft" + '.html', auto_open=False)
 
 
+test_data = numpy.delete(test_data, variables.how_many_to_drop, axis=None)
 test_data = numpy.fft.ifft(test_data)
 trace = plotly.graph_objs.Scatter(x=x, y=numpy.real(test_data))
 plot_data = [trace]
