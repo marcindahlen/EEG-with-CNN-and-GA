@@ -40,17 +40,24 @@ class Badanie(object):
 
     def prepare_input(self):
         """
-        From raw csv trim useless frequencies,
-        select proper channel, @TODO or channels - proper network could read all channels simultaneously?
+        From raw csv select proper channels, @TODO proper network could read all channels simultaneously?
+        proper are channels 1 - 8 and 13 and 14, since i was told other channels contain too much noise
+        trim useless frequencies,
         standardise data.
         @TODO is normalization needed?
+        Out of all 17 channels, only following are proper
         :return void
         """
         for file in self.files_list:
+            temporary_mem_channels = dict()
             self.input_examined[file] = numpy.genfromtxt(variables.in_raw_path + file, delimiter=',')
             self.input_examined[file] = numpy.delete(self.input_examined[file], variables.how_many_to_drop, axis=None)
             channel_size = self.count_channel_size(self.input_examined[file])
-            
+            channels_no = numpy.floor(self.input_examined[file] / channel_size)
+            for channel in range(0, channels_no):
+                temporary_mem_channels[channel] = self.input_examined[file][channel * channel_size : (channel + 1) * channel_size]
+            self.input_examined[file] = temporary_mem_channels
+        #at this point i have a dictionary with filenames as keys and containing dictionaries with channels numbers as keys (and channel numpy array data as values)
 
     def prepare_target(self, examination_no):
         """
@@ -69,14 +76,18 @@ class Badanie(object):
         all stored in single file channel after channel.
         This method counts length of a single channel
         in a particular file, so channels could be extracted.
+        I assume channels are separated by outlier data points.
         :return int
         """
         i = len(eeg)
+        data_slice = eeg[i - 100000:i]      #last hundred thousand points from eeg, assumed they're always from last channel
+        slice_mean = numpy.mean(data_slice)
+        slice_dev =  numpy.std(data_slice)
         flag_rised = True
         min = min(eeg)
         while flag_rised:
             i -= 1
-            if eeg[i] - eeg[i+1] < min:
+            if numpy.absolute(eeg[i] - slice_mean) > 3 * slice_dev:
                 flag_rised = False
                 return len(eeg) - i
 
