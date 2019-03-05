@@ -1,37 +1,16 @@
-import numpy
-import pandas
-import plotting
+from badanie import Badanie
+import variables
+import plotly.graph_objs
 
-in_path = "../in_raw/P04.txt"
-data_output_dir = "../out_wykresy"
+b = Badanie(0)
 
-in_data = pandas.read_csv(in_path, index_col=False, header=0, dtype='a')
-in_data = in_data.transpose()[0]
+data = b.input_examined['P08.txt'][16]
 
-in_data = in_data.iloc[20000:]
+print(data)
 
-in_data = in_data.astype('float32')
+x = [i for i in range(len(data))]
 
-print(in_data.index)
-
-print(in_data.size)
-
-print(in_data[-2])
-
-if (in_data[5037].dtype == "float32"):
-    print("1")
-else:
-    print("0")
-
-mem = 0
-for x in range(in_data.size):
-    if (in_data[5037].dtype == "float32"):
-        mem += 1
-
-print(mem)
-mem = mem / in_data.size
-mem = mem * 100
-print(mem)
-
-
-#rysuj_wykres_kropki(dane, dziedzina, nazwa)
+trace = plotly.graph_objs.Scatter(x=x, y=data)
+plot_data = [trace]
+figure = plotly.graph_objs.Figure(data=plot_data)
+plotly.offline.plot(figure, filename=variables.out_charts_path + "badanie" + '.html', auto_open=False)

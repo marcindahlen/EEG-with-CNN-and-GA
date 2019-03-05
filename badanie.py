@@ -45,7 +45,6 @@ class Badanie(object):
         trim useless frequencies,
         standardise data.
         @TODO is normalization needed?
-        Out of all 17 channels, only following are proper
         :return void
         """
         for file in self.files_list:
@@ -53,7 +52,8 @@ class Badanie(object):
             self.input_examined[file] = numpy.genfromtxt(variables.in_raw_path + file, delimiter=',')
             self.input_examined[file] = numpy.delete(self.input_examined[file], variables.how_many_to_drop, axis=None)
             channel_size = self.count_channel_size(self.input_examined[file])
-            channels_no = numpy.floor(self.input_examined[file] / channel_size)
+            channels_no = numpy.floor(len(self.input_examined[file]) / channel_size).astype(int)
+            print(channels_no)
             for channel in range(0, channels_no):
                 temporary_mem_channels[channel] = self.input_examined[file][channel * channel_size : (channel + 1) * channel_size]
             self.input_examined[file] = temporary_mem_channels
@@ -77,6 +77,8 @@ class Badanie(object):
         This method counts length of a single channel
         in a particular file, so channels could be extracted.
         I assume channels are separated by outlier data points.
+        @TODO probably wrong assumption that channels are equal in length
+        @TODO and there are 16 channels not 17 - first 'item' is noise
         :return int
         """
         i = len(eeg)
@@ -84,10 +86,9 @@ class Badanie(object):
         slice_mean = numpy.mean(data_slice)
         slice_dev =  numpy.std(data_slice)
         flag_rised = True
-        min = min(eeg)
         while flag_rised:
             i -= 1
-            if numpy.absolute(eeg[i] - slice_mean) > 3 * slice_dev:
+            if numpy.absolute(eeg[i] - slice_mean) > 4 * slice_dev:     #find first 'impossible' value - impossible because → https://en.wikipedia.org/wiki/Standard_score
                 flag_rised = False
                 return len(eeg) - i
 

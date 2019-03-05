@@ -3,7 +3,10 @@ import random
 
 
 class LstmNeuron(object):
-    """Class defines a single neuron of long-short term memory type."""
+    """
+    Class defines a single neuron of long-short term memory type.
+    → https://cdn-images-1.medium.com/max/1250/1*laH0_xXEkFE0lKJu54gkFQ.png
+    """
 
     #@TODO konstruktor może, ale nie musi przyjmować zapamiętane wagi
     def __init__(self, window):
@@ -22,10 +25,12 @@ class LstmNeuron(object):
         self.waga_prev = 1 / random.randint(1, 4 * window)
 
     def calculate(self, input=[]):
-        """Executes a single forward pass on a neuron."""
+        """
+        Executes a single forward pass on a neuron.
+        """
         self.y_prev = self.output
         self.state = self.mem
-        # ?? self.stan += self.mem
+        # ?? self.stan += self.mem @TODO why?
         self.suma_in = 0
         for i in range(len(input)):
             self.suma_in += input[i] * self.weights[0][i]
@@ -56,8 +61,10 @@ class LstmNeuron(object):
         return self.output
 
     def learn(self, target, learning_lambda, input=[]):
-        """Executes a single learning pass on a neuron.
+        """
+        Executes a single learning pass on a neuron.
         In case of supervised learning.
+        (that means target data is known)
         """
         self.d_wagi = [[] for i in range(4)]
         for j in range(4):
