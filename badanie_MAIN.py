@@ -11,6 +11,7 @@ I assume following files hierarchy:
             P32.txt
         out_raw/
             main_alpha-index_base.xls
+            out_absData.xls
         out_wykresy/
 
         python/

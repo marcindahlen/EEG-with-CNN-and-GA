@@ -4,10 +4,10 @@ import plotly.graph_objs
 
 b = Badanie(0)
 
-b.prepare_target(3)
-
 data = b.input_examined['P08.txt'][16]
+print(data)
 
+data = b.output_examined['P08.txt']
 print(data)
 
 x = [i for i in range(len(data))]
