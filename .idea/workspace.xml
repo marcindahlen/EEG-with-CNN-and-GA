@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="590de310-510e-4141-a334-2e611d243ca7" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/badanie.py" beforeDir="false" afterPath="$PROJECT_DIR$/badanie.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/badanie_MAIN.py" beforeDir="false" afterPath="$PROJECT_DIR$/badanie_MAIN.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/test_data.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -23,11 +21,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/badanie.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="876">
-              <caret line="138" column="26" selection-start-line="138" selection-start-column="26" selection-end-line="138" selection-end-column="26" />
+            <state relative-caret-position="297">
+              <caret line="143" column="4" selection-start-line="143" selection-start-column="4" selection-end-line="143" selection-end-column="4" />
               <folding>
                 <element signature="e#812#823#0" expanded="true" />
               </folding>
@@ -56,7 +54,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test_data.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="68">
@@ -148,10 +146,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1934" />
-    <option name="y" value="-31" />
-    <option name="width" value="1534" />
-    <option name="height" value="830" />
+    <option name="x" value="2170" />
+    <option name="y" value="-25" />
+    <option name="width" value="1227" />
+    <option name="height" value="664" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -468,22 +466,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/badanie.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="876">
-          <caret line="138" column="26" selection-start-line="138" selection-start-column="26" selection-end-line="138" selection-end-column="26" />
-          <folding>
-            <element signature="e#812#823#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test_data.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
           <caret line="4" column="14" selection-start-line="4" selection-start-column="14" selection-end-line="4" selection-end-column="14" />
           <folding>
             <element signature="e#0#27#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/badanie.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="297">
+          <caret line="143" column="4" selection-start-line="143" selection-start-column="4" selection-end-line="143" selection-end-column="4" />
+          <folding>
+            <element signature="e#812#823#0" expanded="true" />
           </folding>
         </state>
       </provider>

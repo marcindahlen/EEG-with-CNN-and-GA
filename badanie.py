@@ -139,6 +139,9 @@ class Badanie(object):
         index = index / 10
         return 1 if index <= number < index + 0.1 else 0
 
+    def interprete_prediction(self):
+        pass
+    
     def initialize_networks(self):
         """
         Create if not exists a new binary files (plural!!)
