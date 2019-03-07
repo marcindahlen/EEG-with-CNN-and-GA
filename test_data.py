@@ -4,6 +4,8 @@ import plotly.graph_objs
 
 b = Badanie(0)
 
+b.prepare_target(3)
+
 data = b.input_examined['P08.txt'][16]
 
 print(data)

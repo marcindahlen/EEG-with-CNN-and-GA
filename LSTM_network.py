@@ -18,7 +18,7 @@ class NeuralNetwork(object):
     What i mean by value group is a group made by sticking
     together order of possible outcomes. If a scale have 100
     possible values and particular outcome is 37, i want network to
-    classify this 37 to group 4th of ten possible.
+    classify this 37 to the group 4th of ten possible.
     """
 
     def __init__(self, from_existing_data=False):
@@ -56,7 +56,7 @@ class NeuralNetwork(object):
 
     def adjust_data(self, alpha_wave_data):
         """
-        @TODO for now it can't work this way
+        @TODO for now it can't work this way since i have a dictionary as input, not list
         :param alpha_wave_data:
         :return:
         """

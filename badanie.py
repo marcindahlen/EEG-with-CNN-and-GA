@@ -21,7 +21,7 @@ Idealnie, wynikiem pojedynczego badania są:
 →   plik (@TODO czy pliki?)
     binarny z zapisem stanu ostatniej generacji sieci.
 """
-
+import math
 import variables
 import pandas
 import numpy
@@ -31,9 +31,10 @@ import os.path
 
 class Badanie(object):
 
-    def __init__(self, examination_no):
+    def __init__(self, examination_no):                                             #examination_no is the number of column in target data
         self.input_examined = dict()
-        self.files_list = [name for name in os.listdir(variables.in_raw_path)]
+        self.output_examined = dict()
+        self.files_list = [name for name in os.listdir(variables.in_raw_path)]      #@TODO would be good to do NOT load same data every time
         self.files_no = len(self.files_list)
         self.prepare_input()
         self.prepare_target(examination_no)
@@ -57,7 +58,31 @@ class Badanie(object):
             for channel in range(0, channels_no):
                 temporary_mem_channels[channel] = self.input_examined[file][channel * channel_size : (channel + 1) * channel_size]
             self.input_examined[file] = temporary_mem_channels
-        #at this point i have a dictionary with filenames as keys and containing dictionaries with channels numbers as keys (and channel numpy array data as values)
+        #at this point i have a dictionary with filenames as keys containing dictionaries with channel numbers as keys (and channel numpy array data as values)
+
+        for examined_keys, examined_vals in self.input_examined.items():
+            for channel_keys, channel_vals in examined_vals.items():
+                for i in range(len(channel_vals)-1):
+                    channel_vals[i] = channel_vals[i+1] - channel_vals[i]
+                    channel_vals[len(channel_vals)-1] = 0
+            for channel_key, channel_value in examined_vals.items():
+                slice_mean = numpy.mean(channel_value)
+                slice_dev = numpy.std(channel_value)
+                for i in range(len(channel_value)):
+                    if numpy.absolute(channel_value[i] - slice_mean) > 4 * slice_dev:
+                        channel_value[i] = 0
+        #at this point data is standarised around 0, with outsider values deleted
+
+        for examined_keys, examined_vals in self.input_examined.items():
+            minimum = math.inf
+            maximum = 0
+            for channel_keys, channel_vals in examined_vals.items():
+                minimum = min(channel_vals) if min(channel_vals) < minimum else minimum
+                maximum = max(channel_vals) if max(channel_vals) > maximum else maximum
+            for channel_keys, channel_vals in examined_vals.items():
+                for i in range(len(channel_vals)):
+                    channel_vals[i] = (channel_vals[i] - minimum) / (maximum - minimum)
+        #at this point data is normalised in <0, 1>                         #@TODO or maybe i should normalise in <-1, 1> and introduce (-1, 1) to initialized weights in neurons ??
 
     def prepare_target(self, examination_no):
         """
@@ -69,6 +94,9 @@ class Badanie(object):
         :return void
         """
         target_data = pandas.read_excel(variables.out_raw_filepath)
+        target_data = target_data.iloc[2:, :]                         #delete P01BA and P01BB rows
+        target_data = target_data.iloc[:, examination_no + 1].values
+        print(target_data)
 
     def count_channel_size(self, eeg):
         """
@@ -84,11 +112,11 @@ class Badanie(object):
         i = len(eeg)
         data_slice = eeg[i - 100000:i]      #last hundred thousand points from eeg, assumed they're always from last channel
         slice_mean = numpy.mean(data_slice)
-        slice_dev =  numpy.std(data_slice)
+        slice_dev = numpy.std(data_slice)
         flag_rised = True
         while flag_rised:
             i -= 1
-            if numpy.absolute(eeg[i] - slice_mean) > 4 * slice_dev:     #find first 'impossible' value - impossible because → https://en.wikipedia.org/wiki/Standard_score
+            if numpy.absolute(eeg[i] - slice_mean) > 2 * 3 * slice_dev:     #find first 'impossible' value - impossible because: → https://en.wikipedia.org/wiki/Standard_score
                 flag_rised = False
                 return len(eeg) - i
 

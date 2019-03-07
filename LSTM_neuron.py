@@ -9,7 +9,8 @@ class LstmNeuron(object):
     """
 
     #@TODO konstruktor może, ale nie musi przyjmować zapamiętane wagi
-    def __init__(self, window):
+    #@TODO should i initialise weights in (-1, 1) ??
+    def __init__(self, window, from_existing_data=False):
         self.weights = [[] for i in range(4)]
         self.bias_weights = []
         self.suma_in, self.suma_out, self.suma_mem, self.suma_forget = 0, 0, 0, 0
@@ -17,12 +18,18 @@ class LstmNeuron(object):
         self.bias_in, self.bias_out, self.bias_forget, self.bias_mem = 1, 1, 1, 1
         self.mem = 0
         self.output = 0
-        for j in range(4):
-            for i in range(window):
-                self.weights[j][i].append(1 / random.randint(1, 4 * window))
-            self.bias_weights.append(1 / random.randint(1, 4 * window))
+        if not from_existing_data:
+            for j in range(4):
+                for i in range(window):
+                    self.weights[j][i].append(1 / random.randint(1, 4 * window))
+                self.bias_weights.append(1 / random.randint(1, 4 * window))
+            self.waga_prev = 1 / random.randint(1, 4 * window)
+        if from_existing_data:
+            pass
         self.y_prev = 0
-        self.waga_prev = 1 / random.randint(1, 4 * window)
+
+    def load_data(self):
+        pass
 
     def calculate(self, input=[]):
         """

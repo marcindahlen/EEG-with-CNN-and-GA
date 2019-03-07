@@ -2,7 +2,9 @@ from cmath import exp, pi
 
 
 def fft(x):
-    """Forward recursive fast Fourier transform."""
+    """
+    Forward recursive fast Fourier transform.
+    """
     N = len(x)
     if N <= 1: return x
     even = fft(x[0::2])
