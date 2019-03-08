@@ -33,15 +33,14 @@ class LstmNeuron(object):
                 for j in weights_data:
                     for i in j:
                         self.weights[j].append(weights_data[j][i])
-                    self.bias_weights.append(self.weights[j].pop())             # those two lines are a shame,
-                self.waga_prev = weights_data[4].pop()                          # and i should carefully adjust the data saving process
+                    self.bias_weights.append(self.weights[j].pop())
+                self.waga_prev = weights_data[4].pop()
         self.y_prev = 0
 
     def get_weights(self):
         """
         Method outputs neuron's weights in form of lists.
-        There is some commotion in saving bias weights and previous value weight,
-        because of two lines of shame in neuron's constructor.
+        There is some commotion in saving bias weights and previous value weight.
         :return: a list of four lists
         """
         output = [[j for j in i] for i in self.weights]

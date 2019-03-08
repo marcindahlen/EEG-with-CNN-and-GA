@@ -21,9 +21,10 @@ class NeuralNetwork(object):
     classify this 37 to the group 4th of ten possible.
     """
 
-    def __init__(self, from_existing_data=False):
+    def __init__(self, examination_no, from_existing_data=False):
         self.generationNo = 0
-        self.score = math.nan #TODO czy może math.inf ?
+        self.cycles = 0
+        self.score = math.inf       # TODO czy może math.nan ?     # RMSE → https://www.statisticshowto.datasciencecentral.com/rmse/
         self.answer = []
 
         if not from_existing_data:
@@ -42,12 +43,30 @@ class NeuralNetwork(object):
         Given data may be of length non divisible by
         window size and in such case n first values
         are omitted.
-
+        @TODO what about forgetting pre-setup window size and instead make the window parametrised to fit data in 1:100 ratio (i.e.)?
+        :param alpha_wave_data: a dictionary with filenames as keys containing dictionaries with channel numbers as keys
+                (and channel numpy array data as values)
+                i.e. data = b.input_examined['P08.txt'][16] → [0.45233266 0.37322515 0.22718053 ... 0.21095335 0.32860041 0.32860041]
         :return a list of ten values, each value in <0, 1>
                 the highest one at particular neuron,
                 which resembles the class data is classified to.
         """
-        self.generationNo += 1
+
+        self.cycles += 1
+        count_grande = 0
+        count_petite = 0
+        for i in alpha_wave_data:
+            for j in i:
+                count_grande += 1
+                for k in j:
+                    count_petite += 1
+
+        iterations_no = math.floor((count_petite / count_grande) / variables.network_input_window)          # should be around 100
+
+        for i in range(iterations_no):
+            pass
+
+        return self.answer
 
     def adjust_data(self, alpha_wave_data):
         """
@@ -61,9 +80,7 @@ class NeuralNetwork(object):
 
     def evaluate_self(self, alpha_wave_data, target):
         """
-        Given a dictionary which keys are filenames P01.txt - Pxx.txt
-        and values are next channels of a single eeg recording,
-        method calculates network's output classification.
+
         :param alpha_wave_data:
         :param target:
         :return:
@@ -71,7 +88,8 @@ class NeuralNetwork(object):
         pass
 
     def save_state_binary(self, file_path):
-        """Saves wages values of all neurons
+        """
+        Saves wages values of all neurons
         in a binary file.
         First, there's need to make a single
         list from all of the wages of different neuron gates.
@@ -82,7 +100,8 @@ class NeuralNetwork(object):
         pass
 
     def load_state_binary(self, file_path):
-        """Loads all neurons wages to
+        """
+        Loads all neurons wages to
         a single list. From this list neurons' wages
         are set to new values. Topology must be matching.
 
@@ -90,7 +109,8 @@ class NeuralNetwork(object):
         pass
 
     def save_state_text(self, file_path):
-        """Saves wages values of all neurons
+        """
+        Saves wages values of all neurons
         in a text file.
 
         :return void
@@ -98,21 +118,30 @@ class NeuralNetwork(object):
         pass
 
     def load_state_text(self, file_path):
-        """"""
+        """
+
+        :param file_path:
+        :return:
+        """
         pass
 
+    # @TODO All mutation should allow inheritance of features like generationNumber and cycles passed.
+
     def mutate(self):
-        """With a [[given probability]]
+        """
+        With a [[given probability]]
         do or do not change a value of
         a particular wage - going once
         for all wages for all neurons
         in this network.
 
         :return void"""
-        pass
+
+        self.generationNo += 1
 
     def create_single_child(self, other_network):
-        """Given a particular other network
+        """
+        Given a particular other network
         both of them have their neurons' wages
         crossbreed producing a new network with different
         state. After that, new network is mutated
@@ -124,7 +153,8 @@ class NeuralNetwork(object):
         pass
 
     def multiplication_by_budding(self):
-        """This method produces new network,
+        """
+        This method produces new network,
         by mutating this one. Original network
         doesn't change.
 
@@ -133,9 +163,13 @@ class NeuralNetwork(object):
         pass
 
     def set_score(self, new_score):
-        """Overrides the score with a new one."""
+        """
+        Overrides the score with a new one.
+        """
         self.score = new_score
 
     def get_id(self):
-        """:return integer - generated ID based
-            on generation number"""
+        """
+        :return integer - generated ID based
+            on generation number
+            """
