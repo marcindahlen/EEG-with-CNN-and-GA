@@ -25,12 +25,7 @@ class NeuralNetwork(object):
         self.generationNo = 0
         self.score = math.nan #TODO czy może math.inf ?
         self.answer = []
-        """
-        Nested lists cheatsheet:
-        matrix = [[1, 2], [3,4], [5,6], [7,8]]
-        transpose = [[row[i] for row in matrix] for i in range(2)]
-        [[1, 3, 5, 7], [2, 4, 6, 8]]
-        """
+
         if not from_existing_data:
             self.topology = [[LstmNeuron(variables.network_input_window if layer-1 <= 0 else variables.network_topology[layer-1]) for neuron in range(variables.network_topology[layer])] for layer in variables.network_topology]
         if from_existing_data:

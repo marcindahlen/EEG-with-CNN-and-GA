@@ -20,5 +20,7 @@ I assume following files hierarchy:
             .
             .
             variables.py
+        net_memory/
+
 """
 

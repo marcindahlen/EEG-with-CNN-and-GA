@@ -17,7 +17,7 @@ how_many_networks_to_save = floor(population_quantity / 4)
 mutation_probability_factor = 1
 
 in_raw_path = "../in_raw/"
-network_dnas_path = "../network_dnas/"
+net_memory_path = "../net_memory/"
 out_raw_filepath = "../out_raw/out_absData.xls"
 out_charts_path = "../out_wykresy/"
 

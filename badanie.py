@@ -38,6 +38,7 @@ class Badanie(object):
         self.files_no = len(self.files_list)
         self.prepare_input()
         self.prepare_target(examination_no)
+        self.minmax_tuple = ()
 
     def prepare_input(self):
         """
@@ -102,6 +103,7 @@ class Badanie(object):
         print(target_data)
         minimum = min(target_data)
         maximum = max(target_data)
+        self.minmax_tuple = (minimum, maximum)
         for i in range(len(target_data)):
             target_data[i] = (target_data[i] - minimum) / (maximum - minimum)
 
@@ -136,12 +138,30 @@ class Badanie(object):
                 return len(eeg) - i
 
     def decide_no_belonging(self, number, index):
+        """
+        Given minmaxed value of examined's test score
+        and currently considered index in list being build,
+        outputs 1 or 0 where 1 is a valid match
+        :param number:
+        :param index:
+        :return: int: 1 or 0
+        """
         index = index / 10
         return 1 if index <= number < index + 0.1 else 0
 
-    def interprete_prediction(self):
-        pass
-    
+    def interprete_prediction(self, prediction):
+        """
+        Given list with 10 elements - 9 zeros and 1 one,
+        this method converts information from the list
+        to the form as in raw input (reverse process from prepare_target()
+        :return: int
+        """
+        memory = 0
+        for i, x in enumerate(prediction):
+            memory += x * (i + 1) / 10
+        memory = memory * (self.minmax_tuple[1] - self.minmax_tuple[0]) + self.minmax_tuple[0]
+        return memory
+
     def initialize_networks(self):
         """
         Create if not exists a new binary files (plural!!)

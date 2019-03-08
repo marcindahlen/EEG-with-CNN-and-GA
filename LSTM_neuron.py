@@ -10,7 +10,7 @@ class LstmNeuron(object):
 
     #@TODO konstruktor może, ale nie musi przyjmować zapamiętane wagi
     #@TODO should i initialise weights in (-1, 1) ??
-    def __init__(self, window, from_existing_data=False):
+    def __init__(self, window, from_existing_data=False, weights_data=[]):
         self.weights = [[] for i in range(4)]
         self.bias_weights = []
         self.suma_in, self.suma_out, self.suma_mem, self.suma_forget = 0, 0, 0, 0
@@ -21,15 +21,35 @@ class LstmNeuron(object):
         if not from_existing_data:
             for j in range(4):
                 for i in range(window):
-                    self.weights[j][i].append(1 / random.randint(1, 4 * window))
+                    self.weights[j].append(1 / random.randint(1, 4 * window))
                 self.bias_weights.append(1 / random.randint(1, 4 * window))
             self.waga_prev = 1 / random.randint(1, 4 * window)
         if from_existing_data:
-            pass
+            if not weights_data:
+                raise Exception('No weights data passed to the neuron constructor!')
+            elif len(weights_data) != 4:
+                raise Exception('List passed to the neuron constructor has wrong dimensions!')
+            else:
+                for j in weights_data:
+                    for i in j:
+                        self.weights[j].append(weights_data[j][i])
+                    self.bias_weights.append(self.weights[j].pop())             # those two lines are a shame,
+                self.waga_prev = weights_data[4].pop()                          # and i should carefully adjust the data saving process
         self.y_prev = 0
 
-    def load_data(self):
-        pass
+    def get_weights(self):
+        """
+        Method outputs neuron's weights in form of lists.
+        There is some commotion in saving bias weights and previous value weight,
+        because of two lines of shame in neuron's constructor.
+        :return: a list of four lists
+        """
+        output = [[j for j in i] for i in self.weights]
+        output[len(output)-1].append(self.waga_prev)
+        for i, x in enumerate(self.bias_weights):
+            output[i].append(x)
+
+        return output
 
     def calculate(self, input=[]):
         """
