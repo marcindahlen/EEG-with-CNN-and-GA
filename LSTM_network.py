@@ -22,6 +22,7 @@ class NeuralNetwork(object):
     """
 
     def __init__(self, examination_no, from_existing_data=False):
+        self.examination_no = examination_no
         self.generationNo = 0
         self.cycles = 0
         self.score = math.inf       # TODO czy może math.nan ?     # RMSE → https://www.statisticshowto.datasciencecentral.com/rmse/
@@ -53,8 +54,8 @@ class NeuralNetwork(object):
         """
 
         self.cycles += 1
-        count_grande = 0
-        count_petite = 0
+        count_grande = 0                # all examined times all channels
+        count_petite = 0                # all data points
         for i in alpha_wave_data:
             for j in i:
                 count_grande += 1
@@ -64,7 +65,7 @@ class NeuralNetwork(object):
         iterations_no = math.floor((count_petite / count_grande) / variables.network_input_window)          # should be around 100
 
         for i in range(iterations_no):
-            pass
+            read_data
 
         return self.answer
 
