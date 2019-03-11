@@ -4,12 +4,15 @@ Variables used across the experiment
 
 from math import floor
 
-network_input_window = 10 * 10 * 16                             # "receptive field", "filter size", → http://cs231n.github.io/convolutional-networks/#conv
+channels_to_consider = [7, 12, 13]
+window_base_length = 10 * 10 * 16
+network_input_window = window_base_length * len(channels_to_consider)   # "receptive field", "filter size" times channel number
+                                                                        # → http://cs231n.github.io/convolutional-networks/#conv
 
-network_topology = [10 * 16, 5 * 8, 10 * 1]                     # Network classifies eeg data to a particular slice of possible outcomes,
-                                                                # as an input there are 10 channels of data points, - see comments in 'badanie.py'
-                                                                # each channel is about 150k in length,
-                                                                # output is affiliation to one of ten classes
+network_topology = [10 * 16, 5 * 8, 10 * 1]                             # Network classifies eeg data to a particular slice of possible outcomes,
+                                                                        # as an input there are 10 channels of data points, - see comments in 'badanie.py'
+                                                                        # each channel is about 150k in length,
+                                                                        # output is affiliation to one of ten classes
 
 accepted_min_rmse = 1
 population_quantity = 32                                        # this is the number of input eeg examinations

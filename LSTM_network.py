@@ -22,11 +22,13 @@ class NeuralNetwork(object):
     """
 
     def __init__(self, examination_no, from_existing_data=False):
-        self.examination_no = examination_no
+        self.examination_no = examination_no    # the number of the psychological test's column
         self.generationNo = 0
         self.cycles = 0
-        self.score = math.inf       # TODO czy może math.nan ?     # RMSE → https://www.statisticshowto.datasciencecentral.com/rmse/
-        self.answer = []
+        self.score = math.inf       # RMSE → https://www.statisticshowto.datasciencecentral.com/rmse/
+        self.answer = dict()        # for each filename as key, store list of answers as lists of length 10
+        self.question = []
+        self.target_answer = []
 
         if not from_existing_data:
             self.topology = [[LstmNeuron(variables.network_input_window if layer-1 <= 0 else variables.network_topology[layer-1]) for neuron in range(variables.network_topology[layer])] for layer in variables.network_topology]
@@ -61,11 +63,23 @@ class NeuralNetwork(object):
                 count_grande += 1
                 for k in j:
                     count_petite += 1
-
         iterations_no = math.floor((count_petite / count_grande) / variables.network_input_window)          # should be around 100
 
-        for i in range(iterations_no):
-            read_data
+        for i in alpha_wave_data:
+            self.answer[i] = [0 for x in range(10)]
+
+        for a in alpha_wave_data:
+            for i in range(iterations_no):
+                # 1. prepare "the question"
+                extension = []
+                for channel in variables.channels_to_consider:
+                    extension.extend(alpha_wave_data[a][channel][i * variables.window_base_length : (i+1) * variables.window_base_length])
+                self.question.extend(extension)
+                # 2. feed the neurons in the first layer
+
+                # 3. feed the neurons in the second layer
+
+                # 4. feed the neurons in the last layer and get "the answer"
 
         return self.answer
 

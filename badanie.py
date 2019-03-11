@@ -61,6 +61,8 @@ class Badanie(object):
             self.input_examined[file] = temporary_mem_channels
         # at this point i have a dictionary with filenames as keys containing dictionaries with channel numbers as keys (and channel numpy array data as values)
 
+        # @TODO low- and highpass filters + fourier 8-12Hz
+
         for examined_keys, examined_vals in self.input_examined.items():
             for channel_keys, channel_vals in examined_vals.items():
                 for i in range(len(channel_vals)-1):
@@ -84,8 +86,6 @@ class Badanie(object):
                 for i in range(len(channel_vals)):
                     channel_vals[i] = (channel_vals[i] - minimum) / (maximum - minimum)
         # at this point data is normalised in <0, 1>                       @TODO or maybe i should normalise in <-1, 1> and introduce (-1, 1) to initialized weights in neurons ??
-
-        # @TODO low- and highpass filters + fourier 8-12Hz
 
     def prepare_target(self, examination_no):
         """
@@ -179,29 +179,13 @@ class Badanie(object):
 
     def single_pass_one_network(self, network):
         """
-        Given a single network from the list
-        it is run on all examined person's EEG,
-        procuring an <0, 1> output for each (EEG).
-        Produced list of outputs is compared with
-        a list of corresponding target values
-        (new list item = target_val - network_output).
-        Then squares of new list items are summed.
-        The bigger is final number, the worse was
-        network's overall performance.
+
         :return a single float - network's rmse
         """
         pass
 
-    def forward_pass_all_networks(self, networks):
+    def forward_pass_all_networks(self):
         """
-        On given list of networks
-        (all networks of same type and size,
-        they vary only in weights)
-        each network calculates in single pass
-        predicted classification of each
-        examined's EEG.
-        One networks performs as many single-passes
-        as there are examined persons.
 
         Each network has a field to store
         it's mean performance
