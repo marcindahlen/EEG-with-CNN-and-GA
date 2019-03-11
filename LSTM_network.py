@@ -65,21 +65,28 @@ class NeuralNetwork(object):
                     count_petite += 1
         iterations_no = math.floor((count_petite / count_grande) / variables.network_input_window)          # should be around 100
 
-        for i in alpha_wave_data:
-            self.answer[i] = [0 for x in range(10)]
+        self.answer = dict()
 
         for a in alpha_wave_data:
             for i in range(iterations_no):
+                self.answer[a] = []                     # erase previous answer, only last one matters
                 # 1. prepare "the question"
                 extension = []
                 for channel in variables.channels_to_consider:
                     extension.extend(alpha_wave_data[a][channel][i * variables.window_base_length : (i+1) * variables.window_base_length])
                 self.question.extend(extension)
+
+                outputs_first = []
+                outputs_second = []
                 # 2. feed the neurons in the first layer
-
+                for neuron in self.topology[0]:
+                    outputs_first.append(neuron.calculate(self.question))
                 # 3. feed the neurons in the second layer
-
+                for neuron in self.topology[1]:
+                    outputs_second.append(neuron.calculate(outputs_first))
                 # 4. feed the neurons in the last layer and get "the answer"
+                for neuron in self.topology[2]:
+                    self.answer[a].append(neuron.calculate(outputs_second))
 
         return self.answer
 
@@ -93,12 +100,11 @@ class NeuralNetwork(object):
             del alpha_wave_data[0]
         return alpha_wave_data
 
-    def evaluate_self(self, alpha_wave_data, target):
+    def evaluate_self(self, target):
         """
 
-        :param alpha_wave_data:
         :param target:
-        :return:
+        :return: rmse 
         """
         pass
 
