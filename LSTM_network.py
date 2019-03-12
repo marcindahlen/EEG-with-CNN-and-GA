@@ -23,7 +23,7 @@ class NeuralNetwork(object):
     classify this 37 to the group 4th of ten possible.
     """
 
-    def __init__(self, examination_no, from_existing_data=False):
+    def __init__(self, examination_no, existing_topology=[], from_existing_data=False):
         self.examination_no = examination_no    # the number of the psychological test's column
         self.generationNo = 0
         self.cycles = 0
@@ -32,7 +32,10 @@ class NeuralNetwork(object):
         self.question = []
 
         if not from_existing_data:
-            self.topology = [[LstmNeuron(variables.network_input_window if layer-1 <= 0 else variables.network_topology[layer-1]) for neuron in range(variables.network_topology[layer])] for layer in variables.network_topology]
+            if not existing_topology:
+                self.topology = [[LstmNeuron(variables.network_input_window if layer-1 <= 0 else variables.network_topology[layer-1]) for neuron in range(variables.network_topology[layer])] for layer in variables.network_topology]
+            else:
+                self.topology = existing_topology
         if from_existing_data:
             pass
 
@@ -179,7 +182,6 @@ class NeuralNetwork(object):
             for index, line in enumerate(file):
                 pass
 
-
     # @TODO All mutation should allow inheritance of features like generationNumber and cycles passed.
 
     def mutate(self):
@@ -203,12 +205,12 @@ class NeuralNetwork(object):
         random.seed()
         for layer in self.topology:
             for neuron in layer:
-                neuron.set_weights(change_weights(neuron.get_weights()))
+                neuron.set_weights(change_weights(neuron.get_weights(), neuron.get_size()))
 
     def create_single_child(self, other_network):
         """
         Given a particular other network
-        both of them have their neurons' wages
+        both of them have their neurons
         crossbreed producing a new network with different
         state. After that, new network is mutated
         to introduce new quality.
@@ -216,7 +218,13 @@ class NeuralNetwork(object):
 
         :return network
         """
-        pass
+        network_length = 0
+        for layer in self.topology:
+            network_length += len(layer)
+
+        intersection = random.gauss(network_length/2, network_length/6)
+
+        new_topology = []
 
     def multiplication_by_budding(self):
         """

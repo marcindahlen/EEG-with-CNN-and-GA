@@ -44,8 +44,7 @@ class LstmNeuron(object):
         """
         size = 0
         for gate in self.weights:
-            for weight in gate:
-                size += 1
+            size += len(gate)
         return size + 5
 
     def get_weights(self):
