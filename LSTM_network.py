@@ -1,6 +1,8 @@
 import math
+import random
 import variables
 from LSTM_neuron import LstmNeuron
+from array import array
 
 # @TODO konstruktor może, ale nie musi przyjmować zapamiętane wagi
 
@@ -25,10 +27,9 @@ class NeuralNetwork(object):
         self.examination_no = examination_no    # the number of the psychological test's column
         self.generationNo = 0
         self.cycles = 0
-        self.score = math.inf       # RMSE → https://www.statisticshowto.datasciencecentral.com/rmse/
+        self.score = 1              # RMSE → https://www.statisticshowto.datasciencecentral.com/rmse/
         self.answer = dict()        # for each filename as key, store list of answers as lists of length 10
         self.question = []
-        self.target_answer = []
 
         if not from_existing_data:
             self.topology = [[LstmNeuron(variables.network_input_window if layer-1 <= 0 else variables.network_topology[layer-1]) for neuron in range(variables.network_topology[layer])] for layer in variables.network_topology]
@@ -69,7 +70,7 @@ class NeuralNetwork(object):
 
         for a in alpha_wave_data:
             for i in range(iterations_no):
-                self.answer[a] = []                     # erase previous answer, only last one matters
+                self.answer[a] = []                # erase previous answer, only last one (after all iterations) matters
                 # 1. prepare "the question"
                 extension = []
                 for channel in variables.channels_to_consider:
@@ -100,31 +101,55 @@ class NeuralNetwork(object):
             del alpha_wave_data[0]
         return alpha_wave_data
 
-    def evaluate_self(self, target):
+    def evaluate_self(self, target):                # Probably the most important method of them all!!
         """
+        Given the target values in form of dictionary of lists,
+        each list consist of ten values: 9 zeros and 1 one,
+        and having ready "answer" value in same form,
+        where each list consist of ten values in (0, 1);
+        method gives RMSE of last forward pass over
+        all examined EEG data.
 
-        :param target:
-        :return: rmse 
+        Perfect RMSE = 0
+
+        Worst case RMSE = 1
+
+        :param target: dictionary of lists
+        :return: RMSE
         """
-        pass
+        the_sum = dict()
+        for key in target:
+            the_sum[key] = sum([math.pow(f - o, 2) for f, o in zip(self.answer, target)]) / len(target[key])
+            the_sum[key] = math.sqrt(the_sum[key])
+        self.score = sum(the_sum.values()) / len(the_sum)
+
+    def get_score(self):
+        """
+        ":return float <0, 1>
+        """
+        return self.score
+
+    def get_id(self):
+        """
+        :return string
+        """
+        return str(self.examination_no) + '_' + str(self.cycles) + '_' + str(self.score)
 
     def save_state_binary(self, file_path):
         """
         Saves wages values of all neurons
         in a binary file.
-        First, there's need to make a single
-        list from all of the wages of different neuron gates.
         → https://stackoverflow.com/questions/807863/how-to-output-list-of-floats-to-a-binary-file-in-python
 
         :return void
         """
-        pass
+        path = file_path + self.get_id()
+        with open(path, 'wb') as file:
+            the_array = array('f', [])              # i have neurons' weights stored in memeory, how not to duplicate the information?
+            the_array.tofile(file)
 
     def load_state_binary(self, file_path):
         """
-        Loads all neurons wages to
-        a single list. From this list neurons' wages
-        are set to new values. Topology must be matching.
 
         :return void"""
         pass
@@ -136,29 +161,49 @@ class NeuralNetwork(object):
 
         :return void
         """
-        pass
+        path = file_path + self.get_id() + '.txt'
+        with open(path, "w+") as file:
+            for layer in self.topology:
+                for neuron in layer:
+                    for weight in neuron.get_weights():
+                        file.write(weight)
 
     def load_state_text(self, file_path):
         """
 
         :param file_path:
-        :return:
+        :return: void
         """
-        pass
+
+        with open(file_path, "r") as file:
+            for index, line in enumerate(file):
+                pass
+
 
     # @TODO All mutation should allow inheritance of features like generationNumber and cycles passed.
 
     def mutate(self):
         """
-        With a [[given probability]]
+        With some probability
         do or do not change a value of
         a particular wage - going once
         for all wages for all neurons
         in this network.
 
         :return void"""
+        def change_weights(weights: 'list of lists', size: 'weights no.') -> 'list of lists':
+            for gate in weights:
+                for weight in gate:
+                    if random.choice([x for x in range(size)]) == 1:
+                        new_weight = random.gauss(0.5, 0.16)
+                        weight = new_weight
+            return weights
 
         self.generationNo += 1
+        random.seed()
+        for layer in self.topology:
+            for neuron in layer:
+                neuron.set_weights(change_weights(neuron.get_weights()))
 
     def create_single_child(self, other_network):
         """
@@ -183,14 +228,3 @@ class NeuralNetwork(object):
         """
         pass
 
-    def set_score(self, new_score):
-        """
-        Overrides the score with a new one.
-        """
-        self.score = new_score
-
-    def get_id(self):
-        """
-        :return integer - generated ID based
-            on generation number
-            """

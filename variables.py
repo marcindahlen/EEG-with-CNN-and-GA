@@ -14,7 +14,6 @@ network_topology = [10 * 16, 5 * 8, 10 * 1]                             # Networ
                                                                         # each channel is about 150k in length,
                                                                         # output is affiliation to one of ten classes
 
-accepted_min_rmse = 1
 population_quantity = 32                                        # this is the number of input eeg examinations
 how_many_networks_to_save = floor(population_quantity / 4)
 mutation_probability_factor = 1

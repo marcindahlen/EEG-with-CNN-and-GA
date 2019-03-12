@@ -37,6 +37,17 @@ class LstmNeuron(object):
                 self.waga_prev = weights_data[4].pop()
         self.y_prev = 0
 
+    def get_size(self):
+        """
+        Returns number of all weights of this neuron.
+        :return: int
+        """
+        size = 0
+        for gate in self.weights:
+            for weight in gate:
+                size += 1
+        return size + 5
+
     def get_weights(self):
         """
         Method outputs neuron's weights in form of lists.
@@ -49,6 +60,38 @@ class LstmNeuron(object):
             output[i].append(x)
 
         return output
+
+    def get_weights_structured(self):
+        """
+        Returns neuron's weights in the same order
+        as method set_weights() would read them.
+        :return: list of four lists
+        """
+        output = self.weights
+        output[3].append(self.waga_prev)
+        for i in range(4):
+            output[i].append(self.bias_weights[i])
+        return output
+
+    def set_weights(self, weights_data=[]):
+        """
+        Weights should be given as nested list:
+        in a list there should be four lists, one for each gate,
+        each list's last element should be bias weight,
+        and the last list's last but one float should be previous output's weight.
+        :param weights_data:
+        :return: void
+        """
+        if not weights_data:
+            raise Exception('No weights data passed to the neuron constructor!')
+        elif len(weights_data) != 4:
+            raise Exception('List passed to the neuron constructor has wrong dimensions!')
+        else:
+            for j in weights_data:
+                for i in j:
+                    self.weights[j].append(weights_data[j][i])
+                self.bias_weights.append(self.weights[j].pop())
+            self.waga_prev = weights_data[4].pop()
 
     def calculate(self, input=[]):
         """
