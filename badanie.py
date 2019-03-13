@@ -23,6 +23,7 @@ Idealnie, wynikiem pojedynczego badania są:
 """
 import math
 import variables
+from LSTM_network import NeuralNetwork
 import pandas
 import numpy
 import os
@@ -31,7 +32,7 @@ import os.path
 
 class Badanie(object):
 
-    def __init__(self, examination_no):                                             # examination_no is the number of column in target data
+    def __init__(self, examination_no):                                             # examination_no is the index of column in target data
         self.input_examined = dict()
         self.output_examined = dict()
         self.files_list = [name for name in os.listdir(variables.in_raw_path)]      # @TODO would be good to do NOT load same data every time
@@ -39,6 +40,7 @@ class Badanie(object):
         self.prepare_input()
         self.prepare_target(examination_no)
         self.minmax_tuple = ()
+        self.network_list = [NeuralNetwork(examination_no) for i in range(variables.population_quantity)]
 
     def prepare_input(self):
         """
@@ -74,7 +76,7 @@ class Badanie(object):
                 for i in range(len(channel_value)):
                     if numpy.absolute(channel_value[i] - slice_mean) > 4 * slice_dev:
                         channel_value[i] = 0
-        # at this point data is standarised around 0, with outsider values deleted
+        # at this point data is standardised around 0, with outsider values deleted
 
         for examined_keys, examined_vals in self.input_examined.items():
             minimum = math.inf
@@ -160,47 +162,30 @@ class Badanie(object):
         for i, x in enumerate(prediction):
             memory += x * (i + 1) / 10
         memory = memory * (self.minmax_tuple[1] - self.minmax_tuple[0]) + self.minmax_tuple[0]
+
         return memory
-
-    def initialize_networks(self):
-        """
-        Create if not exists a new binary files (plural!!)
-        → https://stackoverflow.com/questions/807863/how-to-output-list-of-floats-to-a-binary-file-in-python
-        describing initial wages for
-        LSTM networks to be trained.
-        Number of files (population) should
-        correspond to number of target classes.
-        First check if there is a file,
-        if not → initialize networks and save states
-        if yes → load states from files
-        :return LSTM_network list
-        """
-        pass
-
-    def single_pass_one_network(self, network):
-        """
-
-        :return a single float - network's rmse
-        """
-        pass
 
     def forward_pass_all_networks(self):
         """
-
-        Each network has a field to store
-        it's mean performance
-        measured as RMSE - root-mean-square error.
-
-        :return one list with rmse scores, position
-                on this list reference position of network
-                and thus order of single-pass
-        """
-        pass
-
-    def repopulate_network_generation(self, networks):
-        """
-        @TODO czy sieć nie powinna sama przechowywać swojego score?
+        For each network in [[self.network_list]]
+        perform single forward pass over
+        available examined persons' data.
+        Evaluate all networks and sort
+        list containing them accordingly.
         → https://stackoverflow.com/questions/403421/how-to-sort-a-list-of-objects-based-on-an-attribute-of-the-objects
+
+        :return sorted list @TODO or void?
+        """
+        output_scores = []                          # list of ints
+        for network in self.network_list:
+            network.forward_pass(self.input_examined)
+            output_scores.append(network.evaluate_self(self.output_examined))
+
+        self.network_list.sort(key=lambda network: network.score, reverse=True)
+        output_scores.sort(reverse=True)            # this variable exist since i plan to print it later
+
+    def repopulate_network_generation(self):
+        """
         Given all networks were scored based on their
         performance and remember their score,
         the list containing them is sorted

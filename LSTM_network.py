@@ -54,7 +54,7 @@ class NeuralNetwork(object):
         :param alpha_wave_data: a dictionary with filenames as keys containing dictionaries with channel numbers as keys
                 (and channel numpy array data as values)
                 i.e. data = b.input_examined['P08.txt'][16] → [0.45233266 0.37322515 0.22718053 ... 0.21095335 0.32860041 0.32860041]
-        :return a list of ten values, each value in <0, 1>
+        :return a list of ten values, each value in <0, 1>          @TODO probably should be void
                 the highest one at particular neuron,
                 which resembles the class data is classified to.
         """
@@ -92,8 +92,6 @@ class NeuralNetwork(object):
                 for neuron in self.topology[2]:
                     self.answer[a].append(neuron.calculate(outputs_second))
 
-        return self.answer
-
     def adjust_data(self, alpha_wave_data):
         """
         @TODO for now it can't work this way since i have a dictionary as input, not list
@@ -125,6 +123,8 @@ class NeuralNetwork(object):
             the_sum[key] = sum([math.pow(f - o, 2) for f, o in zip(self.answer, target)]) / len(target[key])
             the_sum[key] = math.sqrt(the_sum[key])
         self.score = sum(the_sum.values()) / len(the_sum)
+
+        return self.score
 
     def get_score(self):
         """
