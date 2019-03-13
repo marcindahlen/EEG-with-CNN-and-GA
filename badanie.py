@@ -33,6 +33,7 @@ import os.path
 class Badanie(object):
 
     def __init__(self, examination_no):                                             # examination_no is the index of column in target data
+        self.examination_no = examination_no
         self.input_examined = dict()
         self.output_examined = dict()
         self.files_list = [name for name in os.listdir(variables.in_raw_path)]      # @TODO would be good to do NOT load same data every time
@@ -184,23 +185,40 @@ class Badanie(object):
         self.network_list.sort(key=lambda network: network.score, reverse=True)
         output_scores.sort(reverse=True)            # this variable exist since i plan to print it later
 
-    def repopulate_network_generation(self):
+    def evolve_network_generation(self):
         """
         Given all networks were scored based on their
         performance and remember their score,
-        the list containing them is sorted
-        based on their score, from lowest to highest.
-        The worsen [[part]] of networks is deleted and the
-        list is repopulated with children of saved networks
-        (pair multiplication includes mutation)
-        and [[some amount]] of mutated saved networks (budding),
-        and [[some amount]] of new random ones
+        this method makes changes to the list of networks.
+        First 4 networks are saved.
+        Other networks are deleted.
+        First 2 networks generate offspring - as many as needed to fill
+        up half of population cap.
+        Other half is created by budding of 4 initial networks.
+        Two new networks are added above the limit to introduce diversity.
+
         → https://en.wikipedia.org/wiki/Budding
         → https://unix.stackexchange.com/questions/196251/change-only-one-bit-in-a-file
         → https://www.hackerearth.com/practice/basic-programming/bit-manipulation/basics-of-bit-manipulation/tutorial/
         @TODO a może jednak nie binary a txt ← wtedy mutacja to random na [[jednej]] wadze
         @TODO flipping bits in binary files wymaga eksperymentów
 
-        :return networks
+        :return void
         """
-        pass
+        self.network_list = self.network_list[:4]
+
+        while len(self.network_list) <= variables.population_quantity / 2:
+            if len(self.network_list) % 2 == 0:
+                self.network_list.append(self.network_list[0].create_single_child(self.network_list[1]))
+            else:
+                self.network_list.append(self.network_list[1].create_single_child(self.network_list[0]))
+
+        while len(self.network_list) <= variables.population_quantity:
+            self.network_list.append(self.network_list[0].multiplication_by_budding())
+            self.network_list.append(self.network_list[1].multiplication_by_budding())
+            self.network_list.append(self.network_list[2].multiplication_by_budding())
+            self.network_list.append(self.network_list[3].multiplication_by_budding())
+
+        self.network_list.append(NeuralNetwork(self.examination_no))
+        self.network_list.append(NeuralNetwork(self.examination_no))
+
