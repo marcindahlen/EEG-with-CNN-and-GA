@@ -196,7 +196,7 @@ class NeuralNetwork(object):
         def change_weights(weights: 'list of lists', size: 'weights no.') -> 'list of lists':
             for gate in weights:
                 for weight in gate:
-                    if random.choice([x for x in range(size)]) == 1:
+                    if random.choice([x for x in range(size)]) == 1:            # @TODO  solve this more efficiently
                         new_weight = random.gauss(0.5, 0.16)
                         weight = new_weight
             return weights
@@ -214,7 +214,6 @@ class NeuralNetwork(object):
         crossbreed producing a new network with different
         state. After that, new network is mutated
         to introduce new quality.
-        @TODO czy proces krzyżowania też powinien charakteryzować się losowością?
 
         :return network
         """
@@ -222,9 +221,17 @@ class NeuralNetwork(object):
         for layer in self.topology:
             network_length += len(layer)
 
-        intersection = random.gauss(network_length/2, network_length/6)
+        intersection = int(random.gauss(network_length/2, network_length/6))
 
-        new_topology = []
+        left_topology = self.flatten_topology(self.topology)
+        left_topology = left_topology[:intersection]
+        right_topology = self.flatten_topology(other_network.topology)
+        right_topology = right_topology[intersection:]
+
+        new_topology: list = left_topology.extend(right_topology)
+        new_topology = self.rebuild_topology(new_topology)
+
+        return NeuralNetwork(self.examination_no, new_topology).mutate()
 
     def multiplication_by_budding(self):
         """
@@ -234,5 +241,28 @@ class NeuralNetwork(object):
 
         :return network
         """
-        pass
+        return NeuralNetwork(self.examination_no, self.topology).mutate()
 
+    def flatten_topology(self, topology):
+        """
+
+        :return:
+        """
+        flat_topology = []
+        for layer in topology:
+            for neuron in layer:
+                flat_topology.append(neuron)
+
+        return flat_topology
+
+    def rebuild_topology(self, flat: 'flattened topology'):
+        """
+
+        :param flat:
+        :return:
+        """
+        flat.reverse()
+
+        new_topology = [[flat.pop() for neuron in layer] for layer in self.topology]
+
+        return new_topology

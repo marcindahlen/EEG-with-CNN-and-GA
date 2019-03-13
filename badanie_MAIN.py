@@ -24,3 +24,5 @@ I assume following files hierarchy:
 
 """
 
+from badanie import Badanie
+import variables
