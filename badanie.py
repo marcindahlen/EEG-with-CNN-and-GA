@@ -183,7 +183,9 @@ class Badanie(object):
             output_scores.append(network.evaluate_self(self.output_examined))
 
         self.network_list.sort(key=lambda network: network.score, reverse=True)
-        output_scores.sort(reverse=True)            # this variable exist since i plan to print it later
+
+        return output_scores
+
 
     def evolve_network_generation(self):
         """
