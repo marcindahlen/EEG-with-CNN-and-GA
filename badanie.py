@@ -28,6 +28,7 @@ import pandas
 import numpy
 import os
 import os.path
+import time
 
 
 class Badanie(object):
@@ -38,10 +39,33 @@ class Badanie(object):
         self.output_examined = dict()
         self.files_list = [name for name in os.listdir(variables.in_raw_path)]      # @TODO would be good to do NOT load same data every time
         self.files_no = len(self.files_list)
+        self.examination_names = {0: 'SPP',
+                                  1: 'SPH',
+                                  2: 'RPN',
+                                  3: 'Raven A',
+                                  4: 'Raven B',
+                                  5: 'Raven C',
+                                  6: 'Raven D',
+                                  7: 'Raven E',
+                                  8: 'Raven WO',
+                                  9: 'IVE Impulsywnosc',
+                                  10: 'IVE Ryzyko',
+                                  11: 'IVE Empatia',
+                                  12: 'SSZ',
+                                  13: 'SSE',
+                                  14: 'SSU',
+                                  15: 'ACZ',
+                                  16: 'PKT'}
+        print('Badanie ' + self.examination_names[self.examination_no])
+        print('   Znaleziono ' + str(self.files_no) + ' badanych.')
         self.prepare_input()
         self.prepare_target(examination_no)
         self.minmax_tuple = ()
+        start = time.time()
+        time.clock()
+        print('   Inicjalizacja populacji sieci', end="... ")
         self.network_list = [NeuralNetwork(examination_no) for i in range(variables.population_quantity)]
+        print("zakończona po " + str(int(time.time() - start)) + "s")
 
     def prepare_input(self):
         """
@@ -52,19 +76,21 @@ class Badanie(object):
 
         :return void
         """
+        print('   Wczytywanie kanałów', end=': ')
         for file in self.files_list:
             temporary_mem_channels = dict()
             self.input_examined[file] = numpy.genfromtxt(variables.in_raw_path + file, delimiter=',')
             self.input_examined[file] = numpy.delete(self.input_examined[file], variables.how_many_to_drop, axis=None)
             channel_size = self.count_channel_size(self.input_examined[file])
             channels_no = numpy.floor(len(self.input_examined[file]) / channel_size).astype(int)
-            print(channels_no)
+            print(channels_no, end=", ")
             for channel in range(0, channels_no):
                 temporary_mem_channels[channel] = self.input_examined[file][channel * channel_size : (channel + 1) * channel_size]
             self.input_examined[file] = temporary_mem_channels
         # at this point i have a dictionary with filenames as keys containing dictionaries with channel numbers as keys (and channel numpy array data as values)
 
         # @TODO low- and highpass filters + fourier 8-12Hz
+        print()
 
         for examined_keys, examined_vals in self.input_examined.items():
             for channel_keys, channel_vals in examined_vals.items():
@@ -88,7 +114,8 @@ class Badanie(object):
             for channel_keys, channel_vals in examined_vals.items():
                 for i in range(len(channel_vals)):
                     channel_vals[i] = (channel_vals[i] - minimum) / (maximum - minimum)
-        # at this point data is normalised in <0, 1>                       @TODO or maybe i should normalise in <-1, 1> and introduce (-1, 1) to initialized weights in neurons ??
+        # at this point data is normalised in <0, 1>
+        # @TODO or maybe i should normalise in <-1, 1> and introduce (-1, 1) to initialized weights in neurons ??
 
     def prepare_target(self, examination_no):
         """
@@ -99,11 +126,11 @@ class Badanie(object):
         → https://www.mantidproject.org/Working_With_Functions:_Return_Values
         :return void
         """
+        print('   Wczytywanie danych wzorcowych', end='...')
         target_data = pandas.read_excel(variables.out_raw_filepath)
         target_data = target_data.iloc[2:, :]                         # delete P01BA and P01BB rows
         target_data = target_data.iloc[:, examination_no + 1].values
 
-        print(target_data)
         minimum = min(target_data)
         maximum = max(target_data)
         self.minmax_tuple = (minimum, maximum)
@@ -117,6 +144,7 @@ class Badanie(object):
         # The list contain ten values → 0 or 1, where 1 means the original value was in corresponding range
         # i.e. 39 becomes 0.18 when minmaxed* in <32, 71> → which becomes [0, 1, 0, 0, 0, 0, 0, 0, 0, 0]
         #   *look "at this point data is normalised in <0, 1>" above or → https://en.wikipedia.org/wiki/Feature_scaling
+        print(' zakończone.')
 
     def count_channel_size(self, eeg):
         """
@@ -177,6 +205,7 @@ class Badanie(object):
 
         :return sorted list @TODO or void?
         """
+        print("   Sieci klasyfikują...")
         output_scores = []                          # list of ints
         for network in self.network_list:
             network.forward_pass(self.input_examined)
@@ -184,6 +213,7 @@ class Badanie(object):
 
         self.network_list.sort(key=lambda network: network.score, reverse=True)
 
+        print("   Wyniki bieżącej populacji sieci: " + str(output_scores))
         return output_scores
 
 
@@ -207,6 +237,7 @@ class Badanie(object):
 
         :return void
         """
+        print("   Ewolucja sieci", end='... ')
         self.network_list = self.network_list[:4]
 
         while len(self.network_list) <= variables.population_quantity / 2:
@@ -223,4 +254,5 @@ class Badanie(object):
 
         self.network_list.append(NeuralNetwork(self.examination_no))
         self.network_list.append(NeuralNetwork(self.examination_no))
+        print("zakończona.")
 

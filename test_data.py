@@ -11,7 +11,6 @@ data = b.output_examined['P08.txt']
 print(data)
 
 x = [i for i in range(len(data))]
-
 trace = plotly.graph_objs.Scatter(x=x, y=data)
 plot_data = [trace]
 figure = plotly.graph_objs.Figure(data=plot_data)

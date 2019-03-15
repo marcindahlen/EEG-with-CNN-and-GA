@@ -33,7 +33,7 @@ class NeuralNetwork(object):
 
         if not from_existing_data:
             if not existing_topology:
-                self.topology = [[LstmNeuron(variables.network_input_window if layer-1 <= 0 else variables.network_topology[layer-1]) for neuron in range(variables.network_topology[layer])] for layer in variables.network_topology]
+                self.topology = [[LstmNeuron(variables.network_input_window if layer == 0 else variables.network_topology[layer-1]) for neuron in range(variables.network_topology[layer])] for layer in range(len(variables.network_topology))]
             else:
                 self.topology = existing_topology
         if from_existing_data:
