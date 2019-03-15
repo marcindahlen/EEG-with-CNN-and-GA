@@ -54,21 +54,22 @@ class NeuralNetwork(object):
         :param alpha_wave_data: a dictionary with filenames as keys containing dictionaries with channel numbers as keys
                 (and channel numpy array data as values)
                 i.e. data = b.input_examined['P08.txt'][16] → [0.45233266 0.37322515 0.22718053 ... 0.21095335 0.32860041 0.32860041]
-        :return a list of ten values, each value in <0, 1>          @TODO probably should be void
-                the highest one at particular neuron,
-                which resembles the class data is classified to.
+        :return void
         """
 
         self.cycles += 1
         count_grande = 0                # all examined times all channels
         count_petite = 0                # all data points
         for i in alpha_wave_data:
+            print(i, end=" ")
             for j in i:
+                print(j, end=" ")
                 count_grande += 1
                 for k in j:
+                    print(k, end=" ")
                     count_petite += 1
         iterations_no = math.floor((count_petite / count_grande) / variables.network_input_window)          # should be around 100
-
+        print("inside network  " + str(count_petite) + ' / ' + str(count_grande))
         self.answer = dict()
 
         for a in alpha_wave_data:

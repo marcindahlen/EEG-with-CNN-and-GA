@@ -76,7 +76,7 @@ class Badanie(object):
 
         :return void
         """
-        print('   Wczytywanie kanałów', end=': ')
+        print('   Wczytywanie kanałów', end='... ')
         for file in self.files_list:
             temporary_mem_channels = dict()
             self.input_examined[file] = numpy.genfromtxt(variables.in_raw_path + file, delimiter=',')
@@ -87,11 +87,13 @@ class Badanie(object):
             for channel in range(0, channels_no):
                 temporary_mem_channels[channel] = self.input_examined[file][channel * channel_size : (channel + 1) * channel_size]
             self.input_examined[file] = temporary_mem_channels
+        print('   zakończone.')
         # at this point i have a dictionary with filenames as keys containing dictionaries with channel numbers as keys (and channel numpy array data as values)
 
         # @TODO low- and highpass filters + fourier 8-12Hz
-        print()
+        print('   >>fourier placeholder - not implemented yet<<')
 
+        print("   Standaryzacja danych", end="...")
         for examined_keys, examined_vals in self.input_examined.items():
             for channel_keys, channel_vals in examined_vals.items():
                 for i in range(len(channel_vals)-1):
@@ -103,8 +105,10 @@ class Badanie(object):
                 for i in range(len(channel_value)):
                     if numpy.absolute(channel_value[i] - slice_mean) > 4 * slice_dev:
                         channel_value[i] = 0
+        print("zakończona.")
         # at this point data is standardised around 0, with outsider values deleted
 
+        print("   Normalizacja danych", end="...")
         for examined_keys, examined_vals in self.input_examined.items():
             minimum = math.inf
             maximum = 0
@@ -114,6 +118,7 @@ class Badanie(object):
             for channel_keys, channel_vals in examined_vals.items():
                 for i in range(len(channel_vals)):
                     channel_vals[i] = (channel_vals[i] - minimum) / (maximum - minimum)
+        print("zakończona.")
         # at this point data is normalised in <0, 1>
         # @TODO or maybe i should normalise in <-1, 1> and introduce (-1, 1) to initialized weights in neurons ??
 
