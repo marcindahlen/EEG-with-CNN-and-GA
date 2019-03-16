@@ -61,12 +61,9 @@ class NeuralNetwork(object):
         count_grande = 0                # all examined times all channels
         count_petite = 0                # all data points
         for i in alpha_wave_data:
-            print(i, end=" ")
-            for j in i:
-                print(j, end=" ")
+            for j in alpha_wave_data[i]:
                 count_grande += 1
-                for k in j:
-                    print(k, end=" ")
+                for k in alpha_wave_data[i][j]:
                     count_petite += 1
         iterations_no = math.floor((count_petite / count_grande) / variables.network_input_window)          # should be around 100
         print("inside network  " + str(count_petite) + ' / ' + str(count_grande))
