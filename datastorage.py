@@ -18,8 +18,8 @@ class Datastorage(object):
         self.files_list = [name for name in os.listdir(variables.in_raw_path)]  # @TODO would be good to do NOT load same data every time
         self.files_no = len(self.files_list)
         print('   Znaleziono ' + str(self.files_no) + ' badanych.')
-        self.minmax_tuple = ()
         self.isDataInitialised = False
+        self.minmax_channelLength_tuple = ()
 
     def prepare_input(self):
         """
@@ -45,6 +45,7 @@ class Datastorage(object):
         # at this point i have a dictionary with filenames as keys containing dictionaries with channel numbers as keys (and channel numpy array data as values)
 
         # @TODO low- and highpass filters + fourier 8-12Hz
+        # → https://betterexplained.com/articles/an-interactive-guide-to-the-fourier-transform/
         print('   >>fourier placeholder - not implemented yet<<')
 
         print("   Standaryzacja danych", end="...")
@@ -76,6 +77,7 @@ class Datastorage(object):
         # at this point data is normalised in <0, 1>
         # @TODO or maybe i should normalise in <-1, 1> and introduce (-1, 1) to initialized weights in neurons ??
 
+        self.prepare_infoForNetworks()
         self.isDataInitialised = True
 
     def count_channel_size(self, eeg):
@@ -100,3 +102,31 @@ class Datastorage(object):
                 flag_rised = False
                 return len(eeg) - i
 
+    def prepare_infoForNetworks(self):
+        """
+
+        :return:
+        """
+        minimum = math.inf
+        maximum = 0
+        for key in self.input_examined:
+            for channel_key in self.input_examined[key]:
+                minimum = len(self.input_examined[key][channel_key]) if minimum > len(self.input_examined[key][channel_key]) else minimum
+                maximum = len(self.input_examined[key][channel_key]) if maximum < len(self.input_examined[key][channel_key]) else maximum
+        self.minmax_channelLength_tuple = (minimum, maximum)
+
+    def show_summary(self):
+        """
+
+        :return:
+        """
+        if not self.isDataInitialised:
+            print("No data loaded.")
+        else:
+            summary = dict()
+            for key in self.input_examined:
+                summary[key] = dict()
+                print()
+                for channel_key in self.input_examined[key]:
+                    summary[key][channel_key] = len(self.input_examined[key][channel_key])
+                    print(key + ' ' + str(channel_key) + ': ' + str(summary[key][channel_key]), end="; ")

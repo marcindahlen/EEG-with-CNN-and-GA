@@ -23,7 +23,7 @@ class NeuralNetwork(object):
     classify this 37 to the group 4th of ten possible.
     """
 
-    def __init__(self, examination_no, existing_topology=[], from_existing_data=False):
+    def __init__(self, examination_no, receptive_field = variables.network_input_window, existing_topology = [], from_existing_data = False):
         self.examination_no = examination_no    # the number of the psychological test's column
         self.generationNo = 0
         self.cycles = 0
@@ -33,7 +33,7 @@ class NeuralNetwork(object):
 
         if not from_existing_data:
             if not existing_topology:
-                self.topology = [[LstmNeuron(variables.network_input_window if layer == 0 else variables.network_topology[layer-1]) for neuron in range(variables.network_topology[layer])] for layer in range(len(variables.network_topology))]
+                self.topology = [[LstmNeuron(receptive_field if layer == 0 else variables.network_topology[layer-1]) for neuron in range(variables.network_topology[layer])] for layer in range(len(variables.network_topology))]
             else:
                 self.topology = existing_topology
         if from_existing_data:
@@ -58,15 +58,10 @@ class NeuralNetwork(object):
         """
 
         self.cycles += 1
-        count_grande = 0                # all examined times all channels
-        count_petite = 0                # all data points
-        for i in alpha_wave_data:
-            for j in alpha_wave_data[i]:
-                count_grande += 1
-                for k in alpha_wave_data[i][j]:
-                    count_petite += 1
-        iterations_no = math.floor((count_petite / count_grande) / variables.network_input_window)          # should be around 100
-        print("inside network  " + str(count_petite) + ' / ' + str(count_grande))
+
+        iterations_no = 0                           # @TODO !!! ; should be around 100?
+
+        print("inside network  ")
         self.answer = dict()
 
         for a in alpha_wave_data:
