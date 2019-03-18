@@ -34,3 +34,7 @@ x = [i for i in range(len(output_scores))]
         trace = graph_objs.Scatter(x=x, y=output_scores)
         plotly.offline.plot(trace, filename=variables.out_charts_path + 'name.html', auto_open=False) # @TODO filenaming needs parametrisation
 """
+
+"""
+    → https://superuser.com/questions/679679/how-to-increase-pythons-cpu-usage
+"""

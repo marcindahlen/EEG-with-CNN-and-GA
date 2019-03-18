@@ -32,7 +32,7 @@ import time
 
 class Badanie(object):
 
-    def __init__(self, examination_no):                                             # examination_no is the index of column in target data
+    def __init__(self, examination_no, datastorage):                                             # examination_no is the index of column in target data
         self.examination_no = examination_no
         self.output_examined = dict()
         self.examination_names = {0: 'SPP',
@@ -53,8 +53,7 @@ class Badanie(object):
                                   15: 'ACZ',
                                   16: 'PKT'}
         print('Badanie ' + self.examination_names[self.examination_no])
-        self.db = Datastorage()
-        self.db.prepare_input()
+        self.db = datastorage
         self.prepare_target(examination_no)
         self.minmax_tuple = ()
         start = time.time()
@@ -118,7 +117,7 @@ class Badanie(object):
 
         return memory
 
-    def forward_pass_all_networks(self):
+    def forward_pass_all_networks(self, iterations_no):
         """
         For each network in [[self.network_list]]
         perform single forward pass over
@@ -135,7 +134,7 @@ class Badanie(object):
         print("   Sieci klasyfikują...")
         output_scores = []                          # list of ints
         for network in self.network_list:
-            network.forward_pass(self.db.input_examined)
+            network.forward_pass(self.db.input_examined, iterations_no)
             output_scores.append(network.evaluate_self(self.output_examined))
 
         self.network_list.sort(key=lambda network: network.score, reverse=True)

@@ -109,11 +109,26 @@ class Datastorage(object):
         """
         minimum = math.inf
         maximum = 0
+        suma = 0
+        count = 0
         for key in self.input_examined:
             for channel_key in self.input_examined[key]:
                 minimum = len(self.input_examined[key][channel_key]) if minimum > len(self.input_examined[key][channel_key]) else minimum
                 maximum = len(self.input_examined[key][channel_key]) if maximum < len(self.input_examined[key][channel_key]) else maximum
+                suma += len(self.input_examined[key][channel_key])
+                count += 1
         self.minmax_channelLength_tuple = (minimum, maximum)
+        worst = int((maximum - minimum) / maximum * 100)
+        average = int((maximum - (suma / count)) / maximum * 100)
+        print("   Część danych utracona z powodu różnicy ilości punktów kanałów. Najorszy przypadek: " + str(worst) + "% straty danych. Średnio: " + str(average) + "%")
+
+    def assume_networkIterationsNo(self):
+        """
+
+        :return:
+        """
+        return int(self.minmax_channelLength_tuple[0] / variables.network_input_window)          # TODO could be better
+
 
     def show_summary(self):
         """
@@ -130,3 +145,5 @@ class Datastorage(object):
                 for channel_key in self.input_examined[key]:
                     summary[key][channel_key] = len(self.input_examined[key][channel_key])
                     print(key + ' ' + str(channel_key) + ': ' + str(summary[key][channel_key]), end="; ")
+        print()
+        print("networkIterationsNo: " + str(self.assume_networkIterationsNo()))

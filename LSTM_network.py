@@ -39,7 +39,7 @@ class NeuralNetwork(object):
         if from_existing_data:
             pass
 
-    def forward_pass(self, alpha_wave_data):
+    def forward_pass(self, alpha_wave_data, iterations_no):
         """
         Given prepared and normalized data
         as a dictionary of numpy arrays it performs single
@@ -51,6 +51,7 @@ class NeuralNetwork(object):
         window size and in such case n first values
         are omitted.
         @TODO what about forgetting pre-setup window size and instead make the window parametrised to fit data in 1:100 ratio (i.e.)?
+        :param iterations_no:
         :param alpha_wave_data: a dictionary with filenames as keys containing dictionaries with channel numbers as keys
                 (and channel numpy array data as values)
                 i.e. data = b.input_examined['P08.txt'][16] → [0.45233266 0.37322515 0.22718053 ... 0.21095335 0.32860041 0.32860041]
@@ -59,13 +60,10 @@ class NeuralNetwork(object):
 
         self.cycles += 1
 
-        iterations_no = 0                           # @TODO !!! ; should be around 100?
-
-        print("inside network  ")
         self.answer = dict()
 
         for a in alpha_wave_data:
-            for i in range(iterations_no):
+            for i in range(iterations_no-1):         # @TODO iterations should be around 100? for now, around 21
                 self.answer[a] = []                # erase previous answer, only last one (after all iterations) matters
                 # 1. prepare "the question"
                 extension = []
