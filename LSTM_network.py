@@ -67,10 +67,11 @@ class NeuralNetwork(object):
                 self.answer[a] = []                # erase previous answer, only last one (after all iterations) matters
                 # 1. prepare "the question"
                 extension = []
+                self.question = []
                 for channel in variables.channels_to_consider:
                     extension.extend(alpha_wave_data[a][channel][i * variables.window_base_length : (i+1) * variables.window_base_length])
                 self.question.extend(extension)
-
+                # print("in network.calculate: " + str(len(self.question)))
                 outputs_first = []
                 outputs_second = []
                 # 2. feed the neurons in the first layer
