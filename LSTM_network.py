@@ -112,7 +112,7 @@ class NeuralNetwork(object):
         """
         the_sum = dict()
         for key in target:
-            the_sum[key] = sum([math.pow(f - o, 2) for f, o in zip(self.answer, target)]) / len(target[key])
+            the_sum[key] = sum([math.pow(f - o, 2) for f, o in zip(self.answer[key], target[key])]) / len(target[key])
             the_sum[key] = math.sqrt(the_sum[key])
         self.score = sum(the_sum.values()) / len(the_sum)
 

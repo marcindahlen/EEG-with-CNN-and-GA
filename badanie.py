@@ -131,11 +131,19 @@ class Badanie(object):
         if not self.db.isDataInitialised:
             raise Exception('No data was loaded, see dataBase.prepare_input()!')
 
-        print("   Sieci klasyfikują...")
+        print("   Sieci klasyfikują", end="... ")
         output_scores = []                          # list of ints
+        counter = 0
+        start = time.time()
+        time.clock()
         for network in self.network_list:
             network.forward_pass(self.db.input_examined, iterations_no)
             output_scores.append(network.evaluate_self(self.output_examined))
+            counter += 1
+            percent = int((counter / len(self.network_list)) * 100)
+            print(str(percent) + '%', end=' ', flush=True)
+
+        print("iteracja trwała " + str(int(time.time() - start)) + "s")
 
         self.network_list.sort(key=lambda network: network.score, reverse=True)
 
