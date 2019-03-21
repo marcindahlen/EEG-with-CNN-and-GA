@@ -9,7 +9,6 @@ class LstmNeuron(object):
     """
 
     #@TODO konstruktor może, ale nie musi przyjmować zapamiętane wagi
-    #@TODO should i initialise weights in (-1, 1) ??
     def __init__(self, window, from_existing_data=False, weights_data=[]):
         self.weights = [[] for i in range(4)]
         self.bias_weights = []
