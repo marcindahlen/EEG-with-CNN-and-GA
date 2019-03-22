@@ -1,5 +1,6 @@
 import utility
 import random
+import numpy
 
 
 class NumpyNeuron(object):

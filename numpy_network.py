@@ -1,8 +1,8 @@
 import math
 import random
 import variables
-from LSTM_neuron import LstmNeuron
-from array import array
+from numpy_neuron import NumpyNeuron
+import numpy
 
 # @TODO konstruktor może, ale nie musi przyjmować zapamiętane wagi
 
