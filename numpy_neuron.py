@@ -20,7 +20,9 @@ class NumpyNeuron(object):
         self.mem = 0
         self.output = 0
         if not from_existing_data:
-            self.weights = 0.407 * numpy.random.randn(4, window + 2) + 0.5            # +2 from weights for bias and previous value; normal distribution mu=0.5 sigma=0.166
+            self.weights = 0.407 * numpy.random.randn(4, window + 2) + 0.5              # +2 from weights for bias and previous value; normal distribution mu=0.5 sigma=0.166
+            numpy.append(self.weights[0], numpy.random.rand())                          # append weight for previous memory state
+            numpy.append(self.weights[1], numpy.random.rand())                          # append weight for previous memory state
         if from_existing_data:
             if not weights_data:
                 raise Exception('No weights data passed to the neuron constructor!')
