@@ -102,13 +102,13 @@ class NeuralNetwork(object):
         Saves wages values of all neurons
         in a binary file.
         → https://stackoverflow.com/questions/807863/how-to-output-list-of-floats-to-a-binary-file-in-python
-
+        → https://www.numpy.org/devdocs/user/basics.creation.html
         :return void
         """
 
     def load_state_binary(self, file_path):
         """
-
+        → https://www.numpy.org/devdocs/user/basics.creation.html
         :return void"""
         pass
 

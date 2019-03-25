@@ -33,7 +33,7 @@ class Datastorage(object):
         print('   Wczytywanie kanałów', end='... ')
         for file in self.files_list:
             temporary_mem_channels = dict()
-            self.input_examined[file] = numpy.genfromtxt(variables.in_raw_path + file, delimiter=',')
+            self.input_examined[file] = numpy.genfromtxt(variables.in_raw_path + file, delimiter=',', dtype=numpy.float32)
             self.input_examined[file] = numpy.delete(self.input_examined[file], variables.how_many_to_drop, axis=None)
             channel_size = self.count_channel_size(self.input_examined[file])
             channels_no = numpy.floor(len(self.input_examined[file]) / channel_size).astype(int)
