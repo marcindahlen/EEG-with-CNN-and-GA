@@ -68,6 +68,30 @@ class NeuralNetwork(object):
         # 3. feed the neurons in the second layer
         # 4. feed the neurons in the last layer and get "the answer"
 
+        """
+        for a in alpha_wave_data:
+            for i in range(iterations_no-1):         # @TODO iterations should be around 100? for now, around 21
+                self.answer[a] = []                # erase previous answer, only last one (after all iterations) matters
+                # 1. prepare "the question"
+                extension = []
+                self.question = []
+                for channel in variables.channels_to_consider:
+                    extension.extend(alpha_wave_data[a][channel][i * variables.window_base_length : (i+1) * variables.window_base_length])
+                self.question.extend(extension)
+                # print("in network.calculate: " + str(len(self.question)))
+                outputs_first = []
+                outputs_second = []
+                # 2. feed the neurons in the first layer
+                for neuron in self.topology[0]:
+                    outputs_first.append(neuron.calculate(self.question))
+                # 3. feed the neurons in the second layer
+                for neuron in self.topology[1]:
+                    outputs_second.append(neuron.calculate(outputs_first))
+                # 4. feed the neurons in the last layer and get "the answer"
+                for neuron in self.topology[2]:
+                    self.answer[a].append(neuron.calculate(outputs_second))
+        """
+
     def evaluate_self(self, target):                # Probably the most important method of them all!!
         """
         Given the target values in form of dictionary of lists,

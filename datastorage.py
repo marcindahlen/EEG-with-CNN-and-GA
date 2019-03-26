@@ -31,6 +31,30 @@ class Datastorage(object):
         :return void
         """
         print('   Wczytywanie kanałów', end='... ')
+        self.load_channels()
+        print('   zakończone.')
+        # at this point i have a dictionary with filenames as keys containing dictionaries with channel numbers as keys (and channel numpy array data as values)
+
+        # @TODO low- and highpass filters + fourier 8-12Hz
+        # → https://betterexplained.com/articles/an-interactive-guide-to-the-fourier-transform/
+        print('   >>fourier placeholder - not implemented yet<<')
+
+        print("   Standaryzacja danych", end="...")
+        self.standardise_channel_data()
+        print("zakończona.")
+        # at this point data is standardised around 0, with outsider values deleted
+
+        print("   Normalizacja danych", end="...")
+        self.normalise_channel_data()
+        print("zakończona.")
+        # at this point data is normalised in <0, 1>
+        # @TODO or maybe i should normalise in <-1, 1> and introduce (-1, 1) to initialized weights in neurons ??
+
+        self.prepare_infoForNetworks()
+
+        self.isDataInitialised = True
+
+    def load_channels(self):
         for file in self.files_list:
             temporary_mem_channels = dict()
             self.input_examined[file] = numpy.genfromtxt(variables.in_raw_path + file, delimiter=',', dtype=numpy.float32)
@@ -41,14 +65,14 @@ class Datastorage(object):
             for channel in range(0, channels_no):
                 temporary_mem_channels[channel] = self.input_examined[file][channel * channel_size : (channel + 1) * channel_size]
             self.input_examined[file] = temporary_mem_channels
-        print('   zakończone.')
-        # at this point i have a dictionary with filenames as keys containing dictionaries with channel numbers as keys (and channel numpy array data as values)
 
-        # @TODO low- and highpass filters + fourier 8-12Hz
-        # → https://betterexplained.com/articles/an-interactive-guide-to-the-fourier-transform/
-        print('   >>fourier placeholder - not implemented yet<<')
+    def data_apply_filters(self):
+        pass
 
-        print("   Standaryzacja danych", end="...")
+    def data_fourier_transform(self):
+        pass
+
+    def standardise_channel_data(self):
         for examined_keys, examined_vals in self.input_examined.items():
             for channel_keys, channel_vals in examined_vals.items():
                 for i in range(len(channel_vals)-1):
@@ -60,10 +84,8 @@ class Datastorage(object):
                 for i in range(len(channel_value)):
                     if numpy.absolute(channel_value[i] - slice_mean) > 4 * slice_dev:
                         channel_value[i] = 0
-        print("zakończona.")
-        # at this point data is standardised around 0, with outsider values deleted
 
-        print("   Normalizacja danych", end="...")
+    def normalise_channel_data(self):
         for examined_keys, examined_vals in self.input_examined.items():
             minimum = math.inf
             maximum = 0
@@ -72,13 +94,7 @@ class Datastorage(object):
                 maximum = max(channel_vals) if max(channel_vals) > maximum else maximum
             for channel_keys, channel_vals in examined_vals.items():
                 for i in range(len(channel_vals)):
-                    channel_vals[i] = (channel_vals[i] - minimum) / (maximum - minimum)
-        print("zakończona.")
-        # at this point data is normalised in <0, 1>
-        # @TODO or maybe i should normalise in <-1, 1> and introduce (-1, 1) to initialized weights in neurons ??
-
-        self.prepare_infoForNetworks()
-        self.isDataInitialised = True
+                    channel_vals[i] = ((channel_vals[i] - minimum) / (maximum - minimum)).astype(dtype=numpy.float32)
 
     def count_channel_size(self, eeg):
         """
