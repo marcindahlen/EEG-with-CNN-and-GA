@@ -10,6 +10,8 @@ import numpy
 
 # @TODO potrzebna funkcja do zapisu stanu wag
 
+# @TODO czy neurony pierwszej wartswy powinny widzieć cały zakres danych, czy konwolucja?
+
 
 class NeuralNetwork(object):
     """
@@ -75,7 +77,9 @@ class NeuralNetwork(object):
                 outputs = [[] for k in range(len(self.topology))]
                 for k, layer in enumerate(self.topology):
                     for neuron in layer:
-                        outputs[k:int] = numpy.append(outputs[k], neuron.calculate((self.question if k==0 else outputs[k-1]).astype(dtype=numpy.float32)))
+                        outputs[k:int] = numpy.append(outputs[k], neuron.calculate((self.question if k == 0 else outputs[k-1]).astype(dtype=numpy.float32)))
+
+                self.answer = outputs[-1]
 
     def evaluate_self(self, target):                # Probably the most important method of them all!!
         """
@@ -93,17 +97,25 @@ class NeuralNetwork(object):
         :param target: dictionary of lists
         :return: RMSE
         """
+        the_sum = dict()
+
+        for key in target:              # @TODO correct answer is of much importance, should i increase its impact by an order of magnitude (or lower impact of mistake)?
+            the_sum[key] = sum([math.pow(0.1*f - 0.1*o if o != 1 else f - o, 2) for f, o in zip(self.answer[key], target[key])]) / len(target[key])
+            the_sum[key] = math.sqrt(the_sum[key])
+        self.score = sum(the_sum.values()) / len(the_sum)
 
     def get_score(self):
         """
-        ":return float <0, 1>
+        :return float <0, 1>
         """
+
         return self.score
 
     def get_id(self):
         """
         :return string
         """
+
         return str(self.examination_no) + '_' + str(self.cycles) + '_' + str(self.score)
 
     def save_state_binary(self, file_path):
@@ -114,12 +126,23 @@ class NeuralNetwork(object):
         → https://www.numpy.org/devdocs/user/basics.creation.html
         :return void
         """
+        to_save = []
+        for layer in self.topology:
+            for neuron in layer:
+                to_save = numpy.append(to_save, neuron.get_weights_vectorised())
+        to_save.tofile(file_path + self.get_id())
 
-    def load_state_binary(self, file_path):
+    def load_state_binary(self, file_name):
         """
         → https://www.numpy.org/devdocs/user/basics.creation.html
+        → https://docs.scipy.org/doc/numpy-1.15.0/reference/generated/numpy.fromfile.html
         :return void"""
-        pass
+        to_load = numpy.fromfile(file_name, dtype=numpy.float32)
+        for layer in self.topology:
+            for neuron in layer:
+                read = numpy.array(to_load[0:neuron.get_size()], dtype=numpy.float32)
+                to_load = to_load[neuron.get_size():]
+                neuron.set_weights_from_vectorized(read)
 
     def save_state_text(self, file_path):
         """
@@ -132,7 +155,7 @@ class NeuralNetwork(object):
         with open(path, "w+") as file:
             for layer in self.topology:
                 for neuron in layer:
-                    for weight in neuron.get_weights():
+                    for weight in neuron.get_weights_vectorised():
                         file.write(weight)
 
     def load_state_text(self, file_path):
@@ -156,7 +179,22 @@ class NeuralNetwork(object):
         for all wages for all neurons
         in this network.
 
+        I expect to have about 50 populations
+        of networks one after another.
+        Each network have about 103000 weights or more.
+
         :return void"""
+
+        def change_weights(weights: list) -> list:
+            amount = int(len(weights) / variables.population_quantity)
+            change_indexes = numpy.random.random_integers(len(weights), size=(amount,))
+            for index in change_indexes:
+                weights[index] = 0.407 * numpy.random.randn() + 0.5
+            return weights
+
+        for layer in self.topology:
+            for neuron in layer:
+                neuron.set_weights_from_vectorized(change_weights(neuron.get_weights_vectorised))
 
     def create_single_child(self, other_network):
         """

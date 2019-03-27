@@ -61,9 +61,9 @@ class NumpyNeuron(object):
         :return: array (vector) of all weights
         """
         output = numpy.array(self.weights[0], dtype=numpy.float32)
-        output = numpy.append(self.weights[1])
-        output = numpy.append(self.weights[2])
-        output = numpy.append(self.weights[3])
+        output = numpy.append(output, self.weights[1])
+        output = numpy.append(output, self.weights[2])
+        output = numpy.append(output, self.weights[3])
 
         return output
 
