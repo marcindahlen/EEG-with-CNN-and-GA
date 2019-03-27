@@ -1,8 +1,8 @@
-from badanie import Badanie
+from populacja import Populacja
 import variables
 import plotly.graph_objs
 
-b = Badanie(0)
+b = Populacja(0)
 
 data = b.input_examined['P08.txt'][16]
 print(data)

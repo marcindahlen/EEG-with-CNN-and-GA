@@ -11,7 +11,7 @@ network_input_window = window_base_length * len(channels_to_consider)   # "recep
                                                                         # → http://cs231n.github.io/convolutional-networks/#conv
 
 network_topology = [10 * 16, 5 * 8, 10 * 1]                             # Network classifies eeg data to a particular slice of possible outcomes,
-                                                                        # as an input there are 10 channels of data points, - see comments in 'badanie.py'
+                                                                        # as an input there are 10 channels of data points, - see comments in 'populacja.py'
                                                                         # each channel is about 150k in length,
                                                                         # output is affiliation to one of ten classes
 

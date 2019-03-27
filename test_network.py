@@ -1,4 +1,4 @@
-from badanie import Badanie
+from populacja import Populacja
 from datastorage import Datastorage
 import variables
 import plotly.graph_objs
@@ -10,7 +10,7 @@ data.prepare_input()
 
 #data.show_summary()
 
-b = Badanie(1, data)
+b = Populacja(1, data)
 
 print("Assumed iterations: " + str(data.assume_networkIterationsNo()))
 

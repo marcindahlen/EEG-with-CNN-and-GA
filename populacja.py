@@ -30,7 +30,7 @@ from datastorage import Datastorage
 import time
 
 
-class Badanie(object):
+class Populacja(object):
 
     def __init__(self, examination_no, datastorage):                                             # examination_no is the index of column in target data
         self.examination_no = examination_no
@@ -52,7 +52,7 @@ class Badanie(object):
                                   14: 'SSU',
                                   15: 'ACZ',
                                   16: 'PKT'}
-        print('Badanie ' + self.examination_names[self.examination_no])
+        print('Populacja ' + self.examination_names[self.examination_no])
         self.db = datastorage
         self.prepare_target(examination_no)
         self.minmax_tuple = ()
@@ -147,7 +147,7 @@ class Badanie(object):
 
         self.network_list.sort(key=lambda network: network.score, reverse=True)
 
-        print("   Wyniki bieżącej populacji sieci: " + str(output_scores))
+        # print("   Wyniki bieżącej populacji sieci: " + str(output_scores))
         return output_scores
 
 

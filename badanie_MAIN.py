@@ -15,7 +15,7 @@ I assume following files hierarchy:
         out_wykresy/
 
         python/
-            badanie.py
+            populacja.py
             .
             .
             .
@@ -24,7 +24,7 @@ I assume following files hierarchy:
 
 """
 
-from badanie import Badanie
+from populacja import Populacja
 import variables
 from plotly import graph_objs
 import plotly.plotly
