@@ -206,6 +206,21 @@ class NeuralNetwork(object):
 
         :return network
         """
+        network_length = 0
+        for layer in self.topology:
+            network_length += len(layer)
+
+        intersection = int(random.gauss(network_length / 2, network_length / 6))
+
+        left_topology = self.flatten_topology(self.topology)
+        left_topology = left_topology[:intersection]
+        right_topology = self.flatten_topology(other_network.topology)
+        right_topology = right_topology[intersection:]
+
+        new_topology: list = left_topology.extend(right_topology)
+        new_topology = self.rebuild_topology(new_topology)
+
+        return NeuralNetwork(self.examination_no, new_topology).mutate()
 
     def multiplication_by_budding(self):
         """
@@ -216,11 +231,19 @@ class NeuralNetwork(object):
         :return network
         """
 
+        return NeuralNetwork(self.examination_no, self.topology).mutate()
+
     def flatten_topology(self, topology):
         """
 
         :return:
         """
+        flat_topology = []
+        for layer in topology:
+            for neuron in layer:
+                flat_topology.append(neuron)
+
+        return flat_topology
 
     def rebuild_topology(self, flat: 'flattened topology'):
         """
@@ -228,3 +251,8 @@ class NeuralNetwork(object):
         :param flat:
         :return:
         """
+        flat.reverse()
+
+        new_topology = [[flat.pop() for neuron in layer] for layer in self.topology]
+
+        return new_topology
