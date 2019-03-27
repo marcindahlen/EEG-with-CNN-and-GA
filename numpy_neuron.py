@@ -99,9 +99,8 @@ class NumpyNeuron(object):
         """
         Executes a single forward pass on a neuron.
         """
-        input.append(self.bias)
-        input.append(self.y_prev)
-        input = numpy.array(input)
+        input = numpy.append(input, self.bias)
+        input = numpy.append(input, self.y_prev)
 
         self.suma_in = numpy.multiply(input, self.weights[0])
         self.suma_in = numpy.sum(self.suma_in, dtype=numpy.float32)

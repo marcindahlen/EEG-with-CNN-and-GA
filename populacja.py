@@ -23,10 +23,8 @@ Idealnie, wynikiem pojedynczego badania są:
 """
 import math
 import variables
-from LSTM_network import NeuralNetwork
+from numpy_network import NeuralNetwork
 import pandas
-import numpy
-from datastorage import Datastorage
 import time
 
 
