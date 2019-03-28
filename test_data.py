@@ -1,17 +1,22 @@
 from populacja import Populacja
+from datastorage import Datastorage
 import variables
 import plotly.graph_objs
 
-b = Populacja(0)
 
-data = b.input_examined['P08.txt'][16]
-print(data)
+data = Datastorage()
+data.prepare_input()
 
-data = b.output_examined['P08.txt']
-print(data)
+b = Populacja(0, data)
 
-x = [i for i in range(len(data))]
-trace = plotly.graph_objs.Scatter(x=x, y=data)
+the_data = data.input_examined['P08.txt'][16]
+print(the_data)
+
+the_data = b.output_examined['P08.txt']
+print(the_data)
+
+x = [i for i in range(len(the_data))]
+trace = plotly.graph_objs.Scatter(x=x, y=the_data)
 plot_data = [trace]
 figure = plotly.graph_objs.Figure(data=plot_data)
 plotly.offline.plot(figure, filename=variables.out_charts_path + "badanie" + '.html', auto_open=False)

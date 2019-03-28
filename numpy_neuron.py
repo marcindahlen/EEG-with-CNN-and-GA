@@ -27,9 +27,12 @@ class NumpyNeuron(object):
         self.mem = 0
         self.output = 0
         if not from_existing_data:
-            self.weights = 0.407 * numpy.random.randn(4, window + 1) + 0.5              # +1 from weights for bias; normal distribution mu=0.5 sigma=0.166
-            numpy.append(self.weights[0], numpy.random.rand())                          # append weight for previous output value
-            numpy.append(self.weights[1], numpy.random.rand())                          # append weight for previous output value
+            self.weights = [[] for i in range(4)]                                       # repetition to avoid ValueError: could not broadcast input array from shape
+            self.weights[0] = 0.407 * numpy.random.randn(window + 2) + 0.5              # +2 from weights for bias and previous output; normal distribution mu=0.5 sigma=0.166
+            self.weights[1] = 0.407 * numpy.random.randn(window + 2) + 0.5
+            self.weights[2] = 0.407 * numpy.random.randn(window + 1) + 0.5              # +1 from weights for bias; normal distribution mu=0.5 sigma=0.166
+            self.weights[3] = 0.407 * numpy.random.randn(window + 1) + 0.5
+
         if from_existing_data:
             if not weights_data:
                 raise Exception('No weights data passed to the neuron constructor!')
@@ -104,24 +107,24 @@ class NumpyNeuron(object):
 
         self.suma_in = numpy.multiply(input, self.weights[0])
         self.suma_in = numpy.sum(self.suma_in, dtype=numpy.float32)
-        self.y_in = utility.sigmoid(self.suma_in).astype(dtype=numpy.float32)
+        self.y_in = utility.sigmoid(self.suma_in)
 
         self.suma_forget = numpy.multiply(input, self.weights[1])
         self.suma_forget = numpy.sum(self.suma_forget, dtype=numpy.float32)
-        self.y_forget = utility.sigmoid(self.suma_forget).astype(dtype=numpy.float32)
+        self.y_forget = utility.sigmoid(self.suma_forget)
 
         input = input[:-1]              # drop y_prev
 
         self.suma_mem = numpy.multiply(input, self.weights[2])
         self.suma_mem = numpy.sum(self.suma_mem, dtype=numpy.float32)
-        self.mem = self.y_forget * self.mem + self.y_in * utility.tanh(self.suma_mem).astype(dtype=numpy.float32)
+        self.mem = self.y_forget * self.mem + self.y_in * utility.tanh(self.suma_mem)
 
         self.suma_out = numpy.multiply(input, self.weights[3])
         self.suma_out = numpy.sum(self.suma_out, dtype=numpy.float32)
-        self.y_out = utility.sigmoid(self.suma_out).astype(dtype=numpy.float32)
+        self.y_out = utility.sigmoid(self.suma_out)
 
         self.output = utility.tanh(self.mem) * self.y_out
 
-        self.y_prev = self.output.astype(dtype=numpy.float32)
+        self.y_prev = self.output
 
         return self.output

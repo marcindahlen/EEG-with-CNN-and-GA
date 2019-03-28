@@ -73,17 +73,24 @@ class Datastorage(object):
         pass
 
     def standardise_channel_data(self):
+        progress = 0
         for examined_keys, examined_vals in self.input_examined.items():
             for channel_keys, channel_vals in examined_vals.items():
                 for i in range(len(channel_vals)-1):
                     channel_vals[i] = channel_vals[i+1] - channel_vals[i]
-                    channel_vals[len(channel_vals)-1] = 0
-            for channel_key, channel_value in examined_vals.items():
+                    channel_vals[-1] = 0
+            progress += 1
+            print(str(int((progress / len(self.input_examined) * 100))), end="%, ")
+            for channel_key, channel_value in examined_vals.items():                # @TODO it takes eternity to process, needs optimization
                 slice_mean = numpy.mean(channel_value)
                 slice_dev = numpy.std(channel_value)
                 for i in range(len(channel_value)):
-                    if numpy.absolute(channel_value[i] - slice_mean) > 4 * slice_dev:
-                        channel_value[i] = 0
+                    # if numpy.absolute(channel_value[i] - slice_mean) > 4 * slice_dev:
+                    # channel_value[i] = 0
+                    if channel_value[i] - slice_mean > 4 * slice_dev:
+                        channel_value[i] = slice_mean + 3 * slice_dev
+                    elif channel_value[i] - slice_mean < -4 * slice_dev:
+                        channel_value[i] = slice_mean - 3 * slice_dev
 
     def normalise_channel_data(self):
         for examined_keys, examined_vals in self.input_examined.items():

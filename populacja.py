@@ -60,7 +60,7 @@ class Populacja(object):
         self.network_list = [NeuralNetwork(examination_no) for i in range(variables.population_quantity)]
         print("zakończona po " + str(int(time.time() - start)) + "s")
 
-    def prepare_target(self, examination_no):
+    def prepare_target(self, examination_no):                   # @TODO to powinno być w datastorage
         """
         From excel file with columns:
         badany,	SPP,	SPH,	RPN,	Raven_A,	Raven_B,	Raven_C,	Raven_D,	Raven_E,	Raven_WO,	IVE_Impulsywnosc,	IVE_Ryzyko,	IVE_Empatia,	SSZ,	SSE,	SSU,	ACZ,	PKT
