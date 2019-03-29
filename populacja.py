@@ -24,7 +24,6 @@ Idealnie, wynikiem pojedynczego badania są:
 import math
 import variables
 from numpy_network import NeuralNetwork
-import pandas
 import time
 
 
@@ -32,7 +31,6 @@ class Populacja(object):
 
     def __init__(self, examination_no, datastorage):                                             # examination_no is the index of column in target data
         self.examination_no = examination_no
-        self.output_examined = dict()
         self.examination_names = {0: 'SPP',
                                   1: 'SPH',
                                   2: 'RPN',
@@ -52,68 +50,11 @@ class Populacja(object):
                                   16: 'PKT'}
         print('Populacja ' + self.examination_names[self.examination_no])
         self.db = datastorage
-        self.prepare_target(examination_no)
-        self.minmax_tuple = ()
         start = time.time()
         time.clock()
         print('   Inicjalizacja populacji sieci', end="... ")
         self.network_list = [NeuralNetwork(examination_no) for i in range(variables.population_quantity)]
         print("zakończona po " + str(int(time.time() - start)) + "s")
-
-    def prepare_target(self, examination_no):                   # @TODO to powinno być w datastorage
-        """
-        From excel file with columns:
-        badany,	SPP,	SPH,	RPN,	Raven_A,	Raven_B,	Raven_C,	Raven_D,	Raven_E,	Raven_WO,	IVE_Impulsywnosc,	IVE_Ryzyko,	IVE_Empatia,	SSZ,	SSE,	SSU,	ACZ,	PKT
-        read data,
-
-        → https://www.mantidproject.org/Working_With_Functions:_Return_Values
-        :return void
-        """
-        print('   Wczytywanie danych wzorcowych', end='...')
-        target_data = pandas.read_excel(variables.out_raw_filepath)
-        target_data = target_data.iloc[2:, :]                         # delete P01BA and P01BB rows
-        target_data = target_data.iloc[:, examination_no + 1].values
-
-        minimum = min(target_data)
-        maximum = max(target_data)
-        self.minmax_tuple = (minimum, maximum)
-        for i in range(len(target_data)):
-            target_data[i] = (target_data[i] - minimum) / (maximum - minimum)
-
-        for index, file in enumerate(self.db.files_list):
-            self.output_examined[file] = [self.decide_no_belonging(target_data[index], x) for x in range(10)]
-
-        # at this point i have a dictionary with filenames as keys containing a list as value.
-        # The list contain ten values → 0 or 1, where 1 means the original value was in corresponding range
-        # i.e. 39 becomes 0.18 when minmaxed* in <32, 71> → which becomes [0, 1, 0, 0, 0, 0, 0, 0, 0, 0]
-        #   *look "at this point data is normalised in <0, 1>" above or → https://en.wikipedia.org/wiki/Feature_scaling
-        print(' zakończone.')
-
-    def decide_no_belonging(self, number, index):
-        """
-        Given minmaxed value of examined's test score
-        and currently considered index in list being build,
-        outputs 1 or 0 where 1 is a valid match
-        :param number:
-        :param index:
-        :return: int: 1 or 0
-        """
-        index = index / 10
-        return 1 if index <= number < index + 0.1 else 0
-
-    def interprete_prediction(self, prediction):
-        """
-        Given list with 10 elements - 9 zeros and 1 one,
-        this method converts information from the list
-        to the form as in raw input (reverse process from prepare_target()
-        :return: int
-        """
-        memory = 0
-        for i, x in enumerate(prediction):
-            memory += x * (i + 1) / 10
-        memory = memory * (self.minmax_tuple[1] - self.minmax_tuple[0]) + self.minmax_tuple[0]
-
-        return memory
 
     def forward_pass_all_networks(self, iterations_no):
         """
@@ -136,7 +77,7 @@ class Populacja(object):
         time.clock()
         for network in self.network_list:
             network.forward_pass(self.db.input_examined, iterations_no)
-            output_scores.append(network.evaluate_self(self.output_examined))
+            output_scores.append(network.evaluate_self(self.db.output_examined))
             counter += 1
             percent = int((counter / len(self.network_list)) * 100)
             print(str(percent) + '%', end=' ', flush=True)
@@ -145,9 +86,7 @@ class Populacja(object):
 
         self.network_list.sort(key=lambda network: network.score, reverse=True)
 
-        # print("   Wyniki bieżącej populacji sieci: " + str(output_scores))
-        return output_scores
-
+        return output_scores.sort(reverse=True)
 
     def evolve_network_generation(self):
         """

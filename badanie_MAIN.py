@@ -37,4 +37,5 @@ x = [i for i in range(len(output_scores))]
 
 """
     → https://superuser.com/questions/679679/how-to-increase-pythons-cpu-usage
+    → https://stackoverflow.com/questions/4675728/redirect-stdout-to-a-file-in-python
 """

@@ -249,12 +249,13 @@ class NeuralNetwork(object):
 
         return flat_topology
 
-    def rebuild_topology(self, flat: 'flattened topology'):
+    def rebuild_topology(self, flat: list):
         """
 
         :param flat:
         :return:
         """
+        print(len(flat))
         flat.reverse()
 
         new_topology = [[flat.pop() for neuron in layer] for layer in self.topology]

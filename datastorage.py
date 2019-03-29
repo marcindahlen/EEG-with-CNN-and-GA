@@ -6,6 +6,7 @@ despite the number of examinations.
 import variables
 import math
 import numpy
+import pandas
 import os
 import os.path
 
@@ -19,6 +20,7 @@ class Datastorage(object):
         self.files_no = len(self.files_list)
         print('   Znaleziono ' + str(self.files_no) + ' badanych.')
         self.isDataInitialised = False
+        self.minmax_tuple = ()
         self.minmax_channelLength_tuple = ()
 
     def prepare_input(self):
@@ -152,7 +154,6 @@ class Datastorage(object):
         """
         return int(self.minmax_channelLength_tuple[0] / variables.network_input_window)          # TODO could be better
 
-
     def show_summary(self):
         """
 
@@ -170,3 +171,58 @@ class Datastorage(object):
                     print(key + ' ' + str(channel_key) + ': ' + str(summary[key][channel_key]), end="; ")
         print()
         print("networkIterationsNo: " + str(self.assume_networkIterationsNo()))
+
+    def prepare_target(self, examination_no):
+        """
+        From excel file with columns:
+        badany,	SPP,	SPH,	RPN,	Raven_A,	Raven_B,	Raven_C,	Raven_D,	Raven_E,	Raven_WO,	IVE_Impulsywnosc,	IVE_Ryzyko,	IVE_Empatia,	SSZ,	SSE,	SSU,	ACZ,	PKT
+        read data,
+
+        → https://www.mantidproject.org/Working_With_Functions:_Return_Values
+        :return void
+        """
+        print('   Wczytywanie danych wzorcowych', end='...')
+        target_data = pandas.read_excel(variables.out_raw_filepath)
+        target_data = target_data.iloc[2:, :]                         # delete P01BA and P01BB rows
+        target_data = target_data.iloc[:, examination_no + 1].values
+
+        minimum = min(target_data)
+        maximum = max(target_data)
+        self.minmax_tuple = (minimum, maximum)
+        for i in range(len(target_data)):
+            target_data[i] = (target_data[i] - minimum) / (maximum - minimum)
+
+        for index, file in enumerate(self.files_list):
+            self.output_examined[file] = [self.decide_no_belonging(target_data[index], x) for x in range(10)]
+
+        # at this point i have a dictionary with filenames as keys containing a list as value.
+        # The list contain ten values → 0 or 1, where 1 means the original value was in corresponding range
+        # i.e. 39 becomes 0.18 when minmaxed* in <32, 71> → which becomes [0, 1, 0, 0, 0, 0, 0, 0, 0, 0]
+        #   *look "at this point data is normalised in <0, 1>" above or → https://en.wikipedia.org/wiki/Feature_scaling
+        print(' zakończone.')
+
+    def decide_no_belonging(self, number, index):
+        """
+        Given minmaxed value of examined's test score
+        and currently considered index in list being build,
+        outputs 1 or 0 where 1 is a valid match
+        :param number:
+        :param index:
+        :return: int: 1 or 0
+        """
+        index = index / 10
+        return 1 if index <= number < index + 0.1 else 0
+
+    def interprete_prediction(self, prediction):
+        """
+        Given list with 10 elements - 9 zeros and 1 one,
+        this method converts information from the list
+        to the form as in raw input (reverse process from prepare_target()
+        :return: int
+        """
+        memory = 0
+        for i, x in enumerate(prediction):
+            memory += x * (i + 1) / 10
+        memory = memory * (self.minmax_tuple[1] - self.minmax_tuple[0]) + self.minmax_tuple[0]
+
+        return memory
