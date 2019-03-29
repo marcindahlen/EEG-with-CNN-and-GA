@@ -62,7 +62,7 @@ class NeuralNetwork(object):
 
         self.cycles += 1
         self.answer = dict()        # erase previous values
-        test = False
+
         for a in alpha_wave_data:
             for i in range(iterations_no-1):            # @TODO iterations should be around 100? for now, around 21
                 self.answer[a] = []                     # erase previous answer, only last one (after all iterations) matters
@@ -73,17 +73,14 @@ class NeuralNetwork(object):
                 for channel in variables.channels_to_consider:
                     extension = numpy.append(extension, alpha_wave_data[a][channel][i * variables.window_base_length : (i+1) * variables.window_base_length])
                 self.question = numpy.append(self.question, extension)
-                if not test: print(self.question)
 
                 # 2. loop over neurons in layers
                 outputs = [[] for k in range(len(self.topology))]
                 for k, layer in enumerate(self.topology):
                     for neuron in layer:
                         outputs[k] = numpy.append(outputs[k], neuron.calculate((self.question if k == 0 else outputs[k-1]).astype(dtype=numpy.float32)))
-                if not test: print(outputs[0])
 
                 self.answer[a] = outputs[-1]
-                test = True
 
     def evaluate_self(self, target):                # Probably the most important method of them all!!
         """
@@ -106,7 +103,10 @@ class NeuralNetwork(object):
         for key in target:              # @TODO correct answer is of much importance, should i increase its impact by an order of magnitude (or lower impact of mistake)?
             the_sum[key] = sum([math.pow(f - o, 2) for f, o in zip(self.answer[key], target[key])]) / len(target[key])
             the_sum[key] = math.sqrt(the_sum[key])
+
         self.score = sum(the_sum.values()) / len(the_sum)
+
+        return self.score
 
     def get_score(self):
         """
@@ -191,9 +191,9 @@ class NeuralNetwork(object):
 
         def change_weights(weights: list) -> list:
             amount = int(len(weights) / variables.population_quantity)
-            change_indexes = numpy.random.random_integers(len(weights), size=(amount,))
+            change_indexes = numpy.random.random_integers(len(weights), size=(amount,))         # @TODO to be parametrised as learning rate!!
             for index in change_indexes:
-                weights[index] = 0.407 * numpy.random.randn() + 0.5
+                weights[index] = 2 * numpy.random.random_sample() - 1
             return weights
 
         for layer in self.topology:

@@ -26,12 +26,14 @@ class NumpyNeuron(object):
         self.bias = 1
         self.mem = 0
         self.output = 0
-        if not from_existing_data:
+        self.mean = 0
+        self.sqrt_std_dev = 0.5477225575
+        if not from_existing_data:                                                      # @TODO normal distribution might be not the best choice
             self.weights = [[] for i in range(4)]                                       # repetition to avoid ValueError: could not broadcast input array from shape
-            self.weights[0] = 0.407 * numpy.random.randn(window + 2) + 0.5              # +2 from weights for bias and previous output; normal distribution mu=0.5 sigma=0.166
-            self.weights[1] = 0.407 * numpy.random.randn(window + 2) + 0.5
-            self.weights[2] = 0.407 * numpy.random.randn(window + 1) + 0.5              # +1 from weights for bias; normal distribution mu=0.5 sigma=0.166
-            self.weights[3] = 0.407 * numpy.random.randn(window + 1) + 0.5
+            self.weights[0] = numpy.random.beta(0.5, 0.5, window + 2)                   # +2 from weights for bias and previous output; normal distribution mu=0.5 sigma=0.166
+            self.weights[1] = numpy.random.beta(0.5, 0.5, window + 2)
+            self.weights[2] = numpy.random.beta(0.5, 0.5, window + 1)                   # +1 from weights for bias; normal distribution mu=0.5 sigma=0.166
+            self.weights[3] = numpy.random.beta(0.5, 0.5, window + 1)
 
         if from_existing_data:
             if not weights_data:
