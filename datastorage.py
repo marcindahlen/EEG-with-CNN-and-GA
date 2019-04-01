@@ -37,9 +37,12 @@ class Datastorage(object):
         print('   zakończone.')
         # at this point i have a dictionary with filenames as keys containing dictionaries with channel numbers as keys (and channel numpy array data as values)
 
-        # @TODO low- and highpass filters + fourier 8-12Hz
-        # → https://betterexplained.com/articles/an-interactive-guide-to-the-fourier-transform/
-        print('   >>fourier placeholder - not implemented yet<<')
+        # @TODO dat trimming to lowest length (drop initial varying n points for every channel)
+
+        # @TODO low- and highpass filters
+        print('   Filtrowanie fal alfa...', end='... ')
+        self.data_fourier_transform()
+        print('   zakończone.')
 
         print("   Standaryzacja danych", end="...")
         self.standardise_channel_data()
@@ -57,6 +60,10 @@ class Datastorage(object):
         self.isDataInitialised = True
 
     def load_channels(self):
+        """
+        # @TODO wymaga poprawy!!
+        :return:
+        """
         for file in self.files_list:
             temporary_mem_channels = dict()
             self.input_examined[file] = numpy.genfromtxt(variables.in_raw_path + file, delimiter=',', dtype=numpy.float32)
@@ -72,7 +79,30 @@ class Datastorage(object):
         pass
 
     def data_fourier_transform(self):
-        pass
+        """
+        Alpha waves have frequency between 8Hz and 12Hz
+        → https://en.wikipedia.org/wiki/Alpha_wave
+        This method use Fast Fourier Transform to convert
+        EEG data info to it's frequency info, trim information
+        concerning non-alpha wave frequencies, and convert
+        frequency info back to wave datapoints.
+        → → https://betterexplained.com/articles/an-interactive-guide-to-the-fourier-transform/
+
+        :return:
+        """
+        progress = 0
+        lower_data_limes = variables.alpha_low_frequency / variables.frequencyOfData
+        higher_data_limes = variables.alpha_high_frequency / variables.frequencyOfData
+        for examined_keys, examined_vals in self.input_examined.items():
+            for channel_keys, channel_vals in examined_vals.items():
+                channel_vals = numpy.fft.fft(channel_vals)
+                channel_length = len(channel_vals)
+                for i in range(channel_length):
+                    channel_vals[i] = channel_vals[i] if math.floor(lower_data_limes)*channel_length < i < math.ceil(higher_data_limes)*channel_length else 0
+                channel_vals = numpy.fft.ifft(channel_vals)
+            progress += 1
+            print(str(int((progress / len(self.input_examined) * 100))), end="%, ")
+
 
     def standardise_channel_data(self):
         progress = 0

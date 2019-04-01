@@ -15,23 +15,26 @@ def frange(start, stop, step):
         i += step
 
 
-sin = [math.sin(x) for x in frange(0, 1000, 0.1)]
-count = len(sin)
+recipe = [1 if 7 <= x <= 12 else 0 for x in range(2056)]
+count = len(recipe)
 xs = [x for x in range(count)]
 
-f = numpy.fft.fft(sin)
+f = numpy.fft.ifft(recipe)
 
-print(sin)
+print(recipe)
 
 print(f)
 
-trace = plotly.graph_objs.Scatter(x=xs, y=sin)
-plot_data = [trace]
+y_fft_real = [x.real for x in f]
+y_fft_imaginary = [x.imag for x in f]
+trace_real = plotly.graph_objs.Scatter(x=xs, y=y_fft_real)
+trace_imag = plotly.graph_objs.Scatter(x=xs, y=y_fft_imaginary)
+plot_data = [trace_real, trace_imag]
 figure = plotly.graph_objs.Figure(data=plot_data)
 plotly.offline.plot(figure, filename=variables.out_charts_path + "test_evo_sin" + '.html', auto_open=False)
 
-y_fft_real = [x.real for x in f]
-y_fft_imaginary = [x.imag for x in f]
+y_fft_real = [x.real for x in recipe]
+y_fft_imaginary = [x.imag for x in recipe]
 trace_real = plotly.graph_objs.Scatter(x=xs, y=y_fft_real)
 trace_imag = plotly.graph_objs.Scatter(x=xs, y=y_fft_imaginary)
 plot_data = [trace_real, trace_imag]
