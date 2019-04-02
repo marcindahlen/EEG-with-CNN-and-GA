@@ -26,7 +26,13 @@ class Datamockup(object):
     def prepare_input(self):
         """
         → https://playground.tensorflow.org     # training set ideas
+        Input is mocked as the input from real files,
+        meaning format dict(dict(list))
+        First dictionary simulates the examined people files,
+        second simulates channel (only one for simplicity),
+        the list contains data generated from inverse Fourier transform.
 
+        Network's task is to classify data to source frequency (from finite frequencies set)
         :return void
         """
         size = 8 * variables.window_base_length
@@ -38,11 +44,8 @@ class Datamockup(object):
 
     def prepare_target(self, examination_no):
         """
-        From excel file with columns:
-        badany,	SPP,	SPH,	RPN,	Raven_A,	Raven_B,	Raven_C,	Raven_D,	Raven_E,	Raven_WO,	IVE_Impulsywnosc,	IVE_Ryzyko,	IVE_Empatia,	SSZ,	SSE,	SSU,	ACZ,	PKT
-        read data,
 
-        → https://www.mantidproject.org/Working_With_Functions:_Return_Values
+
         :return void
         """
         pass
