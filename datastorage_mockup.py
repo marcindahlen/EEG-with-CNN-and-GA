@@ -16,7 +16,7 @@ class Datamockup(object):
     def __init__(self):
         self.input_examined = dict()
         self.output_examined = dict()
-        self.files_list = [name for name in os.listdir(variables.in_raw_path)]  # @TODO would be good to do NOT load same data every time
+        self.files_list = [name for name in os.listdir(variables.in_raw_path)]
         self.files_no = len(self.files_list)
         print('   Znaleziono ' + str(self.files_no) + ' badanych.')
         self.isDataInitialised = False
@@ -25,28 +25,26 @@ class Datamockup(object):
 
     def prepare_input(self):
         """
-        From raw csv select proper channels, @TODO proper network could read all channels simultaneously?
-        proper are channels 1 - 8 and 13 and 14, since i was told other channels contain too much noise
-        trim useless frequencies,
-        standardise data.
+        → https://playground.tensorflow.org     # training set ideas
 
         :return void
         """
-        pass
+        size = 8 * variables.window_base_length
+        for file in self.files_list:
+            temporary_mem_channels = dict()
+            for channel_no in range(3):
+                temporary_mem_channels[channel_no] = []
+            self.input_examined[file] = temporary_mem_channels
 
-    def load_channels(self):
-        pass
+    def prepare_target(self, examination_no):
+        """
+        From excel file with columns:
+        badany,	SPP,	SPH,	RPN,	Raven_A,	Raven_B,	Raven_C,	Raven_D,	Raven_E,	Raven_WO,	IVE_Impulsywnosc,	IVE_Ryzyko,	IVE_Empatia,	SSZ,	SSE,	SSU,	ACZ,	PKT
+        read data,
 
-    def data_apply_filters(self):
-        pass
-
-    def data_fourier_transform(self):
-        pass
-
-    def standardise_channel_data(self):
-        pass
-
-    def normalise_channel_data(self):
+        → https://www.mantidproject.org/Working_With_Functions:_Return_Values
+        :return void
+        """
         pass
 
     def count_channel_size(self, eeg):
@@ -80,17 +78,6 @@ class Datamockup(object):
         """
 
         :return:
-        """
-        pass
-
-    def prepare_target(self, examination_no):
-        """
-        From excel file with columns:
-        badany,	SPP,	SPH,	RPN,	Raven_A,	Raven_B,	Raven_C,	Raven_D,	Raven_E,	Raven_WO,	IVE_Impulsywnosc,	IVE_Ryzyko,	IVE_Empatia,	SSZ,	SSE,	SSU,	ACZ,	PKT
-        read data,
-
-        → https://www.mantidproject.org/Working_With_Functions:_Return_Values
-        :return void
         """
         pass
 
