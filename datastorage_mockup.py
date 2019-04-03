@@ -27,7 +27,7 @@ class Datamockup(object):
         """
         → https://playground.tensorflow.org     # training set ideas
         Input is mocked as the input from real files,
-        meaning format dict(dict(list))
+        meaning format dict(dict(list)).
         First dictionary simulates the examined people files,
         second simulates channel (only one for simplicity),
         the list contains data generated from inverse Fourier transform.
@@ -36,70 +36,21 @@ class Datamockup(object):
         :return void
         """
         size = 8 * variables.window_base_length
-        for file in self.files_list:
+        for index, file in enumerate(self.files_list):
             temporary_mem_channels = dict()
             for channel_no in range(3):
-                temporary_mem_channels[channel_no] = []
+                temporary_mem_channels[channel_no] = [0 for x in range(size)]
+                temporary_mem_channels[channel_no][index] = 1 + 1j if index < 10 else 0
+                temporary_mem_channels[channel_no] = numpy.fft.ifft(temporary_mem_channels[channel_no])
             self.input_examined[file] = temporary_mem_channels
 
     def prepare_target(self, examination_no):
         """
 
-
         :return void
         """
-        pass
+        for index, file in enumerate(self.files_list):
+            self.output_examined[file] = [0 for x in range(10)]
+            self.output_examined[file][index] = 1 if index < 10 else 0
 
-    def count_channel_size(self, eeg):
-        """
-        For each eeg recording there are 17 channels of streamed data,
-        all stored in single file channel after channel.
-        This method counts length of a single channel
-        in a particular file, so channels could be extracted.
-        I assume channels are separated by outlier data points.
-        @TODO probably wrong assumption that channels are equal in length
-        @TODO and there are 16 channels not 17 - first 'item' is noise
-        :return int
-        """
-        pass
 
-    def prepare_infoForNetworks(self):
-        """
-
-        :return:
-        """
-        pass
-
-    def assume_networkIterationsNo(self):
-        """
-
-        :return:
-        """
-        pass
-
-    def show_summary(self):
-        """
-
-        :return:
-        """
-        pass
-
-    def decide_no_belonging(self, number, index):
-        """
-        Given minmaxed value of examined's test score
-        and currently considered index in list being build,
-        outputs 1 or 0 where 1 is a valid match
-        :param number:
-        :param index:
-        :return: int: 1 or 0
-        """
-        pass
-
-    def interprete_prediction(self, prediction):
-        """
-        Given list with 10 elements - 9 zeros and 1 one,
-        this method converts information from the list
-        to the form as in raw input (reverse process from prepare_target()
-        :return: int
-        """
-        pass

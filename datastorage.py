@@ -206,7 +206,7 @@ class Datastorage(object):
         """
         From excel file with columns:
         badany,	SPP,	SPH,	RPN,	Raven_A,	Raven_B,	Raven_C,	Raven_D,	Raven_E,	Raven_WO,	IVE_Impulsywnosc,	IVE_Ryzyko,	IVE_Empatia,	SSZ,	SSE,	SSU,	ACZ,	PKT
-        read data,
+        read data.
 
         → https://www.mantidproject.org/Working_With_Functions:_Return_Values
         :return void
