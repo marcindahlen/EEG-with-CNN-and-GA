@@ -55,12 +55,13 @@ def process_file(filename):
 for file in files_list:
     process_file(file)
 
+print("nested >>")
 nested_waves_lists = [[0 for j in range(256)] for i in range(10)]
 for i, x in enumerate(nested_waves_lists):
     for j, y in x:
         nested_waves_lists[i][j] = 1+1j if i == j else 0
 for y in nested_waves_lists:
-    y = numpy.fft.ifft(x)
+    y = numpy.fft.ifft(y)
     x = [n for n in range(len(y))]
     trace_real = plotly.graph_objs.Scatter(x=x, y=numpy.real(y))
     trace_imag = plotly.graph_objs.Scatter(x=x, y=numpy.imag(y))
