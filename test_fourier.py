@@ -11,11 +11,21 @@ test_data = numpy.genfromtxt(variables.in_raw_path + 'P07.txt', delimiter=',')
 test_data = numpy.delete(test_data, variables.how_many_to_drop, axis=None)
 x = [x for x in range(0, len(test_data))]
 
-"""
-x = [x/100*cmath.pi for x in range(0, 1000)]
-for y in x:
-    test_data.append(cmath.sin(y))
-"""
+print("nested >>")
+nested_waves_lists = [[0 for j in range(256)] for i in range(10)]
+for i, x in enumerate(nested_waves_lists):
+    for j, y in enumerate(x):
+        nested_waves_lists[i][j] = 1+1j if i == j else 0
+for i, y in enumerate(nested_waves_lists):
+    y = numpy.fft.ifft(y)
+    x = [n for n in range(len(y))]
+    trace_real = plotly.graph_objs.Scatter(x=x, y=numpy.real(y))
+    trace_imag = plotly.graph_objs.Scatter(x=x, y=numpy.imag(y))
+    plot_data = [trace_real, trace_imag]
+    figure = plotly.graph_objs.Figure(data=plot_data)
+    plotly.offline.plot(figure, filename=variables.out_charts_path + str(i) + "ifft" + '.html', auto_open=False)
+print("nested <<")
+
 
 trace = plotly.graph_objs.Scatter(x=x, y=numpy.real(test_data))
 plot_data = [trace]
