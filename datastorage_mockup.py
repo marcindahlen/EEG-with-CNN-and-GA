@@ -53,4 +53,14 @@ class Datamockup(object):
             self.output_examined[file] = [0 for x in range(10)]
             self.output_examined[file][index] = 1 if index < 10 else 0
 
+    def normalise_channel_data(self):
+        for examined_keys, examined_vals in self.input_examined.items():
+            minimum = numpy.inf
+            maximum = 0
+            for channel_keys, channel_vals in examined_vals.items():
+                minimum = min(channel_vals) if min(channel_vals) < minimum else minimum
+                maximum = max(channel_vals) if max(channel_vals) > maximum else maximum
+            for channel_keys, channel_vals in examined_vals.items():
+                for i in range(len(channel_vals)):
+                    channel_vals[i] = ((channel_vals[i] - minimum) / (maximum - minimum)).astype(dtype=numpy.float32)
 

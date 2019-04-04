@@ -3,10 +3,12 @@
 """
 
 import numpy
-import math
+from datastorage_mockup import Datamockup
+from populacja import Populacja
 import plotly.plotly
 import plotly.graph_objs
 import variables
+
 
 def frange(start, stop, step):
     i = start
@@ -15,28 +17,31 @@ def frange(start, stop, step):
         i += step
 
 
-recipe = [1 if 7 <= x <= 12 else 0 for x in range(2056)]
-count = len(recipe)
-xs = [x for x in range(count)]
+def test_Hertz():
+    print("Hertzs testing >>")
+    nested_waves_lists = [[0 for j in range(256)] for i in range(10)]
+    for i, x in enumerate(nested_waves_lists):
+        for j, y in enumerate(x):
+            nested_waves_lists[i][j] = 1 + 1j if i == j else 0
+    for i, y in enumerate(nested_waves_lists):
+        y = numpy.fft.ifft(y)
+        x = [n for n in range(len(y))]
+        trace_real = plotly.graph_objs.Scatter(x=x, y=numpy.real(y))
+        trace_imag = plotly.graph_objs.Scatter(x=x, y=numpy.imag(y))
+        plot_data = [trace_real, trace_imag]
+        figure = plotly.graph_objs.Figure(data=plot_data)
+        plotly.offline.plot(figure, filename=variables.out_charts_path + str(i) + "ifft" + '.html', auto_open=False)
+    print("end testing <<")
 
-f = numpy.fft.ifft(recipe)
 
-print(recipe)
+data = Datamockup
+data.prepare_input()
+data.normalise_channel_data()
+data.prepare_target()
 
-print(f)
+population = Populacja(5, data)
 
-y_fft_real = [x.real for x in f]
-y_fft_imaginary = [x.imag for x in f]
-trace_real = plotly.graph_objs.Scatter(x=xs, y=y_fft_real)
-trace_imag = plotly.graph_objs.Scatter(x=xs, y=y_fft_imaginary)
-plot_data = [trace_real, trace_imag]
-figure = plotly.graph_objs.Figure(data=plot_data)
-plotly.offline.plot(figure, filename=variables.out_charts_path + "test_evo_sin" + '.html', auto_open=False)
+wynik = population.forward_pass_all_networks(8)
+print(wynik)
 
-y_fft_real = [x.real for x in recipe]
-y_fft_imaginary = [x.imag for x in recipe]
-trace_real = plotly.graph_objs.Scatter(x=xs, y=y_fft_real)
-trace_imag = plotly.graph_objs.Scatter(x=xs, y=y_fft_imaginary)
-plot_data = [trace_real, trace_imag]
-figure = plotly.graph_objs.Figure(data=plot_data)
-plotly.offline.plot(figure, filename=variables.out_charts_path + "test_evo_fft" + '.html', auto_open=False)
+population.evolve_network_generation()
