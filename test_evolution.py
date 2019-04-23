@@ -34,10 +34,10 @@ def test_Hertz():
     print("end testing <<")
 
 
-data = Datamockup
+data = Datamockup()
 data.prepare_input()
 data.normalise_channel_data()
-data.prepare_target()
+data.prepare_target(5)
 
 population = Populacja(5, data)
 

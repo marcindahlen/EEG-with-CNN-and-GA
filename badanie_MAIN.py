@@ -39,3 +39,9 @@ x = [i for i in range(len(output_scores))]
     → https://superuser.com/questions/679679/how-to-increase-pythons-cpu-usage
     → https://stackoverflow.com/questions/4675728/redirect-stdout-to-a-file-in-python
 """
+
+"""
+    → https://en.wikipedia.org/wiki/Data_stream_management_system#Synopses  !!!
+    It is possible to use another method for data reading, other than windows,
+    and given the nature of eeg it might be highly desirable to use it.
+"""
