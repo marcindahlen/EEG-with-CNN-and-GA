@@ -4,9 +4,8 @@ for testing the evolution process
 of neural networks.
 """
 
-import variables
+from utils import variables
 import numpy
-import pandas
 import os
 import os.path
 

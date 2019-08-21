@@ -4,7 +4,7 @@
 import numpy
 import plotly.plotly
 import plotly.graph_objs
-import variables
+from utils import variables
 import os
 
 test_data = numpy.genfromtxt(variables.in_raw_path + 'P07.txt', delimiter=',')

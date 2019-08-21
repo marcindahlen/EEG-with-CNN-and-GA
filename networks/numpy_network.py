@@ -1,7 +1,7 @@
 import math
 import random
-import variables
-from numpy_neuron import NumpyNeuron
+from utils import variables
+from networks.numpy_neuron import NumpyNeuron
 import numpy
 
 # @TODO konstruktor może, ale nie musi przyjmować zapamiętane wagi
@@ -35,7 +35,8 @@ class NeuralNetwork(object):
 
         if not from_existing_data:
             if not existing_topology:
-                self.topology = [[NumpyNeuron(receptive_field if layer == 0 else variables.network_topology[layer-1]) for neuron in range(variables.network_topology[layer])] for layer in range(len(variables.network_topology))]
+                self.topology = [[NumpyNeuron(receptive_field if layer == 0 else variables.network_topology[layer - 1]) for neuron in range(
+                    variables.network_topology[layer])] for layer in range(len(variables.network_topology))]
             else:
                 self.topology = existing_topology
         if from_existing_data:
@@ -71,7 +72,7 @@ class NeuralNetwork(object):
                 extension = []
                 self.question = []
                 for channel in variables.channels_to_consider:
-                    extension = numpy.append(extension, alpha_wave_data[a][channel][i * variables.window_base_length : (i+1) * variables.window_base_length])
+                    extension = numpy.append(extension, alpha_wave_data[a][channel][i * variables.window_base_length: (i + 1) * variables.window_base_length])
                 self.question = numpy.append(self.question, extension)
 
                 # 2. loop over neurons in layers

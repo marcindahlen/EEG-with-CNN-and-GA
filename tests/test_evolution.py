@@ -3,11 +3,11 @@
 """
 
 import numpy
-from datastorage_mockup import Datamockup
-from populacja import Populacja
+from dataIO.datastorage_mockup import Datamockup
+from networks.population import Populacja
 import plotly.plotly
 import plotly.graph_objs
-import variables
+from utils import variables
 
 
 def frange(start, stop, step):

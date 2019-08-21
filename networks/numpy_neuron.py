@@ -1,5 +1,4 @@
-import utility
-import random
+from utils import utility
 import numpy
 
 

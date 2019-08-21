@@ -21,9 +21,8 @@ Idealnie, wynikiem pojedynczego badania są:
 →   plik (@TODO czy pliki?)
     binarny z zapisem stanu ostatniej generacji sieci.
 """
-import math
-import variables
-from numpy_network import NeuralNetwork
+from utils import variables
+from networks.numpy_network import NeuralNetwork
 import time
 
 

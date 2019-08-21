@@ -3,7 +3,7 @@ Class created to initialize source data only once,
 despite the number of examinations.
 """
 
-import variables
+from utils import variables
 import math
 import numpy
 import pandas

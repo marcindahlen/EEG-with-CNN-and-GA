@@ -1,6 +1,6 @@
-from populacja import Populacja
-from datastorage import Datastorage
-import variables
+from networks.population import Populacja
+from dataIO.datastorage import Datastorage
+from utils import variables
 import plotly.graph_objs
 
 

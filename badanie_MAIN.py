@@ -15,19 +15,15 @@ I assume following files hierarchy:
         out_wykresy/
 
         python/
-            populacja.py
-            .
-            .
-            .
-            variables.py
+            dataIO/
+            networks/
+            tests/
+            utils/
+            badanie_Main.py
+            main.py
         net_memory/
 
 """
-
-from populacja import Populacja
-import variables
-from plotly import graph_objs
-import plotly.plotly
 
 """
 x = [i for i in range(len(output_scores))]

@@ -1,4 +1,4 @@
-from numpy_neuron import NumpyNeuron
+from networks.numpy_neuron import NumpyNeuron
 import numpy
 
 data = [numpy.random.random() for x in range(100)]

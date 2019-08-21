@@ -1,7 +1,7 @@
 import math
 import random
-import variables
-from LSTM_neuron import LstmNeuron
+from utils import variables
+from networks.LSTM_neuron import LstmNeuron
 from array import array
 
 # @TODO konstruktor może, ale nie musi przyjmować zapamiętane wagi
@@ -33,7 +33,8 @@ class NeuralNetwork(object):
 
         if not from_existing_data:
             if not existing_topology:
-                self.topology = [[LstmNeuron(receptive_field if layer == 0 else variables.network_topology[layer-1]) for neuron in range(variables.network_topology[layer])] for layer in range(len(variables.network_topology))]
+                self.topology = [[LstmNeuron(receptive_field if layer == 0 else variables.network_topology[layer - 1]) for neuron in range(
+                    variables.network_topology[layer])] for layer in range(len(variables.network_topology))]
             else:
                 self.topology = existing_topology
         if from_existing_data:
@@ -69,7 +70,7 @@ class NeuralNetwork(object):
                 extension = []
                 self.question = []
                 for channel in variables.channels_to_consider:
-                    extension.extend(alpha_wave_data[a][channel][i * variables.window_base_length : (i+1) * variables.window_base_length])
+                    extension.extend(alpha_wave_data[a][channel][i * variables.window_base_length: (i + 1) * variables.window_base_length])
                 self.question.extend(extension)
                 # print("in network.calculate: " + str(len(self.question)))
                 outputs_first = []

@@ -1,6 +1,5 @@
 import pandas
-import plotting
-import fourier
+from utils import fourier
 
 in_path = "../in_raw/P06.txt"
 data_output_dir = "../out_wykresy"

@@ -1,4 +1,4 @@
-import utility
+from utils import utility
 import random
 
 
