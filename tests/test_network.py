@@ -1,5 +1,5 @@
 from networks.population import Populacja
-from dataIO.datastorage import Datastorage
+from dataIO.datastorage_wholeInputs import Datastorage
 
 data = Datastorage()
 

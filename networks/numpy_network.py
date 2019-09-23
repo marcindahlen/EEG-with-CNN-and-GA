@@ -10,7 +10,7 @@ import numpy
 
 # @TODO potrzebna funkcja do zapisu stanu wag
 
-# @TODO czy neurony pierwszej wartswy powinny widzieć cały zakres danych, czy konwolucja?
+# @TODO czy neurony pierwszej wartswy powinny widzieć cały zakres danych, czy konwolucja? czy Synopsa?? MOST IMPORTANT!!
 
 
 class NeuralNetwork(object):
@@ -47,12 +47,10 @@ class NeuralNetwork(object):
         Given prepared and normalized data
         as a dictionary of numpy arrays it performs single
         pass over all fragments (windows) of data
-        after each (window) giving some output, but only last
-        one is regarded as important one and is
-        further evaluated by other methods.
-        Given data may be of length non divisible by
-        window size and in such case n first values
-        are omitted.
+        after each (window) giving some output, TODO ...???
+        TODO The new approach after reading some papers should be to do everything (on data preparation/fourier level)
+        TODO to read all relevant data (channel data) at once, without windows and sweeping!
+
         @TODO what about forgetting pre-setup window size and instead make the window parametrised to fit data in 1:100 ratio (i.e.)?
         :param iterations_no:
         :param alpha_wave_data: a dictionary with filenames as keys containing dictionaries with channel numbers as keys

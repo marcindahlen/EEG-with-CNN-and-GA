@@ -4,7 +4,7 @@ import numpy
 
 class NumpyNeuron(object):
     """
-    Class defines a single neuron of long-short term memory type.
+    Class defines a single classic neuron.
     → https://cdn-images-1.medium.com/max/1250/1*laH0_xXEkFE0lKJu54gkFQ.png
 
     Using numpy arrays, since basic LSTM_neuron caused over 73 days

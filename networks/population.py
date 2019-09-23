@@ -55,6 +55,11 @@ class Populacja(object):
         self.network_list = [NeuralNetwork(examination_no) for i in range(variables.population_quantity)]
         print("zakończona po " + str(int(time.time() - start)) + "s")
 
+    def prepareGenericEvoCode(self):
+        """
+        @TODO If I have """
+        pass
+
     def forward_pass_all_networks(self, iterations_no):
         """
         For each network in [[self.network_list]]

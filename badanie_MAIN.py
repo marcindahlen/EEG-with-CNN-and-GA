@@ -9,6 +9,13 @@ I assume following files hierarchy:
             .
             .
             P32.txt
+        in_raw_channels/
+            P01CH01
+            P01CH02
+            .
+            .
+            .
+            P32Ch14
         out_raw/
             main_alpha-index_base.xls
             out_absData.xls
@@ -40,4 +47,13 @@ x = [i for i in range(len(output_scores))]
     → https://en.wikipedia.org/wiki/Data_stream_management_system#Synopses  !!!
     It is possible to use another method for data reading, other than windows,
     and given the nature of eeg it might be highly desirable to use it.
+    
+    The idea behind compression techniques is to maintain only a synopsis of the data, 
+    but not all (raw) data points of the data stream. The algorithms range from selecting 
+    random data points called sampling to summarization using histograms, wavelets 
+    or sketching. One simple example of a compression is the continuous calculation 
+    of an average. Instead of memorizing each data point, the synopsis only holds 
+    the sum and the number of items. The average can be calculated by dividing 
+    the sum by the number. However, it should be mentioned that synopses cannot reflect 
+    the data accurately. Thus, a processing that is based on synopses may produce inaccurate results.
 """
