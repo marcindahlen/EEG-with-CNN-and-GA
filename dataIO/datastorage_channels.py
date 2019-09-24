@@ -163,13 +163,44 @@ class Datastorage(object):
 
         :return:
         """
+        for channel_keys in self.input_examined[0].keys():
+            self.channels_stats[channel_keys]['avg_length'] = 0
+            self.channels_stats[channel_keys]['stddev_length'] = []
+            self.channels_stats[channel_keys]['mean_value'] = 0
+            self.channels_stats[channel_keys]['mean_stddev_value'] = 0
+            self.channels_stats[channel_keys]['total_minmax'] = (math.inf, 0)
+            self.channels_stats[channel_keys]['mean_minmax'] = (math.inf ,0)
+
+        for examined_keys, examined_vals in self.input_examined.items():
+            for channel_keys, channel_vals in examined_vals.items():
+                self.channels_stats[channel_keys]['avg_length'] += len(channel_vals)
+                self.channels_stats[channel_keys]['stddev_length'].append(len(channel_vals))
+                self.channels_stats[channel_keys]['mean_value'] += numpy.mean(channel_vals)
+                self.channels_stats[channel_keys]['mean_stddev_value'].append(numpy.std(channel_vals))
+                self.channels_stats[channel_keys]['total_minmax'][0] = min(channel_vals) if self.channels_stats[channel_keys]['total_minmax'][0] > min(channel_vals) else self.channels_stats[channel_keys]['total_minmax'][0]
+                self.channels_stats[channel_keys]['total_minmax'][1] = max(channel_vals) if self.channels_stats[channel_keys]['total_minmax'][1] < max(channel_vals) else self.channels_stats[channel_keys]['total_minmax'][1]
+
+        for key, value in self.channels_stats.items():
+            self.channels_stats[key]['avg_length'] = self.channels_stats[channel_keys]['avg_length'] / self.examined_no
+            self.channels_stats[key]['stddev_length'] = numpy.std(self.channels_stats[channel_keys]['stddev_length'])
+            self.channels_stats[key]['mean_value'] = numpy.mean(self.channels_stats[channel_keys]['mean_value'])
+            self.channels_stats[key]['mean_stddev_value'] = numpy.std(self.channels_stats[key]['mean_stddev_value'])
+            self.channels_stats[channel_keys]['mean_minmax'][0] = self.channels_stats[channel_keys]['total_minmax'][0] if self.channels_stats[channel_keys]['total_minmax'][0] < self.channels_stats[channel_keys]['mean_minmax'][0] else self.channels_stats[channel_keys]['mean_minmax'][0]
+            self.channels_stats[channel_keys]['mean_minmax'][0] = self.channels_stats[channel_keys]['total_minmax'][
+                1] if self.channels_stats[channel_keys]['total_minmax'][1] > \
+                      self.channels_stats[channel_keys]['mean_minmax'][1] else \
+            self.channels_stats[channel_keys]['mean_minmax'][1]
 
     def print_inputdata_insights(self):
         """
-        
+        Prints results of method prepare_inputdata_insights()
+
         :return:
         """
-        pass
+        for key in self.channels_stats.keys():
+            header = "Channel no. " + str(key)
+            print()
+            print(header.center(40, '*'))
 
     def assume_networkIterationsNo(self):
         """
