@@ -24,8 +24,7 @@ class Datastorage(object):
         self.examined_no = self.files_no / variables.channels_for_person
         print('   Znaleziono ' + str(self.files_no) + ' plików.')
         self.isDataInitialised = False
-        self.minmax_tuple = ()
-        self.minmax_channelLength_tuple = ()
+        self.channels_stats = dict()            # proper description in method: prepare_inputdata_insights()
 
     def prepare_input(self):
         """
@@ -47,9 +46,9 @@ class Datastorage(object):
         self.data_fourier_transform()
         print('   zakończone.')
 
-        print("   Standaryzacja danych", end="...")
-        self.standardise_channel_data()
-        print("zakończona.")
+        # print("   Standaryzacja danych", end="...")
+        # self.standardise_channel_data()
+        # print("zakończona.")
         # at this point data is standardised around 0, with outsider values deleted
 
         print("   Normalizacja danych", end="...")
@@ -58,14 +57,16 @@ class Datastorage(object):
         # at this point data is normalised in <0, 1>
         # @TODO or maybe i should normalise in <-1, 1> and introduce (-1, 1) to initialized weights in neurons ??
 
-        self.prepare_infoForNetworks()
+        self.prepare_inputdata_insights()
 
         self.isDataInitialised = True
 
     def load_channels(self):
         """
         The data is in form of nested dictionaries: input_examined[examined_no][channel][datapoints]
+                                                    input_examined[0 → 33][1 → 10][0 → 100k++]
         TODO consider only those files included in variables.channels_to_consider
+
         :return: void
         """
         for index, file in enumerate(self.files_list):
@@ -119,7 +120,7 @@ class Datastorage(object):
         #             channel_vals[-1] = 0      # TODO i need justification for this kind of standardisation
 
         # for examined_keys, examined_vals in self.input_examined.items():
-        #     for channel_key, channel_value in examined_vals.items():                # @TODO it takes eternity to process, needs optimization
+        #     for channel_key, channel_value in examined_vals.items():          # @TODO it takes an eternity to process, needs optimization
         #         slice_mean = numpy.mean(channel_value)
         #         slice_dev = numpy.std(channel_value)
         #         for i in range(len(channel_value)):
@@ -128,60 +129,47 @@ class Datastorage(object):
         #             if channel_value[i] - slice_mean > 4 * slice_dev:
         #                 channel_value[i] = slice_mean + 3 * slice_dev
         #             elif channel_value[i] - slice_mean < -4 * slice_dev:
-        #                 channel_value[i] = slice_mean - 3 * slice_dev       # TODO ok, but why? Outliers might be crucial
+        #                 channel_value[i] = slice_mean - 3 * slice_dev         # TODO ok, but why? Outliers might be crucial
 
     def normalise_channel_data(self):
+        """
+        Min-max feature scaling (each single channel separately)
+        → https://en.wikipedia.org/wiki/Normalization_(statistics)
+
+        :return: void
+        """
         for examined_keys, examined_vals in self.input_examined.items():
-            minimum = math.inf
-            maximum = 0
             for channel_keys, channel_vals in examined_vals.items():
-                minimum = min(channel_vals) if min(channel_vals) < minimum else minimum
-                maximum = max(channel_vals) if max(channel_vals) > maximum else maximum
-            for channel_keys, channel_vals in examined_vals.items():
+                minimum = min(channel_vals)
+                maximum = max(channel_vals)
                 for i in range(len(channel_vals)):
                     channel_vals[i] = ((channel_vals[i] - minimum) / (maximum - minimum)).astype(dtype=numpy.float32)
+                self.input_examined[examined_keys][channel_keys] = channel_vals
 
-    def count_channel_size(self, eeg):
+    def prepare_inputdata_insights(self):
         """
-        For each eeg recording there are 17 channels of streamed data,
-        all stored in single file channel after channel.
-        This method counts length of a single channel
-        in a particular file, so channels could be extracted.
-        I assume channels are separated by outlier data points.
-        @TODO probably wrong assumption that channels are equal in length
-        @TODO and there are 16 channels not 17 - first 'item' is noise
-        :return int
-        """
-        i = len(eeg)
-        data_slice = eeg[i - 100000:i]  # last hundred thousand points from eeg, assumed they're always from last channel
-        slice_mean = numpy.mean(data_slice)
-        slice_dev = numpy.std(data_slice)
-        flag_rised = True
-        while flag_rised:
-            i -= 1
-            if numpy.absolute(eeg[i] - slice_mean) > 2 * 3 * slice_dev:  # find first 'impossible' value - impossible because: → https://en.wikipedia.org/wiki/Standard_score
-                flag_rised = False
-                return len(eeg) - i
+        Method meant to give some insights about input data.
+        I calculates channels averages with deviations.
+        Those informations are meaningless for the research,
+        but useful to imagine how things look like.
 
-    def prepare_infoForNetworks(self):
-        """
+        After this method completes, variable channels_stats
+        contain nested dictionary. Each dictionary for particular channel
+        contains name key and value: average length (float),
+        standard deviation of length (float), average value (float),
+        standard deviation of value (float), minimal and maximal value
+        for this channel across examined ppl (tuple of floats),
+        average minimal and average maximal for this channel (tuple)
 
         :return:
         """
-        minimum = math.inf
-        maximum = 0
-        suma = 0
-        count = 0
-        for key in self.input_examined:
-            for channel_key in self.input_examined[key]:
-                minimum = len(self.input_examined[key][channel_key]) if minimum > len(self.input_examined[key][channel_key]) else minimum
-                maximum = len(self.input_examined[key][channel_key]) if maximum < len(self.input_examined[key][channel_key]) else maximum
-                suma += len(self.input_examined[key][channel_key])
-                count += 1
-        self.minmax_channelLength_tuple = (minimum, maximum)
-        worst = int((maximum - minimum) / maximum * 100)
-        average = int((maximum - (suma / count)) / maximum * 100)
-        print("   Część danych utracona z powodu różnicy ilości punktów kanałów. Najorszy przypadek: " + str(worst) + "% straty danych. Średnio: " + str(average) + "%")
+
+    def print_inputdata_insights(self):
+        """
+        
+        :return:
+        """
+        pass
 
     def assume_networkIterationsNo(self):
         """
