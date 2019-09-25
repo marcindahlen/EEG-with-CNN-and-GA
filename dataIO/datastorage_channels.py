@@ -169,7 +169,7 @@ class Datastorage(object):
             self.channels_stats[channel_keys]['mean_value'] = 0
             self.channels_stats[channel_keys]['mean_stddev_value'] = 0
             self.channels_stats[channel_keys]['total_minmax'] = (math.inf, 0)
-            self.channels_stats[channel_keys]['mean_minmax'] = (math.inf ,0)
+            self.channels_stats[channel_keys]['mean_minmax'] = (math.inf, 0)
 
         for examined_keys, examined_vals in self.input_examined.items():
             for channel_keys, channel_vals in examined_vals.items():
@@ -186,10 +186,7 @@ class Datastorage(object):
             self.channels_stats[key]['mean_value'] = numpy.mean(self.channels_stats[channel_keys]['mean_value'])
             self.channels_stats[key]['mean_stddev_value'] = numpy.std(self.channels_stats[key]['mean_stddev_value'])
             self.channels_stats[channel_keys]['mean_minmax'][0] = self.channels_stats[channel_keys]['total_minmax'][0] if self.channels_stats[channel_keys]['total_minmax'][0] < self.channels_stats[channel_keys]['mean_minmax'][0] else self.channels_stats[channel_keys]['mean_minmax'][0]
-            self.channels_stats[channel_keys]['mean_minmax'][0] = self.channels_stats[channel_keys]['total_minmax'][
-                1] if self.channels_stats[channel_keys]['total_minmax'][1] > \
-                      self.channels_stats[channel_keys]['mean_minmax'][1] else \
-            self.channels_stats[channel_keys]['mean_minmax'][1]
+            self.channels_stats[channel_keys]['mean_minmax'][1] = self.channels_stats[channel_keys]['total_minmax'][1] if self.channels_stats[channel_keys]['total_minmax'][1] > self.channels_stats[channel_keys]['mean_minmax'][1] else self.channels_stats[channel_keys]['mean_minmax'][1]
 
     def print_inputdata_insights(self):
         """
@@ -201,6 +198,10 @@ class Datastorage(object):
             header = "Channel no. " + str(key)
             print()
             print(header.center(40, '*'))
+            print('Average length: ' + self.channels_stats[key]['avg_length'] + ' with deviation: ' + self.channels_stats[key]['stddev_length'])
+            print('Mean value: ' + self.channels_stats[key]['mean_value'] + ' with \'mean\' deviation: ' + self.channels_stats[key]['mean_stddev_value'])
+            print('Channel\'s global  minimum: ' + self.channels_stats[key]['mean_minmax'][0] + ', and average maximum: ' + self.channels_stats[key]['mean_minmax'][1])
+            print('Average minimum: ' + self.channels_stats[key]['mean_minmax'][0] + ', and average maximum: ' + self.channels_stats[key]['mean_minmax'][1])
 
     def assume_networkIterationsNo(self):
         """
