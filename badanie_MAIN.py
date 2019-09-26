@@ -33,9 +33,9 @@ I assume following files hierarchy:
 """
 
 """
-x = [i for i in range(len(output_scores))]
-        trace = graph_objs.Scatter(x=x, y=output_scores)
-        plotly.offline.plot(trace, filename=variables.out_charts_path + 'name.html', auto_open=False) # @TODO filenaming needs parametrisation
+    x = [i for i in range(len(output_scores))]
+            trace = graph_objs.Scatter(x=x, y=output_scores)
+            plotly.offline.plot(trace, filename=variables.out_charts_path + 'name.html', auto_open=False) # @TODO filenaming needs parametrisation
 """
 
 """
@@ -50,10 +50,32 @@ x = [i for i in range(len(output_scores))]
     
     The idea behind compression techniques is to maintain only a synopsis of the data, 
     but not all (raw) data points of the data stream. The algorithms range from selecting 
-    random data points called sampling to summarization using histograms, wavelets 
+    random data points called sampling to summarisation using histograms, wavelets 
     or sketching. One simple example of a compression is the continuous calculation 
     of an average. Instead of memorizing each data point, the synopsis only holds 
     the sum and the number of items. The average can be calculated by dividing 
     the sum by the number. However, it should be mentioned that synopses cannot reflect 
     the data accurately. Thus, a processing that is based on synopses may produce inaccurate results.
+"""
+
+"""
+    I can use two types of neuron: classic and LSTM.
+    But LSTMs are pointless in one-time-look on data, they don't have occasion to remember anything.
+    Should I implement GRUs?
+    
+    What about LSTM gives final output after looking at all channels?
+    
+    There are some cases:
+    neurons: classic vs LSTM (vs GRU)
+    viewpoint:  single whole channel → verdict; few whole channels → verdict; scanning channel in parts → verdict;
+                scanning channels in parallel → verdict;
+        A nice table of comparison emerges from the above.
+        
+    Outputs could be evaluated in many different ways.
+    There could be 10 output neurons, each one responsible for its own 'range of correctness:
+    for real output 14, neuron no. 2 should fire, rest should be silent.
+    But there could be also a single output neuron giving answers in its range <0, 1> where
+    real output 14 would be a 0.14 answer. 
+    Second approach could be more "trainable".
+    This adds new depth to "a nice table of comparison".
 """
