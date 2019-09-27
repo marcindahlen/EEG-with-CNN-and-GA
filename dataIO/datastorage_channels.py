@@ -18,7 +18,9 @@ class Datastorage(object):
 
     def __init__(self):
         self.input_examined = dict()            # main holder of data, nested dictionary: input_examined[examined_no][channel][datapoints]
-        self.output_examined = dict()
+        self.output_ranges_x10 = dict()         # output_ranges_x10[examined_no][test_no][10x value 0 or 1]
+        self.remember_output_reversal = dict()  # saved mins and maxs to be able to restore values in scale remember_output_reversal[test_no][minmax_tuple]
+        self.output_single_x1 = dict()          # output_single_x1[examined_no][test_no]
         self.files_list = [name for name in os.listdir(variables.in_raw_channels_path)]
         self.files_no = len(self.files_list)
         self.examined_no = self.files_no / variables.channels_for_person
@@ -55,7 +57,6 @@ class Datastorage(object):
         self.normalise_channel_data()
         print("zakończona.")
         # at this point data is normalised in <0, 1>
-        # @TODO or maybe i should normalise in <-1, 1> and introduce (-1, 1) to initialized weights in neurons ??
 
         self.prepare_inputdata_insights()
 
@@ -203,52 +204,52 @@ class Datastorage(object):
             print('Channel\'s global  minimum: ' + self.channels_stats[key]['mean_minmax'][0] + ', and average maximum: ' + self.channels_stats[key]['mean_minmax'][1])
             print('Average minimum: ' + self.channels_stats[key]['mean_minmax'][0] + ', and average maximum: ' + self.channels_stats[key]['mean_minmax'][1])
 
-    def show_summary(self):
-        """
-
-        :return:
-        """
-        if not self.isDataInitialised:
-            print("No data loaded.")
-        else:
-            summary = dict()
-            for key in self.input_examined:
-                summary[key] = dict()
-                print()
-                for channel_key in self.input_examined[key]:
-                    summary[key][channel_key] = len(self.input_examined[key][channel_key])
-                    print(key + ' ' + str(channel_key) + ': ' + str(summary[key][channel_key]), end="; ")
-        print()
-        print("networkIterationsNo: " + str(self.assume_networkIterationsNo()))
-
-    def prepare_target(self, examination_no):
+    # TODO output logic is WAY too complicated
+    def prepare_target_ranges(self):
         """
         From excel file with columns:
-        badany,	SPP,	SPH,	RPN,	Raven_A,	Raven_B,	Raven_C,	Raven_D,	Raven_E,	Raven_WO,	IVE_Impulsywnosc,	IVE_Ryzyko,	IVE_Empatia,	SSZ,	SSE,	SSU,	ACZ,	PKT
-        read data.
+        badany,	SPP,	SPH,	RPN,	Raven_A,	Raven_B,	Raven_C,	Raven_D,	Raven_E,	Raven_WO,
+        IVE_Impulsywnosc,	IVE_Ryzyko,	IVE_Empatia,	SSZ,	SSE,	SSU,	ACZ,	PKT,
+        read data into dictionary, where target data is mapped into ranges.
 
         → https://www.mantidproject.org/Working_With_Functions:_Return_Values
         :return void
         """
-        print('   Wczytywanie danych wzorcowych', end='...')
+        print('   Wczytywanie danych do przedziałów', end='...')
         target_data = pandas.read_excel(variables.out_raw_filepath)
-        target_data = target_data.iloc[2:, :]                         # delete P01BA and P01BB rows
+        
         target_data = target_data.iloc[:, examination_no + 1].values
 
         minimum = min(target_data)
         maximum = max(target_data)
-        self.minmax_tuple = (minimum, maximum)
+        self.remember_output_reversal[examination_no] = (minimum, maximum)
         for i in range(len(target_data)):
             target_data[i] = (target_data[i] - minimum) / (maximum - minimum)
 
-        for index, file in enumerate(self.files_list):
-            self.output_examined[file] = [self.decide_no_belonging(target_data[index], x) for x in range(10)]
+        for index, examined in enumerate(self.input_examined):
+            self.output_ranges_x10[examined] = [self.decide_no_belonging(target_data[index], x) for x in range(10)]
 
-        # at this point i have a dictionary with filenames as keys containing a list as value.
+        # at this point i have a dictionary with examined no. as keys containing a list as value.
         # The list contain ten values → 0 or 1, where 1 means the original value was in corresponding range
         # i.e. 39 becomes 0.18 when minmaxed* in <32, 71> → which becomes [0, 1, 0, 0, 0, 0, 0, 0, 0, 0]
         #   *look "at this point data is normalised in <0, 1>" above or → https://en.wikipedia.org/wiki/Feature_scaling
         print(' zakończone.')
+
+    def prepare_target_number(self, examination_no):
+        """
+        From excel file with columns:
+        badany,	SPP,	SPH,	RPN,	Raven_A,	Raven_B,	Raven_C,	Raven_D,	Raven_E,	Raven_WO,
+        IVE_Impulsywnosc,	IVE_Ryzyko,	IVE_Empatia,	SSZ,	SSE,	SSU,	ACZ,	PKT,
+        read data into dictionary, where target data is saved as a number in <0, 1>.
+
+        → https://www.mantidproject.org/Working_With_Functions:_Return_Values
+        :return void
+        """
+        print('   Wczytywanie danych jako liczba', end='...')
+        target_data = pandas.read_excel(variables.out_raw_filepath)
+        target_data = target_data.iloc[:, examination_no + 1].values
+
+
 
     def decide_no_belonging(self, number, index):
         """
