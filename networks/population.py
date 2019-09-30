@@ -57,7 +57,8 @@ class Populacja(object):
 
     def prepareGenericEvoCode(self):
         """
-        @TODO If I have """
+        → https://www.mantidproject.org/Working_With_Functions:_Return_Values
+        """
         pass
 
     def forward_pass_all_networks(self, iterations_no):

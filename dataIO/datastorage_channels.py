@@ -212,27 +212,30 @@ class Datastorage(object):
         IVE_Impulsywnosc,	IVE_Ryzyko,	IVE_Empatia,	SSZ,	SSE,	SSU,	ACZ,	PKT,
         read data into dictionary, where target data is mapped into ranges.
 
-        → https://www.mantidproject.org/Working_With_Functions:_Return_Values
+        Modified variables: output_ranges_x10[examined_no][test_no][10x value 0 or 1] and remember_output_reversal[test_no][minmax_tuple]
+
         :return void
         """
         print('   Wczytywanie danych do przedziałów', end='...')
         target_data = pandas.read_excel(variables.out_raw_filepath)
-        
-        target_data = target_data.iloc[:, examination_no + 1].values
+        target_data.drop(columns='badany')                            # drop first column
 
-        minimum = min(target_data)
-        maximum = max(target_data)
-        self.remember_output_reversal[examination_no] = (minimum, maximum)
-        for i in range(len(target_data)):
-            target_data[i] = (target_data[i] - minimum) / (maximum - minimum)
+        for examined_no in self.input_examined.keys():
+            self.remember_output_reversal[examined_no] = dict()
+            for test_no in range(17):
+                minimum = min(target_data.iloc[examined_no, :])
+                maximum = max(target_data.iloc[examined_no, :])
+                self.remember_output_reversal[examined_no][test_no] = (minimum, maximum)          # yes this could be more efficient but i find this convenient this way
 
-        for index, examined in enumerate(self.input_examined):
-            self.output_ranges_x10[examined] = [self.decide_no_belonging(target_data[index], x) for x in range(10)]
+        for examined_no in self.remember_output_reversal.keys():
+            self.output_ranges_x10[examined_no] = dict()
+            for test_no in self.remember_output_reversal[examined_no].keys():
+                self.output_ranges_x10[examined_no][test_no] = self.get_ranged_list_outputs(self.remember_output_reversal[examined_no][test_no], target_data.iloc[examined_no, test_no])
 
         # at this point i have a dictionary with examined no. as keys containing a list as value.
         # The list contain ten values → 0 or 1, where 1 means the original value was in corresponding range
         # i.e. 39 becomes 0.18 when minmaxed* in <32, 71> → which becomes [0, 1, 0, 0, 0, 0, 0, 0, 0, 0]
-        #   *look "at this point data is normalised in <0, 1>" above or → https://en.wikipedia.org/wiki/Feature_scaling
+        # → https://en.wikipedia.org/wiki/Feature_scaling
         print(' zakończone.')
 
     def prepare_target_number(self, examination_no):
@@ -247,32 +250,47 @@ class Datastorage(object):
         """
         print('   Wczytywanie danych jako liczba', end='...')
         target_data = pandas.read_excel(variables.out_raw_filepath)
-        target_data = target_data.iloc[:, examination_no + 1].values
+        target_data.drop(columns='badany')                            # drop first column
 
+        for examined_no in self.input_examined.keys():
+            self.remember_output_reversal[examined_no] = dict()
+            for test_no in range(17):
+                minimum = min(target_data.iloc[examined_no, :])
+                maximum = max(target_data.iloc[examined_no, :])
+                self.remember_output_reversal[examined_no][test_no] = (minimum, maximum)
 
+        for examined_no in self.remember_output_reversal.keys():
+            self.output_ranges_x10[examined_no] = dict()
+            for test_no in self.remember_output_reversal[examined_no].keys():
+                self.output_ranges_x10[examined_no][test_no] = (target_data.iloc[examined_no, test_no] - self.remember_output_reversal[examined_no][test_no][0]) / (self.remember_output_reversal[examined_no][test_no][0] - self.remember_output_reversal[examined_no][test_no][1])
 
-    def decide_no_belonging(self, number, index):
+    def get_ranged_list_outputs(self, minmax, score):
         """
-        Given minmaxed value of examined's test score
-        and currently considered index in list being build,
-        outputs 1 or 0 where 1 is a valid match
-        :param number:
-        :param index:
-        :return: int: 1 or 0
-        """
-        index = index / 10
-        return 1 if index <= number < index + 0.1 else 0
+        Given (min, max) tuple of examined's test score
+        and considered score,
+        outputs list of 1 or 0s
+        where 1 stands for correct range out of 10 possible
 
-    def interprete_prediction(self, prediction):
+        :param minmax: tuple of ints
+        :param score: int
+        :return: in ex.: [0, 0, 0, 0, 0, 0, 1, 0, 0, 0]
+        """
+        output = []
+        input = (score - minmax[0]) / (minmax[1] - minmax[0])
+        for i in range(10):
+            index = i / 10
+            output.append(1 if index <= input < index + 0.1 else 0)
+        return output
+
+    def interprete_prediction_from_list(self, prediction):
         """
         Given list with 10 elements - 9 zeros and 1 one,
         this method converts information from the list
-        to the form as in raw input (reverse process from prepare_target()
+        to the form as in raw input (reverse process from prepare_target_ranges()
+
         :return: int
         """
-        memory = 0
-        for i, x in enumerate(prediction):
-            memory += x * (i + 1) / 10
-        memory = memory * (self.minmax_tuple[1] - self.minmax_tuple[0]) + self.minmax_tuple[0]
+        pass
 
-        return memory
+    def interprete_prediction_from_number(self):
+        pass
