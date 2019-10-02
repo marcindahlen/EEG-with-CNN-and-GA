@@ -214,9 +214,13 @@ class Datastorage(object):
 
         Modified variables: output_ranges_x10[examined_no][test_no][10x value 0 or 1] and remember_output_reversal[test_no][minmax_tuple]
 
+        I will have a dictionary of dictionaries containing a list as value each.
+        # The list contain ten values → 0 or 1, where 1 means the original value was in corresponding range
+        # i.e. 39 becomes 0.18 when minmaxed* in <32, 71> → which becomes [0, 1, 0, 0, 0, 0, 0, 0, 0, 0]
+        # → https://en.wikipedia.org/wiki/Feature_scaling
         :return void
         """
-        print('   Wczytywanie danych do przedziałów', end='...')
+        print('   Wczytywanie target data do przedziałów', end='...')
         target_data = pandas.read_excel(variables.out_raw_filepath)
         target_data.drop(columns='badany')                            # drop first column
 
@@ -232,10 +236,6 @@ class Datastorage(object):
             for test_no in self.remember_output_reversal[examined_no].keys():
                 self.output_ranges_x10[examined_no][test_no] = self.get_ranged_list_outputs(self.remember_output_reversal[examined_no][test_no], target_data.iloc[examined_no, test_no])
 
-        # at this point i have a dictionary with examined no. as keys containing a list as value.
-        # The list contain ten values → 0 or 1, where 1 means the original value was in corresponding range
-        # i.e. 39 becomes 0.18 when minmaxed* in <32, 71> → which becomes [0, 1, 0, 0, 0, 0, 0, 0, 0, 0]
-        # → https://en.wikipedia.org/wiki/Feature_scaling
         print(' zakończone.')
 
     def prepare_target_number(self, examination_no):
@@ -248,7 +248,7 @@ class Datastorage(object):
         → https://www.mantidproject.org/Working_With_Functions:_Return_Values
         :return void
         """
-        print('   Wczytywanie danych jako liczba', end='...')
+        print('   Wczytywanie target data jako liczbę', end='...')
         target_data = pandas.read_excel(variables.out_raw_filepath)
         target_data.drop(columns='badany')                            # drop first column
 
@@ -260,9 +260,11 @@ class Datastorage(object):
                 self.remember_output_reversal[examined_no][test_no] = (minimum, maximum)
 
         for examined_no in self.remember_output_reversal.keys():
-            self.output_ranges_x10[examined_no] = dict()
+            self.output_single_x1[examined_no] = dict()
             for test_no in self.remember_output_reversal[examined_no].keys():
-                self.output_ranges_x10[examined_no][test_no] = (target_data.iloc[examined_no, test_no] - self.remember_output_reversal[examined_no][test_no][0]) / (self.remember_output_reversal[examined_no][test_no][0] - self.remember_output_reversal[examined_no][test_no][1])
+                self.output_single_x1[examined_no][test_no] = (target_data.iloc[examined_no, test_no] - self.remember_output_reversal[examined_no][test_no][0]) / (self.remember_output_reversal[examined_no][test_no][0] - self.remember_output_reversal[examined_no][test_no][1])
+
+    print(' zakończone.')
 
     def get_ranged_list_outputs(self, minmax, score):
         """
@@ -282,7 +284,7 @@ class Datastorage(object):
             output.append(1 if index <= input < index + 0.1 else 0)
         return output
 
-    def interprete_prediction_from_list(self, prediction):
+    def interprete_prediction_from_list(self, minmax, prediction_list):
         """
         Given list with 10 elements - 9 zeros and 1 one,
         this method converts information from the list
@@ -290,7 +292,12 @@ class Datastorage(object):
 
         :return: int
         """
-        pass
+        output = 0
+        for index, number in enumerate(prediction_list):
+            output = index * 10 if number == 1 else output
+        output = output * (minmax[1] - minmax[0]) + (minmax[0] * (minmax[1] - minmax[0]))
 
-    def interprete_prediction_from_number(self):
-        pass
+        return output
+
+    def interprete_prediction_from_number(self, minmax, prediction):
+        return prediction * (minmax[1] - minmax[0]) + (minmax[0] * (minmax[1] - minmax[0]))
