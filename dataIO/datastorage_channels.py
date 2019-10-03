@@ -66,17 +66,29 @@ class Datastorage(object):
         """
         The data is in form of nested dictionaries: input_examined[examined_no][channel][datapoints]
                                                     input_examined[0 → 33][1 → 10][0 → 100k++]
-        TODO consider only those files included in variables.channels_to_consider
-
         :return: void
         """
         for index, file in enumerate(self.files_list):
             examined_person = math.floor((index + 1) / variables.channels_for_person)
             current_channel_no = index - examined_person * variables.channels_for_person + 1
-            loaded_data = numpy.genfromtxt(variables.in_raw_path + file, delimiter=',', dtype=numpy.float32)
-            data_to_save = numpy.delete(loaded_data, variables.how_many_to_drop, axis=None)
+            if variables.limit_people and variables.limit_channels:
+                if examined_person in variables.people_to_consider and current_channel_no in variables.channels_to_consider:
+                    self.load_particular_channel(file, current_channel_no, examined_person)
+            elif variables.limit_people and not variables.limit_channels:
+                if examined_person in variables.people_to_consider:
+                    self.load_particular_channel(file, current_channel_no, examined_person)
+            elif not variables.limit_people and variables.limit_channels:
+                if current_channel_no in variables.channels_to_consider:
+                    self.load_particular_channel(file, current_channel_no, examined_person)
+            else:
+                self.load_particular_channel(file, current_channel_no, examined_person)
+
+    def load_particular_channel(self, file, current_channel_no, examined_person):
+        loaded_data = numpy.genfromtxt(variables.in_raw_path + file, delimiter=',', dtype=numpy.float32)
+        data_to_save = numpy.delete(loaded_data, variables.how_many_to_drop, axis=None)
+        if not examined_person in self.input_examined:
             self.input_examined[examined_person] = {}
-            self.input_examined[examined_person][current_channel_no] = data_to_save
+        self.input_examined[examined_person][current_channel_no] = data_to_save
 
     def data_apply_filters(self):
         """
