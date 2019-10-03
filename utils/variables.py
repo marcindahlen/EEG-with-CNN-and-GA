@@ -1,10 +1,15 @@
 """
 Variables used across the experiment
 """
-
 from math import floor
 
+#TODO
 channels_to_consider = [7, 12, 13]                                      # only these particular channels will be considered
+limit_channels = True                                                   # if True, only channels_to_consider are loaded
+# TODO
+people_to_consider = [3, 5]                                             # only these particular people will be considered
+limit_people = True                                                     # if True, only people_to_consider will be considered
+
 window_base_length = 10 * 10 * 16                                       # handcoded "reasonable" amount, should be adjusted in the process
 channels_for_person = 10
 
@@ -20,11 +25,10 @@ population_quantity = 32                                                # this i
 how_many_networks_to_save = floor(population_quantity / 4)
 mutation_probability_factor = 1
 
-in_raw_path = "../in_raw/"
-in_raw_channels_path = "../in_raw/channels/"
-net_memory_path = "../net_memory/"
-out_raw_filepath = "../out_raw/out_absData.xls"
-out_charts_path = "../out_wykresy/"
+in_raw_path = "../../in_raw/"
+net_memory_path = "../../net_memory/"
+out_raw_filepath = "../../out_raw/out_absData.xls"
+out_charts_path = "../../out_wykresy/"
 
 how_many_to_drop = 20000                                                # I was told to drop this amount of initial data, so i'm dropping it (for each channel)
 

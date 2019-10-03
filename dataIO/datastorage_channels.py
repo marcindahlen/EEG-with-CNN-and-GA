@@ -21,7 +21,7 @@ class Datastorage(object):
         self.output_ranges_x10 = dict()         # output_ranges_x10[examined_no][test_no][10x value 0 or 1]
         self.remember_output_reversal = dict()  # saved mins and maxs to be able to restore values in scale remember_output_reversal[test_no][minmax_tuple]
         self.output_single_x1 = dict()          # output_single_x1[examined_no][test_no]
-        self.files_list = [name for name in os.listdir(variables.in_raw_channels_path)]
+        self.files_list = [name for name in os.listdir(variables.in_raw_path)]
         self.files_no = len(self.files_list)
         self.examined_no = self.files_no / variables.channels_for_person
         print('   Znaleziono ' + str(self.files_no) + ' plików.')

@@ -10,6 +10,7 @@ class LstmNeuron(object):
 
     #@TODO konstruktor może, ale nie musi przyjmować zapamiętane wagi
     def __init__(self, window, from_existing_data=False, weights_data=[]):
+        self.d_wagi = [[] for i in range(4)]
         self.weights = [[] for i in range(4)]
         self.bias_weights = []
         self.suma_in, self.suma_out, self.suma_mem, self.suma_forget = 0, 0, 0, 0
@@ -133,7 +134,6 @@ class LstmNeuron(object):
         In case of supervised learning.
         (that means target data is known)
         """
-        self.d_wagi = [[] for i in range(4)]
         for j in range(4):
             for i in range(len(input)):
                 self.d_wagi[j].append(0)
