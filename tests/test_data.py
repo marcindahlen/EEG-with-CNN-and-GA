@@ -12,37 +12,74 @@ class TestData:
     def test_loading(self):
         data = Datastorage()
         data.load_channels()
+
+        x = [i for i in range(len(data.input_examined[3][2]))]
+        trace = plotly.graph_objs.Scatter(x=x, y=data.input_examined[3][2])
+        plot_data = [trace]
+        figure = plotly.graph_objs.Figure(data=plot_data)
+        plotly.offline.plot(figure, filename=variables.out_charts_path + "testDataAfterLoading" + '.html',
+                            auto_open=False)
+
         particular_data = data.input_examined[3][2][100:200]
         print(particular_data)
+        assert any(particular_data) != False
+
+    def test_standardisation(self):
+        data = Datastorage()
+        data.load_channels()
+        data.standardise_channel_data()
+
+        x = [i for i in range(len(data.input_examined[3][2]))]
+        trace = plotly.graph_objs.Scatter(x=x, y=data.input_examined[3][2])
+        plot_data = [trace]
+        figure = plotly.graph_objs.Figure(data=plot_data)
+        plotly.offline.plot(figure, filename=variables.out_charts_path + "testDataAfterStandardisation" + '.html',
+                            auto_open=False)
+
+        particular_data = data.input_examined[3][2][100:200]
         assert any(particular_data) != False
 
     def test_fourier_transform(self):
         data = Datastorage()
         data.load_channels()
-
-        x = [i for i in range(len(data.input_examined[3][2]))]
-        trace = plotly.graph_objs.Scatter(x=x, y=data.input_examined[3][2])
-        plot_data = [trace]
-        figure = plotly.graph_objs.Figure(data=plot_data)
-        plotly.offline.plot(figure, filename=variables.out_charts_path + "testDataBeforeFourier" + '.html', auto_open=False)
-
+        data.standardise_channel_data()
         data.fourier_transform()
 
-        particular_data = data.input_examined[3][2][100:200]
         x = [i for i in range(len(data.input_examined[3][2]))]
         trace = plotly.graph_objs.Scatter(x=x, y=data.input_examined[3][2])
         plot_data = [trace]
         figure = plotly.graph_objs.Figure(data=plot_data)
-        plotly.offline.plot(figure, filename=variables.out_charts_path + "testDataBeforeFourier" + '.html', auto_open=False)
+        plotly.offline.plot(figure, filename=variables.out_charts_path + "testDataAfterFourier" + '.html', auto_open=False)
 
+        particular_data = data.input_examined[3][2][100:200]
         print(particular_data)
         assert any(particular_data) != False
 
-    def test_normalistaion(self):
+    def test_normalisation(self):
         data = Datastorage()
         data.load_channels()
+        data.standardise_channel_data()
         data.fourier_transform()
         data.normalise_channel_data()
+
+        x = [i for i in range(len(data.input_examined[3][2]))]
+        trace = plotly.graph_objs.Scatter(x=x, y=data.input_examined[3][2])
+        plot_data = [trace]
+        figure = plotly.graph_objs.Figure(data=plot_data)
+        plotly.offline.plot(figure, filename=variables.out_charts_path + "testDataAfterNormalisation" + '.html',
+                            auto_open=False)
+
         particular_data = data.input_examined[3][2][100:200]
         print(particular_data)
         assert any(particular_data) != False
+
+
+    def test_summary(self):
+        data = Datastorage()
+        data.load_channels()
+        data.standardise_channel_data()
+        data.fourier_transform()
+        data.normalise_channel_data()
+        data.prepare_inputdata_insights()
+
+        data.print_inputdata_insights()

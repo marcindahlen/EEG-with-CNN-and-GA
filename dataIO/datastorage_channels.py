@@ -122,32 +122,22 @@ class Datastorage(object):
                 channel_length = len(channel_vals)
                 for i in range(channel_length):
                     channel_vals[i] = channel_vals[i] if math.floor(lower_data_limes) * channel_length < i < math.ceil(higher_data_limes) * channel_length else 0
-                    channel_vals[i] = numpy.real(channel_vals[i])
-                self.input_examined[examined_keys][channel_keys] = numpy.fft.ifft(channel_vals)     # TODO trim unnecessary parts (zeros from line above)
+                self.input_examined[examined_keys][channel_keys] = numpy.real(numpy.fft.ifft(channel_vals))   # TODO trim unnecessary parts (zeros from line above)
 
     def standardise_channel_data(self):
         """
         I need to carefully consider the need of standardisation and a way to proper justify it
+        If standardising, do it BEFORE Fourier transform.
 
         :return: void
         """
-        # for examined_keys, examined_vals in self.input_examined.items():
-        #     for channel_keys, channel_vals in examined_vals.items():
-        #         for i in range(len(channel_vals)-1):
-        #             channel_vals[i] = channel_vals[i+1] - channel_vals[i]
-        #             channel_vals[-1] = 0      # TODO i need justification for this kind of standardisation
-
-        # for examined_keys, examined_vals in self.input_examined.items():
-        #     for channel_key, channel_value in examined_vals.items():          # @TODO it takes an eternity to process, needs optimization
-        #         slice_mean = numpy.mean(channel_value)
-        #         slice_dev = numpy.std(channel_value)
-        #         for i in range(len(channel_value)):
-        #             # if numpy.absolute(channel_value[i] - slice_mean) > 4 * slice_dev:
-        #             # channel_value[i] = 0
-        #             if channel_value[i] - slice_mean > 4 * slice_dev:
-        #                 channel_value[i] = slice_mean + 3 * slice_dev
-        #             elif channel_value[i] - slice_mean < -4 * slice_dev:
-        #                 channel_value[i] = slice_mean - 3 * slice_dev         # TODO ok, but why? Outliers might be crucial
+        for examined_keys, examined_vals in self.input_examined.items():
+             for channel_key, channel_value in examined_vals.items():          # @TODO it takes an eternity to process, needs optimization
+                 slice_mean = numpy.mean(channel_value)
+                 slice_dev = numpy.std(channel_value)
+                 for i in range(len(channel_value)):
+                     if numpy.absolute(channel_value[i] - slice_mean) > 4 * slice_dev:
+                        numpy.delete(channel_value, i)
 
     def normalise_channel_data(self):
         """
@@ -181,7 +171,8 @@ class Datastorage(object):
 
         :return:
         """
-        for channel_keys in self.input_examined[0].keys():
+        first_key = next(iter(self.input_examined))
+        for channel_keys in self.input_examined[first_key].keys():
             self.channels_stats[channel_keys]['avg_length'] = 0
             self.channels_stats[channel_keys]['stddev_length'] = []
             self.channels_stats[channel_keys]['mean_value'] = 0
