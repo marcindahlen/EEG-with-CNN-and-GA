@@ -45,7 +45,7 @@ class Datastorage(object):
         # @TODO data trimming to lowest length (drop initial varying n points for every channel)  <- unnecessary here if later trimmed by pure alpha wave length
 
         print('   Filtrowanie fal alfa', end='... ')
-        self.data_fourier_transform()
+        self.fourier_transform()
         print('   zakończone.')
 
         # print("   Standaryzacja danych", end="...")
@@ -70,7 +70,7 @@ class Datastorage(object):
         """
         for index, file in enumerate(self.files_list):
             examined_person = math.floor((index + 1) / variables.channels_for_person)
-            current_channel_no = index - examined_person * variables.channels_for_person + 1
+            current_channel_no = index - examined_person * variables.channels_for_person
             if variables.limit_people and variables.limit_channels:
                 if examined_person in variables.people_to_consider and current_channel_no in variables.channels_to_consider:
                     self.load_particular_channel(file, current_channel_no, examined_person)
@@ -90,14 +90,14 @@ class Datastorage(object):
             self.input_examined[examined_person] = {}
         self.input_examined[examined_person][current_channel_no] = data_to_save
 
-    def data_apply_filters(self):
+    def apply_filters(self):
         """
         TODO for time being i don't know the parameters for high- and low pass filters
         :return:
         """
         pass
 
-    def data_fourier_transform(self):
+    def fourier_transform(self):
         """
         Alpha waves have frequency between 8Hz and 12Hz
         → https://en.wikipedia.org/wiki/Alpha_wave
@@ -106,6 +106,10 @@ class Datastorage(object):
         concerning non-alpha wave frequencies, and convert
         frequency info back to wave datapoints.
         → https://betterexplained.com/articles/an-interactive-guide-to-the-fourier-transform/
+
+        What is important, numpy.fft.ifft() will give complex output even if it should
+        be real (small imaginary addon will be always present! Python marks imaginary
+        part with a "j" letter!
 
         :return:
         """
@@ -118,6 +122,7 @@ class Datastorage(object):
                 channel_length = len(channel_vals)
                 for i in range(channel_length):
                     channel_vals[i] = channel_vals[i] if math.floor(lower_data_limes) * channel_length < i < math.ceil(higher_data_limes) * channel_length else 0
+                    channel_vals[i] = numpy.real(channel_vals[i])
                 self.input_examined[examined_keys][channel_keys] = numpy.fft.ifft(channel_vals)     # TODO trim unnecessary parts (zeros from line above)
 
     def standardise_channel_data(self):

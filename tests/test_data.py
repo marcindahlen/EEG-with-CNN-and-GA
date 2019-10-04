@@ -1,17 +1,48 @@
+import pytest
 from dataIO.datastorage_channels import Datastorage
+from utils import variables
+import plotly
 
-# x = [i for i in range(len(the_data))]
-# trace = plotly.graph_objs.Scatter(x=x, y=the_data)
-# plot_data = [trace]
-# figure = plotly.graph_objs.Figure(data=plot_data)
-# plotly.offline.plot(figure, filename=variables.out_charts_path + "badanie" + '.html', auto_open=False)
+class TestData:
 
-class test_data():
-    def __init__(self):
-        self.data = Datastorage()
-        self.data.load_channels()
+    @pytest.fixture
+    def load_filecontent(self):
+        pass # refuses to work this way
 
     def test_loading(self):
-        the_data = self.data.input_examined[1][1][100:200]
-        print(the_data)
-        assert the_data != False
+        data = Datastorage()
+        data.load_channels()
+        particular_data = data.input_examined[3][2][100:200]
+        print(particular_data)
+        assert any(particular_data) != False
+
+    def test_fourier_transform(self):
+        data = Datastorage()
+        data.load_channels()
+
+        x = [i for i in range(len(data.input_examined[3][2]))]
+        trace = plotly.graph_objs.Scatter(x=x, y=data.input_examined[3][2])
+        plot_data = [trace]
+        figure = plotly.graph_objs.Figure(data=plot_data)
+        plotly.offline.plot(figure, filename=variables.out_charts_path + "testDataBeforeFourier" + '.html', auto_open=False)
+
+        data.fourier_transform()
+
+        particular_data = data.input_examined[3][2][100:200]
+        x = [i for i in range(len(data.input_examined[3][2]))]
+        trace = plotly.graph_objs.Scatter(x=x, y=data.input_examined[3][2])
+        plot_data = [trace]
+        figure = plotly.graph_objs.Figure(data=plot_data)
+        plotly.offline.plot(figure, filename=variables.out_charts_path + "testDataBeforeFourier" + '.html', auto_open=False)
+
+        print(particular_data)
+        assert any(particular_data) != False
+
+    def test_normalistaion(self):
+        data = Datastorage()
+        data.load_channels()
+        data.fourier_transform()
+        data.normalise_channel_data()
+        particular_data = data.input_examined[3][2][100:200]
+        print(particular_data)
+        assert any(particular_data) != False
