@@ -25,42 +25,7 @@ class Datastorage(object):
         self.files_no = len(self.files_list)
         self.examined_no = self.files_no / variables.channels_for_person
         print('   Znaleziono ' + str(self.files_no) + ' plików.')
-        self.isDataInitialised = False
         self.channels_stats = dict()            # proper description in method: prepare_inputdata_insights()
-
-    def prepare_input(self):
-        """
-        From raw csvs read channels,
-        proper are channels 1 - 8 and 13 and 14, since i was told other channels contain too much noise.
-        Trim useless frequencies (i was told to be interested only in alpha waves, that is 8-12Hz),
-        standardise data.
-
-        :return void
-        """
-        print('   Wczytywanie kanałów', end='... ')
-        self.load_channels()
-        print('   zakończone.')
-        # at this point i have a dictionary with filenames as keys containing dictionaries with channel numbers as keys (and channel numpy array data as values)
-
-        # @TODO data trimming to lowest length (drop initial varying n points for every channel)  <- unnecessary here if later trimmed by pure alpha wave length
-
-        print('   Filtrowanie fal alfa', end='... ')
-        self.fourier_transform()
-        print('   zakończone.')
-
-        # print("   Standaryzacja danych", end="...")
-        # self.standardise_channel_data()
-        # print("zakończona.")
-        # at this point data is standardised around 0, with outsider values deleted
-
-        print("   Normalizacja danych", end="...")
-        self.normalise_channel_data()
-        print("zakończona.")
-        # at this point data is normalised in <0, 1>
-
-        self.prepare_inputdata_insights()
-
-        self.isDataInitialised = True
 
     def load_channels(self):
         """
@@ -85,7 +50,7 @@ class Datastorage(object):
 
     def load_particular_channel(self, file, current_channel_no, examined_person):
         loaded_data = numpy.genfromtxt(variables.in_raw_path + file, delimiter=',', dtype=numpy.float32)
-        data_to_save = numpy.delete(loaded_data, variables.how_many_to_drop, axis=None)
+        data_to_save = numpy.delete(loaded_data, slice(0, variables.how_many_to_drop), axis=None)
         if not examined_person in self.input_examined:
             self.input_examined[examined_person] = {}
         self.input_examined[examined_person][current_channel_no] = data_to_save
@@ -106,6 +71,7 @@ class Datastorage(object):
         concerning non-alpha wave frequencies, and convert
         frequency info back to wave datapoints.
         → https://betterexplained.com/articles/an-interactive-guide-to-the-fourier-transform/
+        → https://www.youtube.com/watch?v=spUNpyF58BY
 
         What is important, numpy.fft.ifft() will give complex output even if it should
         be real (small imaginary addon will be always present! Python marks imaginary
@@ -121,8 +87,9 @@ class Datastorage(object):
                 channel_vals = numpy.fft.fft(channel_vals)
                 channel_length = len(channel_vals)
                 for i in range(channel_length):
-                    channel_vals[i] = channel_vals[i] if math.floor(lower_data_limes) * channel_length < i < math.ceil(higher_data_limes) * channel_length else 0
-                self.input_examined[examined_keys][channel_keys] = numpy.real(numpy.fft.ifft(channel_vals))   # TODO trim unnecessary parts (zeros from line above)
+                    channel_vals[i] = channel_vals[i] if math.floor(lower_data_limes * channel_length) < i < math.ceil(higher_data_limes * channel_length) else 0
+                # self.input_examined[examined_keys][channel_keys] = numpy.real(numpy.fft.ifft(channel_vals))   # TODO trim unnecessary parts (zeros from line above)
+                self.input_examined[examined_keys][channel_keys] = numpy.imag(channel_vals)
 
     def standardise_channel_data(self):
         """
@@ -136,8 +103,9 @@ class Datastorage(object):
                  slice_mean = numpy.mean(channel_value)
                  slice_dev = numpy.std(channel_value)
                  for i in range(len(channel_value)):
-                     if numpy.absolute(channel_value[i] - slice_mean) > 4 * slice_dev:
-                        numpy.delete(channel_value, i)
+                     if numpy.absolute(channel_value[i] - slice_mean) > 3 * slice_dev:
+                        channel_value[i] = numpy.delete(channel_value, i)
+                 self.input_examined[examined_keys][channel_key] = channel_value
 
     def normalise_channel_data(self):
         """
@@ -173,6 +141,8 @@ class Datastorage(object):
         """
         first_key = next(iter(self.input_examined))
         for channel_keys in self.input_examined[first_key].keys():
+            if not 'avg_length' in self.channels_stats[channel_keys]:
+                self.channels_stats[channel_keys] = dict()
             self.channels_stats[channel_keys]['avg_length'] = 0
             self.channels_stats[channel_keys]['stddev_length'] = []
             self.channels_stats[channel_keys]['mean_value'] = 0

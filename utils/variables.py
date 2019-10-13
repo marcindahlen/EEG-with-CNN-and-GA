@@ -4,10 +4,10 @@ Variables used across the experiment
 from math import floor
 
 #TODO
-channels_to_consider = [2, 7]                                           # only these particular channels will be considered
+channels_to_consider = [3, 7]                                           # only these particular channels will be considered
 limit_channels = True                                                   # if True, only channels_to_consider are loaded
 # TODO
-people_to_consider = [3, 5]                                             # only these particular people will be considered
+people_to_consider = [4, 5]                                             # only these particular people will be considered
 limit_people = True                                                     # if True, only people_to_consider will be considered
 # TODO
 testscale_to_consider = [2]                                             # only these test will be processed and learned
