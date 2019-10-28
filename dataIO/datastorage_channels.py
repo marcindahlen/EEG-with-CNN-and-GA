@@ -74,7 +74,7 @@ class Datastorage(object):
         → https://www.youtube.com/watch?v=spUNpyF58BY
 
         What is important, numpy.fft.ifft() will give complex output even if it should
-        be real (small imaginary addon will be always present! Python marks imaginary
+        be real (small imaginary addon will be always present!) Python marks imaginary
         part with a "j" letter!
 
         :return:
@@ -88,8 +88,8 @@ class Datastorage(object):
                 channel_length = len(channel_vals)
                 for i in range(channel_length):
                     channel_vals[i] = channel_vals[i] if math.floor(lower_data_limes * channel_length) < i < math.ceil(higher_data_limes * channel_length) else 0
-                # self.input_examined[examined_keys][channel_keys] = numpy.real(numpy.fft.ifft(channel_vals))   # TODO trim unnecessary parts (zeros from line above)
-                self.input_examined[examined_keys][channel_keys] = numpy.imag(channel_vals)
+                self.input_examined[examined_keys][channel_keys] = numpy.real(numpy.fft.ifft(channel_vals))   # TODO trim unnecessary parts (zeros from line above)
+                # self.input_examined[examined_keys][channel_keys] = numpy.imag(channel_vals)
 
     def standardise_channel_data(self):
         """
@@ -139,16 +139,16 @@ class Datastorage(object):
 
         :return:
         """
-        first_key = next(iter(self.input_examined))
+        first_key = next(iter(self.input_examined))                 # to know which people are considered
         for channel_keys in self.input_examined[first_key].keys():
-            if not 'avg_length' in self.channels_stats[channel_keys]:
+            if not channel_keys in self.channels_stats:
                 self.channels_stats[channel_keys] = dict()
             self.channels_stats[channel_keys]['avg_length'] = 0
             self.channels_stats[channel_keys]['stddev_length'] = []
             self.channels_stats[channel_keys]['mean_value'] = 0
-            self.channels_stats[channel_keys]['mean_stddev_value'] = 0
-            self.channels_stats[channel_keys]['total_minmax'] = (math.inf, 0)
-            self.channels_stats[channel_keys]['mean_minmax'] = (math.inf, 0)
+            self.channels_stats[channel_keys]['mean_stddev_value'] = []
+            self.channels_stats[channel_keys]['total_minmax'] = [math.inf, 0]
+            self.channels_stats[channel_keys]['mean_minmax'] = [math.inf, 0]
 
         for examined_keys, examined_vals in self.input_examined.items():
             for channel_keys, channel_vals in examined_vals.items():
@@ -163,7 +163,7 @@ class Datastorage(object):
             self.channels_stats[key]['avg_length'] = self.channels_stats[key]['avg_length'] / self.examined_no
             self.channels_stats[key]['stddev_length'] = numpy.std(self.channels_stats[key]['stddev_length'])
             self.channels_stats[key]['mean_value'] = numpy.mean(self.channels_stats[key]['mean_value'])
-            self.channels_stats[key]['mean_stddev_value'] = numpy.std(self.channels_stats[key]['mean_stddev_value'])
+            self.channels_stats[key]['mean_stddev_value'] = numpy.std(self.channels_stats[key]['mean_stddev_value'])    # type change from list to float
             self.channels_stats[key]['mean_minmax'][0] = self.channels_stats[key]['total_minmax'][0] if self.channels_stats[key]['total_minmax'][0] < self.channels_stats[key]['mean_minmax'][0] else self.channels_stats[key]['mean_minmax'][0]
             self.channels_stats[key]['mean_minmax'][1] = self.channels_stats[key]['total_minmax'][1] if self.channels_stats[key]['total_minmax'][1] > self.channels_stats[key]['mean_minmax'][1] else self.channels_stats[key]['mean_minmax'][1]
 
@@ -177,10 +177,10 @@ class Datastorage(object):
             header = "Channel no. " + str(key)
             print()
             print(header.center(40, '*'))
-            print('Average length: ' + self.channels_stats[key]['avg_length'] + ' with deviation: ' + self.channels_stats[key]['stddev_length'])
-            print('Mean value: ' + self.channels_stats[key]['mean_value'] + ' with \'mean\' deviation: ' + self.channels_stats[key]['mean_stddev_value'])
-            print('Channel\'s global  minimum: ' + self.channels_stats[key]['mean_minmax'][0] + ', and average maximum: ' + self.channels_stats[key]['mean_minmax'][1])
-            print('Average minimum: ' + self.channels_stats[key]['mean_minmax'][0] + ', and average maximum: ' + self.channels_stats[key]['mean_minmax'][1])
+            print('Average length: ' + str(self.channels_stats[key]['avg_length']) + ' with deviation: ' + str(self.channels_stats[key]['stddev_length']))
+            print('Mean value: ' + str(self.channels_stats[key]['mean_value']) + ' with \'mean\' deviation: ' + str(self.channels_stats[key]['mean_stddev_value']))
+            print('Channel\'s global  minimum: ' + str(self.channels_stats[key]['mean_minmax'][0]) + ', and average maximum: ' + str(self.channels_stats[key]['mean_minmax'][1]))
+            print('Average minimum: ' + str(self.channels_stats[key]['mean_minmax'][0]) + ', and average maximum: ' + str(self.channels_stats[key]['mean_minmax'][1]))
 
     # TODO output logic is WAY too complicated
     def prepare_target_ranges(self):

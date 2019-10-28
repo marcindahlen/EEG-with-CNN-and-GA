@@ -82,7 +82,7 @@ class TestData:
         data.load_channels()
         data.standardise_channel_data()
         data.fourier_transform()
-        data.normalise_channel_data()
+        # data.normalise_channel_data()
         data.prepare_inputdata_insights()
 
         data.print_inputdata_insights()
