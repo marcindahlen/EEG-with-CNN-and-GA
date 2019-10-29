@@ -160,7 +160,7 @@ class Datastorage(object):
                 self.channels_stats[channel_keys]['total_minmax'][1] = max(channel_vals) if self.channels_stats[channel_keys]['total_minmax'][1] < max(channel_vals) else self.channels_stats[channel_keys]['total_minmax'][1]
 
         for key in self.channels_stats.keys():
-            self.channels_stats[key]['avg_length'] = self.channels_stats[key]['avg_length'] / self.examined_no
+            self.channels_stats[key]['avg_length'] = self.channels_stats[key]['avg_length'] / len(self.input_examined.keys())
             self.channels_stats[key]['stddev_length'] = numpy.std(self.channels_stats[key]['stddev_length'])
             self.channels_stats[key]['mean_value'] = numpy.mean(self.channels_stats[key]['mean_value'])
             self.channels_stats[key]['mean_stddev_value'] = numpy.std(self.channels_stats[key]['mean_stddev_value'])    # type change from list to float

@@ -1,13 +1,17 @@
-from networks.numpy_neuron import NumpyNeuron
+from networks.simple_neuron import NumpyNeuron
 import numpy
+import pytest
 
-data = [numpy.random.random() for x in range(100)]
+class TestData:
 
-neuron_1 = NumpyNeuron(100)
-neuron_2 = NumpyNeuron(100)
+    pytest.data_0 = [numpy.random.random() for x in range(100)]
+    pytest.data_1 = [numpy.random.random() for x in range(100)]
 
-output_1 = neuron_1.calculate(data)
-output_2 = neuron_2.calculate(data)
+    def test_simple_neurons(self):
+        neuron_A = NumpyNeuron(100)
+        neuron_B = NumpyNeuron(100)
 
-print(output_1)
-print(output_2)
+        output_A = neuron_A.calculate(pytest.data_0)
+        output_B = neuron_B.calculate(pytest.data_1)
+        
+        assert output_A != output_B

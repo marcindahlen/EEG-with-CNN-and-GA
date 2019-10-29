@@ -22,7 +22,7 @@ Idealnie, wynikiem pojedynczego badania są:
     binarny z zapisem stanu ostatniej generacji sieci.
 """
 from utils import variables
-from networks.numpy_network import NeuralNetwork
+from networks.LSTM_network import NeuralNetwork
 import time
 
 
