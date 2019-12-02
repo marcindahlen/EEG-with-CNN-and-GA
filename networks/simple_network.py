@@ -15,7 +15,7 @@ import numpy
 
 class NeuralNetwork(object):
     """
-    Class defines a simple network consisting of numpy-LSTM neurons grouped
+    Class defines a simple network consisting of basic neurons grouped
     in layers as defined in variables.py
     I assume network can be trained to classify one's eeg data
     to a single scale's values group in psychology test.

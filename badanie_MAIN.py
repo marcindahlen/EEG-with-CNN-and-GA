@@ -79,3 +79,8 @@ I assume following files hierarchy:
     Second approach could be more "trainable".
     This adds new depth to "a nice table of comparison".
 """
+
+"""
+Decide to use 3-fold cross validation vs 6-fold cross validation.
+Citation about estimating network performance on larger dataset most welcome.
+"""
