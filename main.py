@@ -11,8 +11,6 @@ in_data = in_data.iloc[20000:]
 
 print(in_data.index)
 
-#rysuj_wykres_kropki(dane, dziedzina, nazwa)
-
 frequency_step = fourier.fourier(in_data)
 
 print(frequency_step)

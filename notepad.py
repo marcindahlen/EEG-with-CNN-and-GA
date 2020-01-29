@@ -81,11 +81,11 @@ I assume following files hierarchy:
 """
 
 """
-Decide to use 3-fold cross validation vs 6-fold cross validation.
+Decide to use 3-fold cross validation vs 6-fold cross validation (shuffling!)
 → a bias-variance trade-off associated with the choice of k in k-fold cross-validation. 
 Typically, given these considerations, one performs k-fold cross-validation using k = 5 or k = 10, 
 as these values have been shown empirically to yield test error rate estimates that suffer neither 
 from excessively high bias nor from very high variance.
 
-Citation about estimating network performance on larger dataset most welcome.
+Citation about estimating network performance on larger data sets most welcome.
 """
