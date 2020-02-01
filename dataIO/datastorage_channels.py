@@ -91,27 +91,6 @@ class Datastorage(object):
                 self.input_examined[examined_keys][channel_keys] = numpy.real(numpy.fft.ifft(channel_vals))   # TODO trim unnecessary parts (zeros from line above)
                 # self.input_examined[examined_keys][channel_keys] = numpy.imag(channel_vals)
 
-    def standardise_channel_data(self):
-        """
-        I need to carefully consider the need of standardisation and a way to proper justify it
-        If standardising, do it BEFORE Fourier transform.
-
-        :return: void
-        """
-        for examined_keys, examined_vals in self.input_examined.items():
-             for channel_key, channel_vals in examined_vals.items():          # @TODO it takes an eternity to process, needs optimization
-                 channel_mean = numpy.mean(channel_vals)
-                 channel_dev = numpy.std(channel_vals)
-                 channel_length = len(channel_vals)
-                 print('***')
-                 print(channel_mean)
-                 print(channel_dev)
-                 print(channel_length)
-                 for i in range(channel_length):
-                     if numpy.absolute(channel_vals[i] - channel_mean) > 3 * channel_dev:
-                        channel_vals = numpy.delete(channel_vals, i)
-                 self.input_examined[examined_keys][channel_key] = channel_vals
-
     def normalise_channel_data(self):
         """
         Min-max feature scaling (each single channel separately)

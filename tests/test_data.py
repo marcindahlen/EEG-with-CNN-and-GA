@@ -30,7 +30,6 @@ class TestData:
     def test_standardisation(self):
         data = Datastorage()
         data.load_channels()
-        data.standardise_channel_data()
 
         x = [i for i in range(len(data.input_examined[pytest.person_no][pytest.channel_no]))]
         trace = plotly.graph_objs.Scatter(x=x, y=data.input_examined[pytest.person_no][pytest.channel_no])
@@ -45,7 +44,6 @@ class TestData:
     def test_fourier_transform(self):
         data = Datastorage()
         data.load_channels()
-        data.standardise_channel_data()
         data.fourier_transform()
 
         x = [i for i in range(len(data.input_examined[pytest.person_no][pytest.channel_no]))]
@@ -61,7 +59,6 @@ class TestData:
     def test_normalisation(self):
         data = Datastorage()
         data.load_channels()
-        data.standardise_channel_data()
         data.fourier_transform()
         data.normalise_channel_data()
 
