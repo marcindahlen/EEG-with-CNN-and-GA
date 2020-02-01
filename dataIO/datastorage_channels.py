@@ -168,16 +168,29 @@ class Datastorage(object):
 
     def adjust_input_data_lengths(self):
         """
-
+        Neural networks need to have constant input size.
+        The number of input length is defined in the variables file.
+        After viewing input data insights I recommend 100k data points length
+        for each channel, each person.
         :return:
         """
         for examined_keys, examined_vals in self.input_examined.items():
             for channel_keys, channel_vals in examined_vals.items():
-                channel_vals = numpy.fft.fft(channel_vals)
                 channel_length = len(channel_vals)
-                for i in range(channel_length):
+                if channel_length > variables.desired_data_length:
+                    difference = channel_length - variables.desired_data_length
+                    if difference % 2 == 0:
+                        channel_vals = numpy.delete(channel_vals, slice(channel_length - difference/2, channel_length), axis=None)
+                        channel_vals = numpy.delete(channel_vals, slice(0, difference/2), axis=None)
+                    else:
+                        channel_vals = numpy.delete(channel_vals, 0, axis=None)
+                        channel_length = len(channel_vals)
+                        difference = channel_length - variables.desired_data_length
+                        channel_vals = numpy.delete(channel_vals, slice(channel_length - difference/2, channel_length), axis=None)
+                        channel_vals = numpy.delete(channel_vals, slice(0, difference/2), axis=None)
+                elif channel_length < variables.desired_data_length:
                     pass
-                self.input_examined[examined_keys][channel_keys] = 0
+                self.input_examined[examined_keys][channel_keys] = channel_vals
 
     def prepare_target_ranges(self):
         """

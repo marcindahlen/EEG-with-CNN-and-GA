@@ -34,6 +34,7 @@ out_raw_filepath = "../../out_raw/out_absData.xls"
 out_charts_path = "../../out_wykresy/"
 
 how_many_to_drop = 20000                                                # I was told to drop this amount of initial data, so i'm dropping it (for each channel)
+desired_data_length = 100000
 
 frequencyOfData = 256                                                   # how many data points are recorded per second (eeg)
 alpha_low_frequency = 8
