@@ -80,9 +80,9 @@ class TestData:
     def test_summary(self):
         data = Datastorage()
         data.load_channels()
-        data.standardise_channel_data()
         data.fourier_transform()
-        # data.normalise_channel_data()
-        data.prepare_inputdata_insights()
 
+        data.prepare_inputdata_insights()
         data.print_inputdata_insights()
+
+        data.normalise_channel_data()

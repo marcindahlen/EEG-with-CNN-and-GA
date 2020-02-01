@@ -70,6 +70,7 @@ I assume following files hierarchy:
     viewpoint:  single whole channel → verdict; few whole channels → verdict; scanning channel in parts → verdict;
                 scanning channels in parallel → verdict;
         A nice table of comparison emerges from the above.
+    →https://machinelearningmastery.com/cnn-long-short-term-memory-networks/
         
     Outputs could be evaluated in many different ways.
     There could be 10 output neurons, each one responsible for its own 'range of correctness:

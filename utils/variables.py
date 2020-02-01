@@ -5,10 +5,10 @@ from math import floor
 
 #TODO
 channels_to_consider = [3, 7]                                           # only these particular channels will be considered
-limit_channels = True                                                   # if True, only channels_to_consider are loaded
+limit_channels = False                                                   # if True, only channels_to_consider are loaded
 # TODO
 people_to_consider = [4, 5]                                             # only these particular people will be considered
-limit_people = True                                                     # if True, only people_to_consider will be considered
+limit_people = False                                                     # if True, only people_to_consider will be considered
 # TODO
 testscale_to_consider = [2]                                             # only these test will be processed and learned
 limit_tests = True                                                      # if True, only testscale_to_consider will be considered

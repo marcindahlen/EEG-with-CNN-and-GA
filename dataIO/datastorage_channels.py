@@ -99,13 +99,18 @@ class Datastorage(object):
         :return: void
         """
         for examined_keys, examined_vals in self.input_examined.items():
-             for channel_key, channel_value in examined_vals.items():          # @TODO it takes an eternity to process, needs optimization
-                 slice_mean = numpy.mean(channel_value)
-                 slice_dev = numpy.std(channel_value)
-                 for i in range(len(channel_value)):
-                     if numpy.absolute(channel_value[i] - slice_mean) > 3 * slice_dev:
-                        channel_value[i] = numpy.delete(channel_value, i)
-                 self.input_examined[examined_keys][channel_key] = channel_value
+             for channel_key, channel_vals in examined_vals.items():          # @TODO it takes an eternity to process, needs optimization
+                 channel_mean = numpy.mean(channel_vals)
+                 channel_dev = numpy.std(channel_vals)
+                 channel_length = len(channel_vals)
+                 print('***')
+                 print(channel_mean)
+                 print(channel_dev)
+                 print(channel_length)
+                 for i in range(channel_length):
+                     if numpy.absolute(channel_vals[i] - channel_mean) > 3 * channel_dev:
+                        channel_vals = numpy.delete(channel_vals, i)
+                 self.input_examined[examined_keys][channel_key] = channel_vals
 
     def normalise_channel_data(self):
         """
@@ -125,7 +130,7 @@ class Datastorage(object):
     def prepare_inputdata_insights(self):
         """
         Method meant to give some insights about input data.
-        I calculates channels averages with deviations.
+        It calculates channels averages with deviations.
         Those informations are meaningless for the research,
         but useful to imagine how things look like.
 
@@ -139,7 +144,7 @@ class Datastorage(object):
 
         :return:
         """
-        first_key = next(iter(self.input_examined))                 # to know which people are considered
+        first_key = variables.people_to_consider[0]                 # to know where to start indexing
         for channel_keys in self.input_examined[first_key].keys():
             if not channel_keys in self.channels_stats:
                 self.channels_stats[channel_keys] = dict()
@@ -182,12 +187,25 @@ class Datastorage(object):
             print('Channel\'s global  minimum: ' + str(self.channels_stats[key]['mean_minmax'][0]) + ', and average maximum: ' + str(self.channels_stats[key]['mean_minmax'][1]))
             print('Average minimum: ' + str(self.channels_stats[key]['mean_minmax'][0]) + ', and average maximum: ' + str(self.channels_stats[key]['mean_minmax'][1]))
 
-    # TODO output logic is WAY too complicated
+    def adjust_input_data_lengths(self):
+        """
+
+        :return:
+        """
+        for examined_keys, examined_vals in self.input_examined.items():
+            for channel_keys, channel_vals in examined_vals.items():
+                channel_vals = numpy.fft.fft(channel_vals)
+                channel_length = len(channel_vals)
+                for i in range(channel_length):
+                    pass
+                self.input_examined[examined_keys][channel_keys] = 0
+
     def prepare_target_ranges(self):
         """
         From excel file with columns:
         badany,	SPP,	SPH,	RPN,	Raven_A,	Raven_B,	Raven_C,	Raven_D,	Raven_E,	Raven_WO,
         IVE_Impulsywnosc,	IVE_Ryzyko,	IVE_Empatia,	SSZ,	SSE,	SSU,	ACZ,	PKT,
+        Kłamstwo, Neurotycznosc, Ekstrawersja, Psychotyzm
         read data into dictionary, where target data is mapped into ranges.
 
         Modified variables: output_ranges_x10[examined_no][test_no][10x value 0 or 1] and remember_output_reversal[test_no][minmax_tuple]
@@ -204,7 +222,7 @@ class Datastorage(object):
 
         for examined_no in self.input_examined.keys():
             self.remember_output_reversal[examined_no] = dict()
-            for test_no in range(17):
+            for test_no in range(21):
                 minimum = min(target_data.iloc[examined_no, :])
                 maximum = max(target_data.iloc[examined_no, :])
                 self.remember_output_reversal[examined_no][test_no] = (minimum, maximum)          # yes this could be more efficient but i find this convenient this way
@@ -221,6 +239,7 @@ class Datastorage(object):
         From excel file with columns:
         badany,	SPP,	SPH,	RPN,	Raven_A,	Raven_B,	Raven_C,	Raven_D,	Raven_E,	Raven_WO,
         IVE_Impulsywnosc,	IVE_Ryzyko,	IVE_Empatia,	SSZ,	SSE,	SSU,	ACZ,	PKT,
+        Kłamstwo, Neurotycznosc, Ekstrawersja, Psychotyzm
         read data into dictionary, where target data is saved as a number in <0, 1>.
 
         → https://www.mantidproject.org/Working_With_Functions:_Return_Values
@@ -232,7 +251,7 @@ class Datastorage(object):
 
         for examined_no in self.input_examined.keys():
             self.remember_output_reversal[examined_no] = dict()
-            for test_no in range(17):
+            for test_no in range(21):
                 minimum = min(target_data.iloc[examined_no, :])
                 maximum = max(target_data.iloc[examined_no, :])
                 self.remember_output_reversal[examined_no][test_no] = (minimum, maximum)
