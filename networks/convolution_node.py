@@ -1,12 +1,13 @@
-from utils import utility
 import numpy
 from networks import node
 
-class NumpyNeuron(node.Node):
-    """
-    Class defines a single classic neuron.
-    → https://en.wikipedia.org/wiki/Artificial_neuron#Basic_structure
 
+class ConvNode(node.Node):
+    """
+    This differs from a single neuron by not using the activation function
+    nor bias.
+    → http://brohrer.github.io/how_convolutional_neural_networks_work.html
+    → https://towardsdatascience.com/intuitively-understanding-convolutions-for-deep-learning-1f6f42faee1
     """
 
     def __init__(self, window, from_existing_data=False, weights_data=[]):
@@ -17,12 +18,11 @@ class NumpyNeuron(node.Node):
         :param weights_data:
         """
         self.suma_in = 0
-        self.bias = 1
         self.output = 0
         self.sqrt_std_dev = 0.5477225575
         if not from_existing_data:                                                      # @TODO normal distribution might be not the best choice
             self.weights = []
-            self.weights = numpy.random.beta(0.5, 0.5, window + 1)
+            self.weights = numpy.random.uniform(-2, 2, window)
 
         if from_existing_data:
             if not weights_data:
@@ -37,7 +37,6 @@ class NumpyNeuron(node.Node):
         input = numpy.append(input, self.bias)
 
         self.suma_in = numpy.multiply(input, self.weights)
-        self.suma_in = numpy.sum(self.suma_in, dtype=numpy.float32)
-        self.output = utility.sigmoid(self.suma_in)
+        self.output = numpy.sum(self.suma_in, dtype=numpy.float32)
 
         return self.output
