@@ -1,16 +1,39 @@
-import pandas
-from utils import fourier
 
-in_path = "../in_raw/P06.txt"
-data_output_dir = "../out_wykresy"
+from dataIO.datastorage_channels import Datastorage
 
-in_data = pandas.read_csv(in_path, index_col=False, header=0)
-in_data = in_data.transpose()[0]
+# load input data
+data = Datastorage()
+data.load_channels()
+data.fourier_transform()
+data.prepare_inputdata_insights()
+data.print_inputdata_insights()
+data.normalise_channel_data()
 
-in_data = in_data.iloc[20000:]
+# load output data
+target_data = data.prepare_target_ranges()
 
-print(in_data.index)
+# spawn convolution networks in a population
 
-frequency_step = fourier.fourier(in_data)
+# evolve conv networks in a population
 
-print(frequency_step)
+# evolution done, draw charts: best accuracy each epoch, other stats
+
+# save best performing network, save metadata (stats) for further comparisons
+
+# spawn simple full-connected networks in a population
+
+# evolve simple networks in a population
+
+# evolution done, draw charts: best accuracy each epoch, other stats
+
+# save best performing network, save metadata (stats) for further comparisons
+
+# spawn LSTM, window-reading networks in a population
+
+# evolve LSTM networks in a population
+
+# evolution done, draw charts: best accuracy each epoch, other stats
+
+# save best performing network, save metadata (stats) for further comparisons
+
+# populations comparison
