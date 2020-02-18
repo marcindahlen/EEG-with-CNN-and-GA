@@ -6,6 +6,9 @@ class Node(object):
     Basic methods to be shared by neurons, pools and convolution nodes.
     """
 
+    def calculate(self):
+        pass
+
     def get_size(self):
         """
         Returns number of all weights of this neuron.
