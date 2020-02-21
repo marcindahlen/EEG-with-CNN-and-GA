@@ -1,5 +1,7 @@
 import math
 import random
+
+from networks.network import Network
 from utils import variables
 from networks.LSTM_neuron import NumpyNeuron
 import numpy
@@ -13,7 +15,7 @@ import numpy
 # @TODO czy neurony pierwszej wartswy powinny widzieć cały zakres danych, czy konwolucja? czy Synopsa?? MOST IMPORTANT!!
 
 
-class NeuralNetwork(object):
+class NeuralNetwork(Network):
     """
     Class defines a simple network consisting of basic neurons grouped
     in layers as defined in variables.py

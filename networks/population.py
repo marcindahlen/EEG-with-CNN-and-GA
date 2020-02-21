@@ -28,7 +28,8 @@ import time
 
 class Populacja(object):
 
-    def __init__(self, examination_no, datastorage):                                             # examination_no is the index of column in target data
+    def __init__(self, examination_no, datastorage, nodeType):                                             # examination_no is the index of column in target data
+        self.nodeType = nodeType
         self.examination_no = examination_no
         self.examination_names = {0: 'SPP',
                                   1: 'SPH',
@@ -46,7 +47,11 @@ class Populacja(object):
                                   13: 'SSE',
                                   14: 'SSU',
                                   15: 'ACZ',
-                                  16: 'PKT'}
+                                  16: 'PKT',
+                                  17: 'Lie',
+                                  18: 'Neuro',
+                                  19: 'Ekstr',
+                                  20: 'Psycho'}
         print('Populacja ' + self.examination_names[self.examination_no])
         self.db = datastorage
         start = time.time()
