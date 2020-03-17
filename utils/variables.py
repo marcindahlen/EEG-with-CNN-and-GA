@@ -39,3 +39,25 @@ desired_data_length = 100000
 frequencyOfData = 256                                                   # how many data points are recorded per second (eeg)
 alpha_low_frequency = 8
 alpha_high_frequency = 12
+
+examination_names = {0: 'SPP',
+                     1: 'SPH',
+                     2: 'RPN',
+                     3: 'Raven A',
+                     4: 'Raven B',
+                     5: 'Raven C',
+                     6: 'Raven D',
+                     7: 'Raven E',
+                     8: 'Raven WO',
+                     9: 'IVE Impulsywnosc',
+                     10: 'IVE Ryzyko',
+                     11: 'IVE Empatia',
+                     12: 'SSZ',
+                     13: 'SSE',
+                     14: 'SSU',
+                     15: 'ACZ',
+                     16: 'PKT',
+                     17: 'Lie',
+                     18: 'Neuro',
+                     19: 'Ekstr',
+                     20: 'Psycho'}
