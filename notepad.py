@@ -1,6 +1,4 @@
 """
-Main node of the experiment.
-
 I assume following files hierarchy:
     root/
         in_raw/
@@ -26,10 +24,16 @@ I assume following files hierarchy:
             networks/
             tests/
             utils/
-            badanie_Main.py
+            notepad.py
             main.py
         net_memory/
 
+"""
+
+"""
+"The total economic burden of MDD (major depression) is now estimated to be $210.5 billion per year."
+- http://www.workplacementalhealth.org/Mental-Health-Topics/Depression/Quantifying-the-Cost-of-Depression
++ https://onlinelibrary.wiley.com/doi/full/10.1002/wps.20692
 """
 
 """
@@ -73,8 +77,8 @@ I assume following files hierarchy:
     →https://machinelearningmastery.com/cnn-long-short-term-memory-networks/
         
     Outputs could be evaluated in many different ways.
-    There could be 10 output neurons, each one responsible for its own 'range of correctness:
-    for real output 14, neuron no. 2 should fire, rest should be silent.
+    There could be 10 output neurons, each one responsible for its own range of correctness:
+    for real output 14, neuron no. 2 should fire, rest should be 'silent'.
     But there could be also a single output neuron giving answers in its range <0, 1> where
     real output 14 would be a 0.14 answer. 
     Second approach could be more "trainable".

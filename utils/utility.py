@@ -1,7 +1,7 @@
 import datetime
 import math
 
-def srednia(x=[]):
+def mean(x=[]):
     """Given a list of numbers, returns their mean value."""
     suma = 0.0
     for el in x:
@@ -25,35 +25,35 @@ def maksimum(x=[]):
     return wynik
 
 
-def normalizuj(x=[]):
+def normalise(x=[]):
     """Given a list of numbers, returns a normalized <0 1> list."""
     min = minimum(x)
     maks = maksimum(x)
     return [(n - min) / (maks - min) for n in x]
 
 
-def odchylenie(x=[]):
+def deviation(x=[]):
     """Returns standard deviation for a given list of numbers."""
-    mem = srednia(x)
+    mem = mean(x)
     return (1 / (len(x) - 1)) * math.sqrt(sum((el - mem) * (el - mem) for el in x))
 
 
-def korelacja(x=[], y=[]):
+def corelation(x=[], y=[]):
     """Returns Pearson's product-moment coefficient for two list of numbers."""
-    memx = srednia(x)
-    memy = srednia(y)
-    return sum((elx - memx) * (ely - memy) for elx, ely in zip(x, y)) / odchylenie(y) * odchylenie(x) * (
+    memx = mean(x)
+    memy = mean(y)
+    return sum((elx - memx) * (ely - memy) for elx, ely in zip(x, y)) / deviation(y) * deviation(x) * (
         1 / (len(x) - 1))
 
 
-def regresja_liniowa(x=[], y=[]):
+def linear_regression(x=[], y=[]):
     """Returns aproximated a0 coeficient for given two lists of numvers,
     where a0 fits the y = a0*x+a1 model.  """
 
-    return korelacja(x, y) * odchylenie(y) / odchylenie(x)
+    return corelation(x, y) * deviation(y) / deviation(x)
 
 
-def wyznacznik(M, n):
+def determinant(M, n):
     """Matrix determinant calculated using LU decomposition, for given two-dimensional square matrix
     M with order of n. """
     L = [[] for i in range(n)]
@@ -80,7 +80,7 @@ def wyznacznik(M, n):
     return detU * detL
 
 
-def regresja_wielomianowa(x = [], y = [], n = 2):
+def polinomial_regression(x = [], y = [], n = 2):
     """Given lists of numbers and desired degree of polynomial,
     returns a list of coefficients of aproximated polynomial."""
     wynik = []
@@ -100,7 +100,7 @@ def regresja_wielomianowa(x = [], y = [], n = 2):
     for i in range(n):
         Mx[i][i] = My
     for i in range(n):
-        wynik.append(wyznacznik(Mx[i], n))
+        wynik.append(determinant(Mx[i], n))
     wynik.reverse()
     return wynik
 

@@ -1,5 +1,4 @@
 """
-
 Idealnie, wynikiem pojedynczego badania są:
 →   plik graficzny ilustrujący postęp nauki
     kolejnych generacji sieci,
