@@ -37,12 +37,6 @@ I assume following files hierarchy:
 """
 
 """
-    x = [i for i in range(len(output_scores))]
-            trace = graph_objs.Scatter(x=x, y=output_scores)
-            plotly.offline.plot(trace, filename=variables.out_charts_path + 'name.html', auto_open=False) # @TODO filenaming needs parametrisation
-"""
-
-"""
     → https://superuser.com/questions/679679/how-to-increase-pythons-cpu-usage
     → https://stackoverflow.com/questions/4675728/redirect-stdout-to-a-file-in-python
 """
@@ -63,18 +57,35 @@ I assume following files hierarchy:
 """
 
 """
-    I can use two types of neuron: classic and LSTM.
+    I can use two types of neuron: classic and LSTM (/GRUs)
     But LSTMs are pointless in one-time-look on data, they don't have occasion to remember anything.
-    Should I implement GRUs?
     
     What about LSTM gives final output after looking at all channels?
     
     There are some cases:
-    neurons: classic vs LSTM (vs GRU)
-    viewpoint:  single whole channel → verdict; few whole channels → verdict; scanning channel in parts → verdict;
-                scanning channels in parallel → verdict;
-        A nice table of comparison emerges from the above.
-    →https://machinelearningmastery.com/cnn-long-short-term-memory-networks/
+    neurons: 
+            classic vs LSTM (vs GRU)
+    viewpoint:  
+            single whole channel → verdict; 
+            few whole channels → verdict; 
+            scanning channel in parts → verdict;
+            scanning channels in parallel → verdict;
+    output (classification):
+            a number;
+            a vector;
+    A nice table of comparison emerges from the above:
+            multichannel simple convolution 10outputs            (data → convolution → pooling → ANN → output vec)
+            multichannel simple convolution singleOutput         (data → convolution → pooling → ANN → single number)
+            multichannel simple noConv 10outputs                 (data → pooling → ANN → output vec)
+            multichannel simple noConv singleOutput              (data → pooling → ANN → single number)
+            multichannel lstm convolution 10outputs              (data → convolution → data-chunks → lstm step-by-step → output vec)
+            multichannel lstm convolution singleOutput           (data → convolution → data-chunks → lstm step-by-step → single number)
+            multichannel lstm noConv 10outputs                   (data → pooling → lstm step-by-step → output vec)
+            multichannel lstm noConv singleOutput                (data → pooling → lstm step-by-step → single number)
+            
+        lstm step-by-step → a smaller net than classic ANN, used window after window on the input
+        
+        The learning method is genetic algorithm, ideally besides training weights it also optimises pooling size and method.
         
     Outputs could be evaluated in many different ways.
     There could be 10 output neurons, each one responsible for its own range of correctness:
@@ -83,6 +94,12 @@ I assume following files hierarchy:
     real output 14 would be a 0.14 answer. 
     Second approach could be more "trainable".
     This adds new depth to "a nice table of comparison".
+    
+    →https://machinelearningmastery.com/cnn-long-short-term-memory-networks/
+"""
+
+"""
+    Additional comparison trained network vs untrained network.
 """
 
 """
