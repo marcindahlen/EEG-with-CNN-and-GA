@@ -85,6 +85,8 @@ I assume following files hierarchy:
             
         lstm step-by-step → a smaller net than classic ANN, used window after window on the input
         
+        multichannel → one algorithm is evaluated on all channels
+        
         The learning method is genetic algorithm, ideally besides training weights it also optimises pooling size and method.
         
     Outputs could be evaluated in many different ways.
