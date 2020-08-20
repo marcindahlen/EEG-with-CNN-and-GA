@@ -1,4 +1,4 @@
-from networks.simple_neuron import NumpyNeuron
+from networks.neuron_simple import NumpyNeuron
 import numpy
 import pytest
 

@@ -1,5 +1,5 @@
 
-from dataIO.datastorage_channels import Datastorage
+from dataIO.datastorage import Datastorage
 
 # load input data
 data = Datastorage()

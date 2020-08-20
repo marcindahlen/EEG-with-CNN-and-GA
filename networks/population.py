@@ -5,9 +5,9 @@ Idealnie, wynikiem pojedynczego badania są:
 →   plik z przewidywanymi klasyfikacjami grupy testowej
     dokonanymi przez najlepszą sieć
     """
-from networks import convolution_node
+from networks import node_convolution
 from utils import variables
-from networks.LSTM_network import NeuralNetwork
+from networks.network_LSTM import NeuralNetwork
 import time
 
 
@@ -21,7 +21,7 @@ class Population(object):
 
     def create_new(self):
         """"""
-        if self.nodeType == convolution_node:
+        if self.nodeType == node_convolution:
             pass
         else:
             pass

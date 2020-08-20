@@ -1,5 +1,5 @@
 import pytest
-from dataIO.datastorage_channels import Datastorage
+from dataIO.datastorage import Datastorage
 from utils import variables
 import plotly
 
