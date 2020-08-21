@@ -33,6 +33,9 @@ class LogHandler(object):
         pass
 
     def send_findings(self):
+        if not variables.email_addresses:
+            return
+
         msg = EmailMessage()
         msg['Subject'] = ''
         msg['To'] = ', '.join(variables.email_addresses)
