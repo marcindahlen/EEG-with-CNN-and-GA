@@ -3,7 +3,7 @@ import random
 
 from networks.network import Network
 from utils import variables
-from networks.neuron_LSTM import NumpyNeuron
+from nodes.neuron_LSTM import NumpyNeuron
 import numpy
 
 # @TODO konstruktor może, ale nie musi przyjmować zapamiętane wagi

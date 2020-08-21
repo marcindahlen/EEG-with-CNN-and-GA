@@ -12,6 +12,8 @@ data.normalise_channel_data()
 # load output data
 target_data = data.prepare_target_ranges()
 
+
+
 # spawn convolution networks in a population (LSTM nets, single channels - as separate)                                1
 
 # evolve conv networks in a population

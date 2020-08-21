@@ -61,3 +61,5 @@ examination_names = {0: 'SPP',
                      18: 'Neuro',
                      19: 'Ekstr',
                      20: 'Psycho'}
+
+email_addresses = ['marcindahlen@gmail.com']

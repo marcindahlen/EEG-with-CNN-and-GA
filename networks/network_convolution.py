@@ -1,7 +1,7 @@
 import math
 import random
 from utils import variables
-from networks.neuron_LSTM import NumpyNeuron
+from nodes.neuron_LSTM import NumpyNeuron
 import numpy
 
 

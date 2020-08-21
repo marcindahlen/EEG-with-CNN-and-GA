@@ -2,7 +2,7 @@ pytest
 scipy
 numpy
 pandas
-plotly
+matplotlib
 tabulate
 testpath
 xlrd
