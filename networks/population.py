@@ -13,10 +13,9 @@ import time
 
 class Population(object):
 
-    def __init__(self, examination_no, datastorage, nodeType):
+    def __init__(self, examination_no):
         self.nodeType = nodeType
         self.examination_no = examination_no
-        #self.datastorage = datastorage
         self.savedRMSEs = []
 
     def create_new(self):

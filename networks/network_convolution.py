@@ -3,9 +3,10 @@ import random
 from utils import variables
 from nodes.neuron_LSTM import NumpyNeuron
 import numpy
+from networks import network
 
 
-class ConvNetwork(object):
+class ConvNetwork(network.Network, object):
     """
     → https://medium.com/mlreview/a-guide-to-receptive-field-arithmetic-for-convolutional-neural-networks-e0f514068807
     """

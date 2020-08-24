@@ -6,3 +6,4 @@ matplotlib
 tabulate
 testpath
 xlrd
+tensorflow

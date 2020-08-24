@@ -11,7 +11,7 @@ class Network(object):
         pass
 
     def get_id(self):
-       pass
+        pass
 
     def save_state_binary(self):
         pass
