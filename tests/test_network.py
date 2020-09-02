@@ -1,5 +1,3 @@
-from networks.population import Population
-
 data = Datastorage()
 
 data.prepare_input()

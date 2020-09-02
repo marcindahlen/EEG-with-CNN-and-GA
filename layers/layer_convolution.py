@@ -9,7 +9,6 @@ class Convolution(object):
         self.weights = numpy.ndarray(self.weights_shape, dtype=float)
 
     def forward_pass(self, input):
-        """"""
         if input.shape is (20000,):
             self.output = tf.keras.layers.Conv1D()  # TODO
             return self.output

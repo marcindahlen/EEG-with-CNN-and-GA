@@ -3,22 +3,7 @@ import numpy
 
 
 class NumpyNeuron(object):
-    """
-    Class defines a single classic neuron.
-    → https://cdn-images-1.medium.com/max/1250/1*laH0_xXEkFE0lKJu54gkFQ.png
-
-    Using numpy arrays, since basic LSTM_neuron caused over 73 days
-    of calculations on 4 i7 cores.
-    """
-
     def __init__(self, window, from_existing_data=False, weights_data=[]):
-        """
-
-        :param window: int
-        :param from_existing_data: bool
-        :param weights_data: numpy two dimensional array:
-                4 vectors of lengths: [window + 2], [window + 2], [window + 1], [window + 1]
-        """
         self.y_prev = 0
         self.suma_in, self.suma_out, self.suma_mem, self.suma_forget = 0, 0, 0, 0
         self.y_in, self.y_forget, self.state, self.y_out = 0, 0, 0, 0
@@ -43,27 +28,15 @@ class NumpyNeuron(object):
                 self.weights = weights_data
 
     def get_size(self):
-        """
-        Returns number of all weights of this neuron.
-        :return: int
-        """
         size = 0
         for gate in self.weights:
             size += len(gate)
         return size
 
     def get_weights(self):
-        """
-        Method outputs neuron's weights in form of numpy array.
-        :return: numpy 2-dimensional array
-        """
         return self.weights
 
     def get_weights_vectorised(self):
-        """
-
-        :return: array (vector) of all weights
-        """
         output = numpy.array(self.weights[0], dtype=numpy.float32)
         output = numpy.append(output, self.weights[1])
         output = numpy.append(output, self.weights[2])
@@ -71,27 +44,13 @@ class NumpyNeuron(object):
 
         return output
 
-
     def set_weights_from_vectorized(self,  weights_data=[]):
-        """
-        Given array (vector) it saved as numpy 2-dimensional array
-        :return: void
-        """
         for i in range(self.weights):
             for j in range(self.weights[i]):
                 self.weights[i][j] = weights_data[0]
                 weights_data = weights_data[1:]
 
     def set_weights(self, weights_data=[]):
-        """
-        Weights should be given as nested list:
-        in a list there should be four lists, one for each gate,
-        each list's last element should be bias weight,
-        and the last list's last but one float should be previous output's weight.
-        :param weights_data: numpy two dimensional array:
-                4 vectors of lengths: [window + 2], [window + 2], [window + 1], [window + 1]
-        :return: void
-        """
         if not weights_data:
             raise Exception('No weights data passed to the neuron constructor!')
         elif len(weights_data) != 4:
@@ -100,9 +59,6 @@ class NumpyNeuron(object):
             self.weights = weights_data
 
     def calculate(self, input=[]):
-        """
-        Executes a single forward pass on a neuron.
-        """
         input = numpy.append(input, self.bias)
         input = numpy.append(input, self.y_prev)
 

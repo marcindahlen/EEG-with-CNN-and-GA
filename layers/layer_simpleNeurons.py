@@ -8,7 +8,6 @@ class SimpleLayer(object):
         self.weights = ()
 
     def forward_pass(self, input):
-        """"""
         if input.shape is (100000,):
             self.output = tf.nn.avg_pool1d(input, [5], strides=None, data_format='SAME')
             return self.output

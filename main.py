@@ -1,5 +1,5 @@
 
-from dataIO.datastorage import Datastorage
+from dataIO.datastorage_uksw import Datastorage
 
 # load input data
 data = Datastorage()
@@ -49,6 +49,6 @@ target_data = data.prepare_target_ranges()
 
 # print and save stats                                                                                                 6
 
-# generate and save charts                                                                                             7
+# generate and save charts, send emails if needed                                                                      7
 
 

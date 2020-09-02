@@ -1,14 +1,18 @@
 import matplotlib
+import matplotlib.pyplot
+
+from utils import variables
 
 
-"""
-    x = [i for i in range(len(output_scores))]
-            trace = graph_objs.Scatter(x=x, y=output_scores)
-            plotly.offline.plot(trace, filename=variables.out_charts_path + 'name.html', auto_open=False) # @TODO filenaming needs parametrisation
-"""
-
-data_output_dir = "C:/marcin/psychologia_badania/EEG_csv_x32/out_wykresy"
-
-def makeDotsChart(dane, dziedzina, nazwa):
+def make_single_dots_chart(nazwa, dane):
     """Given the data and chart file name,
     method automates plotting simple scatter chart"""
+    out_path = variables.out_charts_path + nazwa + '.jpg'
+    domain = [i for i in range(len(dane))]
+    pyplot.plot(domain, dane, 'o')
+    pyplot.savefig(out_path)
+
+
+def make_multi_chart(nazwa, dane=[]):
+    pass
+

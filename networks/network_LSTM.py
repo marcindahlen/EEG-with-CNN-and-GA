@@ -4,8 +4,6 @@ from utils import variables
 from nodes.neuron_LSTM import NumpyNeuron
 import numpy
 
-# @TODO konstruktor może, ale nie musi przyjmować zapamiętane wagi
-
 # @TODO parser zapamiętanych wag z/do pliku
 
 # @TODO potrzebna funkcja do zapisu stanu wag
@@ -14,17 +12,6 @@ import numpy
 
 
 class NeuralNetwork(object):
-    """
-    Class defines a simple network consisting of numpy-LSTM neurons grouped
-    in layers as defined in variables.py
-    I assume network can be trained to classify one's eeg data
-    to a single scale's values group in psychology test.
-    What i mean by value group is a group made by sticking
-    together order of possible outcomes. If a scale have 100
-    possible values and particular outcome is 37, i want network to
-    classify this 37 to the group 4th of ten possible.
-    """
-
     def __init__(self, examination_no, receptive_field = variables.network_input_window, existing_topology = [], from_existing_data = False):
         self.examination_no = examination_no    # the number of the psychological test's column
         self.generationNo = 0

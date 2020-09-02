@@ -4,7 +4,7 @@
 
 import numpy
 from dataIO.datastorage_mockup import Datamockup
-from networks.population import Populacja
+from populations.population import Populacja
 import plotly.plotly
 import plotly.graph_objs
 from utils import variables
