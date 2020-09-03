@@ -29,7 +29,7 @@ mutation_probability_factor = 1
 single_channel_network_layers = [Layer.AvgPool, Layer.convolution, Layer.AvgPool, Layer.convolution, Layer.convolution,
                                  Layer.LSTM, Layer.LSTM, Layer.LSTM]
 herding_network_layers = []
-random_guessing_test_network_layers = []
+random_guessing_test_network_layers = [Layer.AvgPool, Layer.MaxPool, Layer.convolution, Layer.basic_neuron]
 single_LSTM_for_all_channels_layers = []
 
 in_raw_path = "../../in_raw/"

@@ -1,8 +1,9 @@
 
 class INetwork(object):
     """"""
-    def __init__(self):
+    def __init__(self, name):
         self.layers = []
+        self.name= name
 
     def forward_pass(self):
         """"""
