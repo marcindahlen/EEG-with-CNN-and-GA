@@ -36,6 +36,7 @@ in_raw_path = "../../in_raw/"
 net_memory_path = "../../net_memory/"
 out_raw_filepath = "../../out_raw/out_absData.xls"
 out_charts_path = "../../out_wykresy/"
+output_path = "../../output_basic/"
 
 # I was told to drop this amount of initial data, so i'm dropping it (for each channel)
 how_many_to_drop = 20000

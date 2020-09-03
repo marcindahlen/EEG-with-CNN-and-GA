@@ -3,6 +3,7 @@ from email.message import EmailMessage
 import imghdr
 
 from utils import variables
+from datetime import datetime, time
 
 
 class Singleton(type):
@@ -20,20 +21,21 @@ class LogHandler(object):
     def __init__(self):
         self.entries = dict()
 
-    def log_entry(self):
-        pass
+    def timestamp(self):
+        return datetime.fromtimestamp(time.time())
 
-    def save_entries(self):
-        pass
+    def log_entry(self, entry):
+        self.entries[self.timestamp()] = entry
 
-    def entries_to_str(self):
-        return self.entries
-
-    def plot_charts(self):
-        pass
+    def save_log(self):
+        file = open(variables.output_path + self.entries.keys()[0].strftime("%H_%M_%S"))
+        for key, val in self.entries:
+            file.write(key.strftime("%H_%M_%S") + " : " + val)
+            file.write("\r\n")
+        file.close()
 
     def send_findings(self):
-        if not variables.email_addresses:
+        if not variables.should_send_mail:
             return
 
         msg = EmailMessage()

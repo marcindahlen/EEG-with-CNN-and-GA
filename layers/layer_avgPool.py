@@ -1,17 +1,26 @@
-import tensorflow as tf
+import tensorflow
 import numpy
 
+from layers.ilayer import ILayer
 
-class AvgPool(object):
+
+class AvgPool(ILayer):
     def __init__(self):
-        self.input_shape = None
         self.output = None
+        self.in_shape = None
+        self.out_shape = None
+        self.weights = None
 
     def forward_pass(self, input):
-        """"""
-        self.input_shape = numpy.shape(input)
+        self.in_shape = len(numpy.shape(input))
 
-        if self.input_shape is 1:
-            pass
+        if self.in_shape == 1:
+            self.output = input[None][:, :, None]
+            self.output = tensorflow.nn.avg_pool1d(self.output, 5, 5, padding='SAME')
+        elif self.in_shape == 3:
+            self.output = input[None][:, :, None]
+            self.output = tensorflow.nn.avg_pool3d(self.output, [5, 5, 5], [5, 5, 5], padding='SAME')
         else:
-            pass
+            raise Exception("Invalid input shape in AvgPool layer: " + str(self.in_shape))
+
+        return self.output

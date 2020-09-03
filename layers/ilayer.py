@@ -25,3 +25,7 @@ class ILayer(object):
     def rebuild_weights(self, flatline_weights):
         """"""
         pass
+
+    def init_weights(self):
+        """"""
+        pass
