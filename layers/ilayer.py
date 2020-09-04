@@ -1,8 +1,8 @@
 class ILayer(object):
     """"""
     def __init__(self, in_shape, out_shape):
-        self.output = 0
-        self.in_shape = in_shape
+        self.output = None
+        self.dimensions = in_shape
         self.out_shape = out_shape
         self.weights = []
 
@@ -26,6 +26,6 @@ class ILayer(object):
         """"""
         pass
 
-    def init_weights(self):
+    def init_weights(self, kernels: int) -> list:
         """"""
         pass

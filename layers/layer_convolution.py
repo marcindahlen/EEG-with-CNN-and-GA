@@ -1,32 +1,45 @@
 import tensorflow as tf
 import numpy
 
+from layers.ilayer import ILayer
 
-class Convolution(object):
-    def __init__(self):
-        self.output = 0
-        self.weights_shape = []
-        self.weights = numpy.ndarray(self.weights_shape, dtype=float)
+
+class Convolution(ILayer):
+    def __init__(self, kernels, dimensions):
+        self.output = None
+        self.dimensions = None
+        self.weights = self.init_weights(kernels, dimensions)
 
     def forward_pass(self, input):
-        if input.shape is (20000,):
-            self.output = tf.keras.layers.Conv1D()  # TODO
-            return self.output
-        elif input.shape is (5, 4000):
-            self.output = numpy.ndarray(input.shape, dtype=float)
-            for x in input:
-                self.output[x] = tf.keras.layers.Conv1D()  # TODO
-        elif input.shape is (5, 5, 800):
-            self.output = numpy.ndarray(input.shape, dtype=float)
-            for x in input:
-                for y in x:
-                    self.output[x][y] = tf.keras.layers.Conv1D()  # TODO
+        self.dimensions = len(numpy.shape(input))
+        if self.dimensions == 3:
+            self.output = tf.nn.conv2d(
+                input, self.weights, 5, padding='SAME', data_format='NWC', dilations=None, name=None
+            )
+        if self.dimensions == 5 or self.dimensions == 12:
+            self.output = tf.nn.conv3d(
+                input, self.weights, 5, padding='SAME', data_format='NDHWC', dilations=None, name=None
+            )
         else:
-            raise Exception("Error in AvgPool: not supported input shape!")
+            raise Exception("Invalid input shape in convolution layer: " + str(self.dimensions))
 
-    def get_all_weights(self):
+    def get_all_weights(self, weights):
         pass
 
     def set_all_weights(self):
         pass
+
+    def decompose_weights(self):
+        pass
+
+    def rebuild_weights(self, flatline_weights):
+        pass
+
+    def init_weights(self, kernels: int, dimensions: int) -> numpy.ndarray:
+        if dimensions == 3:                                 # first conv layer
+            return numpy.random.rand(1, 20000, 1, kernels)
+        elif dimensions == 5:                               # nth conv layer or layer in "herded" data
+            return numpy.random.rand(1, 20000, 1, kernels)
+        elif dimensions == 12:                              # layer in multilayer eeg data
+            return numpy.random.rand(15, 15, 15)
 

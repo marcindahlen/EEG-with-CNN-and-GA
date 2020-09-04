@@ -26,8 +26,10 @@ population_quantity = 32
 how_many_networks_to_save = floor(population_quantity / 4)
 mutation_probability_factor = 1
 
-single_channel_network_layers = [Layer.AvgPool, Layer.convolution, Layer.AvgPool, Layer.convolution, Layer.convolution,
+single_channel_network_layers_LSTM = [Layer.AvgPool, Layer.convolution, Layer.AvgPool, Layer.convolution, Layer.convolution,
                                  Layer.LSTM, Layer.LSTM, Layer.LSTM]
+single_channel_network_layers_basic = [Layer.AvgPool, Layer.convolution, Layer.AvgPool, Layer.convolution, Layer.convolution,
+                                 Layer.basic_neuron, Layer.basic_neuron, Layer.basic_neuron]
 herding_network_layers = []
 random_guessing_test_network_layers = [Layer.AvgPool, Layer.MaxPool, Layer.convolution, Layer.basic_neuron]
 single_LSTM_for_all_channels_layers = []

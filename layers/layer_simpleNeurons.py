@@ -1,36 +1,30 @@
 import tensorflow as tf
 import numpy
 
+from layers.ilayer import ILayer
 
-class SimpleLayer(object):
-    def __init__(self):
-        self.output = 0
-        self.weights = ()
+
+class SimpleLayer(ILayer):
+    def __init__(self, in_shape, out_shape):
+        self.output = None
+        self.in_shape = in_shape
+        self.out_shape = out_shape
+        self.weights = []
 
     def forward_pass(self, input):
-        if input.shape is (100000,):
-            self.output = tf.nn.avg_pool1d(input, [5], strides=None, data_format='SAME')
-            return self.output
-        elif input.shape is (5, 20000):
-            self.output = numpy.ndarray(input.shape, dtype=float)
-            for x in input:
-                self.output[x] = tf.nn.avg_pool1d(input[x], [5], strides=None, data_format='SAME')
-        elif input.shape is (5, 5, 4000):
-            self.output = numpy.ndarray(input.shape, dtype=float)
-            for x in input:
-                for y in x:
-                    self.output[x][y] = tf.nn.avg_pool1d(input[x][y], [5], strides=None, data_format='SAME')
-        elif input.shape is (5, 5, 5, 800):
-            self.output = numpy.ndarray(input.shape, dtype=float)
-            for x in input:
-                for y in x:
-                    for z in y:
-                        self.output[x][y][z] = tf.nn.avg_pool1d(input[x][y][z], [5], strides=None, data_format='SAME')
-        else:
-            raise Exception("Error in AvgPool: not supported input shape!")
+        pass
 
-    def get_all_weights(self):
+    def get_all_weights(self, weights):
         pass
 
     def set_all_weights(self):
+        pass
+
+    def decompose_weights(self):
+        pass
+
+    def rebuild_weights(self, flatline_weights):
+        pass
+
+    def init_weights(self, kernels: int) -> list:
         pass
