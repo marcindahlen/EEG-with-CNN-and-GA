@@ -13,15 +13,21 @@ class SimpleLayer(ILayer):
         self.output = None
         self.in_shape = None
         self.size = size
-        self.weights = self.init_weights(in_shape, size)
         self.biases_weights = self.init_weights((1,), size)
+        self.weights = self.init_weights(in_shape, size)
 
     def forward_pass(self, input) -> numpy.ndarray:
+        print("forward_pass")
         self.output = tf.reshape(input, self.in_shape)
+        print(self.output)
         self.output = numpy.append(self.output, [1])
-        self.output = [numpy.matmul(self.output, w) for w in range(self.size)]
-        self.output = numpy.sum(self.output)
-        self.output = sigmoid(self.output)
+        print(self.output)
+        self.output = [numpy.matmul(self.output, self.weights[w]) for w in range(self.size)]
+        print(self.output)
+        self.output = [numpy.sum(e) for e in self.output]
+        print(self.output)
+        self.output = [sigmoid(s) for s in self.output]
+        print(self.output)
 
         return self.output
 
@@ -43,4 +49,4 @@ class SimpleLayer(ILayer):
 
     def init_weights(self, in_shape: Tuple, size: int) -> numpy.ndarray:
         self.in_shape = reduce(lambda x, y: x * y, in_shape)
-        return numpy.random.rand(size, self.in_shape + 1)       # + 1 bias weight
+        return numpy.random.normal(loc=0, scale=0.25, size=(size, self.in_shape + 1))      # + 1 bias weight

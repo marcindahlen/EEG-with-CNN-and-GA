@@ -2,8 +2,8 @@ from nodes.neuron_simple import NumpyNeuron
 import numpy
 import pytest
 
-class TestData:
 
+class TestData:
     pytest.data = [numpy.random.random() for x in range(100)]
 
     def test_simple_neurons(self):
