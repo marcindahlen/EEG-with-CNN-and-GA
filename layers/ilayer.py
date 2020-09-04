@@ -4,7 +4,7 @@ class ILayer(object):
         self.output = None
         self.dimensions = in_shape
         self.out_shape = out_shape
-        self.weights = []
+        self.weights = None
 
     def forward_pass(self, input):
         """"""

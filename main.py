@@ -1,16 +1,22 @@
 
 from dataIO.datastorage_uksw import Datastorage
 
+"""                                         EEG -> Depressive disorder                                              """
+
+
+"""                                   EEG -> variables.examination_test_names                                       """
+
+"""
 # load input data
-data = Datastorage()
-data.load_channels()
-data.fourier_transform()
-data.prepare_inputdata_insights()
-data.print_inputdata_insights()
-data.normalise_channel_data()
+data_eeg = Datastorage()
+data_eeg.load_channels()
+data_eeg.fourier_transform()
+data_eeg.prepare_inputdata_insights()
+data_eeg.print_inputdata_insights()
+data_eeg.normalise_channel_data()
 
 # load output data
-target_data = data.prepare_target_ranges()
+target_data = data_eeg.prepare_target_ranges()
 
 # test system by spawning networks and single pass each for test, note results for comparison                          1
 
@@ -50,5 +56,6 @@ target_data = data.prepare_target_ranges()
 # print and save stats                                                                                                 6
 
 # generate and save charts, send emails if needed                                                                      7
+"""
 
 
