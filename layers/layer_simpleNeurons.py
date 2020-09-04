@@ -17,17 +17,11 @@ class SimpleLayer(ILayer):
         self.weights = self.init_weights(in_shape, size)
 
     def forward_pass(self, input) -> numpy.ndarray:
-        print("forward_pass")
         self.output = tf.reshape(input, self.in_shape)
-        print(self.output)
         self.output = numpy.append(self.output, [1])
-        print(self.output)
         self.output = [numpy.matmul(self.output, self.weights[w]) for w in range(self.size)]
-        print(self.output)
         self.output = [numpy.sum(e) for e in self.output]
-        print(self.output)
         self.output = [sigmoid(s) for s in self.output]
-        print(self.output)
 
         return self.output
 

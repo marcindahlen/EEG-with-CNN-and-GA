@@ -26,12 +26,33 @@ population_quantity = 32
 how_many_networks_to_save = floor(population_quantity / 4)
 mutation_probability_factor = 1
 
-single_channel_network_layers_LSTM = [Layer.AvgPool, Layer.convolution, Layer.AvgPool, Layer.convolution, Layer.convolution,
-                                 Layer.LSTM, Layer.LSTM, Layer.LSTM]
-single_channel_network_layers_basic = [Layer.AvgPool, Layer.convolution, Layer.AvgPool, Layer.convolution, Layer.convolution,
-                                 Layer.basic_neuron, Layer.basic_neuron, Layer.basic_neuron]
+single_channel_network_layers_LSTM = [Layer.AvgPool, Layer.convolution, Layer.AvgPool, Layer.convolution,
+                                      Layer.convolution, Layer.LSTM, Layer.LSTM, Layer.LSTM]
+single_channel_network_layers_LSTM_IO = [(100000, 20000),
+                                         (20000, (32, 4000)),
+                                         ((32, 4000), (32, 800)),
+                                         ((32, 800), (64, 160)),
+                                         ((64, 160), (128, 32)),
+                                         ((128, 32), 1024),
+                                         (1024, 1024),
+                                         (1024, 10)]
+
+single_channel_network_layers_basic = [Layer.AvgPool, Layer.convolution, Layer.AvgPool, Layer.convolution,
+                                       Layer.convolution, Layer.basic_neuron, Layer.basic_neuron, Layer.basic_neuron]
+single_channel_network_layers_basic_IO = [(100000, 20000),
+                                          (20000, (32, 4000)),
+                                          ((32, 4000), (32, 800)),
+                                          ((32, 800), (64, 160)),
+                                          ((64, 160), (128, 32)),
+                                          ((128, 32), 1024),
+                                          (1024, 1024),
+                                          (1024, 10)]
+
 herding_network_layers = []
+herding_network_layers_IO = []
+
 random_guessing_test_network_layers = [Layer.AvgPool, Layer.MaxPool, Layer.convolution, Layer.basic_neuron]
+
 single_LSTM_for_all_channels_layers = []
 
 in_raw_path = "../../in_raw/"
@@ -51,26 +72,26 @@ alpha_low_frequency = 8
 alpha_high_frequency = 12
 
 examination_test_names = {0: 'SPP',
-                     1: 'SPH',
-                     2: 'RPN',
-                     3: 'Raven A',
-                     4: 'Raven B',
-                     5: 'Raven C',
-                     6: 'Raven D',
-                     7: 'Raven E',
-                     8: 'Raven WO',
-                     9: 'IVE Impulsywnosc',
-                     10: 'IVE Ryzyko',
-                     11: 'IVE Empatia',
-                     12: 'SSZ',
-                     13: 'SSE',
-                     14: 'SSU',
-                     15: 'ACZ',
-                     16: 'PKT',
-                     17: 'Lie',
-                     18: 'Neuro',
-                     19: 'Ekstr',
-                     20: 'Psycho'}
+                          1: 'SPH',
+                          2: 'RPN',
+                          3: 'Raven A',
+                          4: 'Raven B',
+                          5: 'Raven C',
+                          6: 'Raven D',
+                          7: 'Raven E',
+                          8: 'Raven WO',
+                          9: 'IVE Impulsywnosc',
+                          10: 'IVE Ryzyko',
+                          11: 'IVE Empatia',
+                          12: 'SSZ',
+                          13: 'SSE',
+                          14: 'SSU',
+                          15: 'ACZ',
+                          16: 'PKT',
+                          17: 'Lie',
+                          18: 'Neuro',
+                          19: 'Ekstr',
+                          20: 'Psycho'}
 
 # used to send emails with summary after completion
 email_addresses = ['marcindahlen@gmail.com']
