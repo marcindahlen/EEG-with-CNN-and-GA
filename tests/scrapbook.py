@@ -1,31 +1,23 @@
-import numpy as np
+from functools import reduce
+
+import numpy
 
 # https://stackoverflow.com/questions/58146901/how-to-use-only-max-average-pooling-layer-in-tensorflow-for-1d-array
+import tensorflow
 
-a = np.random.randn(4).astype('float32')
-print(a)
-print("  ")
-print("  ")
+data_1d = numpy.random.rand(15)
+data_1d = data_1d[None][:, :, None]
+data_3d = numpy.random.rand(15, 15, 15)
+data_3d = data_3d[None][:, :, None]
 
-bac = a[None][:, :, None]
-print(bac)
-print("  ")
-print("  ")
+print(data_1d)
+print(data_3d)
+print("")
 
-cbd = a[None][None, None, :, :, None]
-print(cbd)
-print("  ")
-print("  ")
+new = tensorflow.reshape(data_1d, 15)
+print(new)
+print("")
 
-a = np.random.randn(4, 4, 4).astype('float32')
-print(a)
-print("  ")
-print("  ")
-
-bac = a[None][:, :, None]               # addin two dims
-print(bac)
-print("  ")
-print("  ")
-
-cbd = a[None][None, None, :, :, None]   # adding 4 dims
-print(cbd)
+new = tensorflow.reshape(new, (1, 5, 3, 1))  # batch_shape + [height, width, channels]
+print(new)
+print("")

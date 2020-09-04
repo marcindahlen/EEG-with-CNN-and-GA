@@ -3,7 +3,7 @@ import numpy
 from layers.layer_avgPool import AvgPool
 
 
-class TestData:
+class TestPooling:
     def test_pooling(self):
         data_1d = numpy.random.rand(15)
         data_3d = numpy.random.rand(15, 15, 15)
