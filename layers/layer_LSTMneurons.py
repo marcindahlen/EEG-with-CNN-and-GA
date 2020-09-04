@@ -20,10 +20,10 @@ class LSTMLayer(ILayer):
     def set_all_weights(self):
         pass
 
-    def decompose_weights(self):
+    def decomposed_weights(self):
         pass
 
-    def rebuild_weights(self, flatline_weights):
+    def rebuild_weights(self, flat_weights):
         pass
 
     def init_weights(self, kernels: int) -> list:

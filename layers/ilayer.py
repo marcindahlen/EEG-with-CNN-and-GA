@@ -10,22 +10,22 @@ class ILayer(object):
         """"""
         pass
 
-    def get_all_weights(self, weights):
+    def get_all_weights(self):
         """"""
         pass
 
-    def set_all_weights(self):
+    def set_all_weights(self, new_weights):
         """"""
         pass
 
-    def decompose_weights(self):
+    def decomposed_weights(self):
         """"""
         pass
 
-    def rebuild_weights(self, flatline_weights):
+    def rebuild_weights(self, flat_weights):
         """"""
         pass
 
-    def init_weights(self, kernels: int) -> list:
+    def init_weights(self) -> list:
         """"""
         pass

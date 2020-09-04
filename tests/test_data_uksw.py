@@ -1,16 +1,15 @@
 import pytest
 from dataIO.datastorage_uksw import Datastorage
 from utils import variables
-import plotly
+
 
 class TestData:
-
     pytest.person_no = variables.people_to_consider[0]
     pytest.channel_no = variables.channels_to_consider[0]
 
     @pytest.fixture
     def load_filecontent(self):
-        pass # refuses to work this way
+        pass  # refuses to work this way
 
     def test_loading(self):
         data = Datastorage()
@@ -50,7 +49,8 @@ class TestData:
         trace = plotly.graph_objs.Scatter(x=x, y=data.input_examined[pytest.person_no][pytest.channel_no])
         plot_data = [trace]
         figure = plotly.graph_objs.Figure(data=plot_data)
-        plotly.offline.plot(figure, filename=variables.out_charts_path + "testDataAfterFourier" + '.html', auto_open=False)
+        plotly.offline.plot(figure, filename=variables.out_charts_path + "testDataAfterFourier" + '.html',
+                            auto_open=False)
 
         particular_data = data.input_examined[pytest.person_no][pytest.channel_no][100:200]
         print(particular_data)
@@ -72,7 +72,6 @@ class TestData:
         particular_data = data.input_examined[pytest.person_no][pytest.channel_no][100:200]
         print(particular_data)
         assert any(particular_data) != False
-
 
     def test_summary(self):
         data = Datastorage()
