@@ -47,16 +47,20 @@ class LSTMLayer(ILayer):
         return self.outputs
 
     def get_all_weights(self) -> numpy.ndarray:
-        pass
+        return self.weights
 
     def set_all_weights(self, new_weights):
-        pass
+        if numpy.shape(new_weights) == numpy.shape(self.weights):
+            self.weights = new_weights
+        elif len(numpy.shape(new_weights)) == 1:
+            self.weights = self.rebuild_weights(new_weights)
 
     def decomposed_weights(self):
-        pass
+        flat_length = reduce(lambda x, y: x * y, self.weights)
+        return tf.reshape(self.weights, flat_length)
 
     def rebuild_weights(self, flat_weights):
-        pass
+        return tf.reshape(flat_weights, numpy.shape(self.weights))
 
     def init_weights(self, in_shape: Tuple, size: int) -> numpy.ndarray:
         self.in_shape = reduce(lambda x, y: x * y, in_shape)
