@@ -4,6 +4,7 @@ from typing import Tuple
 import tensorflow as tf
 import numpy
 
+from layers.available_layers import Layer
 from layers.ilayer import ILayer
 
 
@@ -12,6 +13,7 @@ class Convolution(ILayer):
         self.output = None
         self.dimensions = dimensions
         self.weights = self.init_weights(kernels_out, kernels_in, dimensions, filter_len)
+        self.type = Layer.convolution
 
     def forward_pass(self, input: numpy.ndarray):
         self.dimensions = numpy.shape(input)

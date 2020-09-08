@@ -1,6 +1,7 @@
 import numpy
 import tensorflow
 
+from layers.available_layers import Layer
 from layers.layer_convolution import Convolution
 
 

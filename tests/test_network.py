@@ -1,16 +1,30 @@
-data = Datastorage()
+import numpy
 
-data.prepare_input()
+from layers.available_layers import Layer
 
-data.prepare_target(1)
-b = Populacja(1, data)
 
-print("Assumed iterations: " + str(data.assume_networkIterationsNo()))
+class TestNetwork:
+    def test_net(self):
+        data_1d = numpy.random.rand(150)
+        data_2d = numpy.random.rand(150, 150)
 
-wyniki = b.forward_pass_all_networks(data.assume_networkIterationsNo())
-print(wyniki)
+        layers = [Layer.convolution, Layer.convolution, Layer.basic_neuron, Layer.basic_neuron]
+        layers_1d_shape = [(150, (6, 30)),
+                           ((6, 30), (12, 6)),
+                           ((12, 6), 6),
+                           (6, 1)]
 
-b.evolve_network_generation()
+        print(data_1d)
+        print(data_2d)
 
-wyniki = b.forward_pass_all_networks(data.assume_networkIterationsNo())
-print(wyniki)
+        print("")
+        print("")
+        output = LSTM_1d_layer.forward_pass(data_1d)
+        print(output)
+        assert numpy.shape(output) == (4,)
+        print("")
+        print("")
+        output = LSTM_2d_layer.forward_pass(data_2d)
+        print(output)
+
+        assert numpy.shape(output) == (4,)

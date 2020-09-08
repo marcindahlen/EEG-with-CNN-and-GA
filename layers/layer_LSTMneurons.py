@@ -4,6 +4,7 @@ from typing import Tuple
 import tensorflow as tf
 import numpy
 
+from layers.available_layers import Layer
 from layers.ilayer import ILayer
 from utils.utility import sigmoid, tanh
 
@@ -16,6 +17,7 @@ class LSTMLayer(ILayer):
         self.in_shape = in_shape
         self.size = size
         self.weights = self.init_weights(in_shape, size)
+        self.type = Layer.LSTM
 
     def forward_pass(self, input) -> numpy.ndarray:
         input = tf.reshape(input, self.in_shape)

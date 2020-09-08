@@ -1,6 +1,7 @@
 import tensorflow
 import numpy
 
+from layers.available_layers import Layer
 from layers.ilayer import ILayer
 
 
@@ -8,8 +9,7 @@ class AvgPool(ILayer):
     def __init__(self):
         self.output = None
         self.dimensions = None
-        self.out_shape = None
-        self.weights = None
+        self.type = Layer.AvgPool
 
     def forward_pass(self, input):
         self.dimensions = len(numpy.shape(input))

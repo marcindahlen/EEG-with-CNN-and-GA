@@ -1,5 +1,6 @@
 import numpy
 
+from layers.available_layers import Layer
 from layers.layer_LSTMneurons import LSTMLayer
 
 

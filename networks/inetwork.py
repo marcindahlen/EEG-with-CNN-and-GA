@@ -1,15 +1,20 @@
 
 class INetwork(object):
     """"""
-    def __init__(self, name):
-        self.layers = []
-        self.name= name
+    def __init__(self, layer_types, ins_outs_shapes):
+        self.layers = None
+        self.output = None
+        self.score = None
 
-    def forward_pass(self):
+    def forward_pass(self, input):
         """"""
         pass
 
-    def evaluate_self(self):
+    def initialize(self, layer_types, ins_outs_shapes):
+        """"""
+        pass
+
+    def evaluate_self(self, target):
         """"""
         pass
 
@@ -53,6 +58,6 @@ class INetwork(object):
         """"""
         pass
 
-    def rebuild_weights(self, flatline_weights):
+    def rebuild_weights(self, flat_weights):
         """"""
         pass

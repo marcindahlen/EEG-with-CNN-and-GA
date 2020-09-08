@@ -4,6 +4,7 @@ from typing import Tuple
 import tensorflow as tf
 import numpy
 
+from layers.available_layers import Layer
 from layers.ilayer import ILayer
 from utils.utility import sigmoid
 
@@ -15,6 +16,7 @@ class SimpleLayer(ILayer):
         self.size = size
         self.biases_weights = self.init_weights((1,), size)
         self.weights = self.init_weights(in_shape, size)
+        self.type = Layer.basic_neuron
 
     def forward_pass(self, input) -> numpy.ndarray:
         self.output = tf.reshape(input, self.in_shape)
