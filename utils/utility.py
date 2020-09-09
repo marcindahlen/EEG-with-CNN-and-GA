@@ -1,6 +1,7 @@
 import datetime
 import math
 
+
 def mean(x=[]):
     """Given a list of numbers, returns their mean value."""
     suma = 0.0
@@ -38,19 +39,19 @@ def deviation(x=[]):
     return (1 / (len(x) - 1)) * math.sqrt(sum((el - mem) * (el - mem) for el in x))
 
 
-def corelation(x=[], y=[]):
+def correlation(x=[], y=[]):
     """Returns Pearson's product-moment coefficient for two list of numbers."""
     memx = mean(x)
     memy = mean(y)
     return sum((elx - memx) * (ely - memy) for elx, ely in zip(x, y)) / deviation(y) * deviation(x) * (
-        1 / (len(x) - 1))
+            1 / (len(x) - 1))
 
 
 def linear_regression(x=[], y=[]):
-    """Returns aproximated a0 coeficient for given two lists of numvers,
+    """Returns approximated a0 coefficient for given two lists of numbers,
     where a0 fits the y = a0*x+a1 model.  """
 
-    return corelation(x, y) * deviation(y) / deviation(x)
+    return correlation(x, y) * deviation(y) / deviation(x)
 
 
 def determinant(M, n):
@@ -80,7 +81,7 @@ def determinant(M, n):
     return detU * detL
 
 
-def polinomial_regression(x = [], y = [], n = 2):
+def polynomial_regression(x=[], y=[], n=2):
     """Given lists of numbers and desired degree of polynomial,
     returns a list of coefficients of aproximated polynomial."""
     wynik = []
@@ -105,42 +106,45 @@ def polinomial_regression(x = [], y = [], n = 2):
     return wynik
 
 
-def rmse(x=[], y=[]):
+def rmse(x, y) -> float:
     """For two lists of numbers, returns root-mean-square error of how
     different are coresponding elements of the lists."""
+    if x is None:
+        x = []
     return math.sqrt(sum([(a - b) ** 2 for a, b in zip(x, y)]) / len(x))
 
 
-def tanh(x):
+def tanh(x: float) -> float:
     """Returns a value of hyperbolic tangent for a given number."""
     return 2 / (1 + math.exp(-2 * x)) - 1
 
 
-def derivative_tanh(x):
+def derivative_tanh(x: float) -> float:
     """Returns a value of derivative of hyperbolic tangent for a given number."""
     mem = tanh(x)
     return 1 - (mem * mem)
 
 
-def sigmoid(x):
+def sigmoid(x: float) -> float:
     """Returns a value of sigmoid function for a given number."""
     return 1 / (1 + math.exp(-x))
 
 
-def derivative_sigmoid(x):
+def derivative_sigmoid(x: float) -> float:
     """Returns a value of derivative of sigmoid function for a given number."""
     mem = sigmoid(x)
     return mem * (1 - mem)
 
 
-def bent(x):
+def bent(x: float) -> float:
     """Returns a value of bent identity function for a given number."""
     return (math.sqrt(x * x + 1) - 1) / 2 + x
 
 
-def derivative_bent(x):
+def derivative_bent(x: float) -> float:
     """Returns a value of derivative of bent identity for a given number."""
     return x / (2 * math.sqrt(x * x + 1)) + 1
 
-def getTime():
+
+def get_time():
     return datetime.datetime.now().strftime("%Y%m%d")

@@ -14,6 +14,7 @@ class Convolution(ILayer):
         self.dimensions = dimensions
         self.weights = self.init_weights(kernels_out, kernels_in, dimensions, filter_len)
         self.type = Layer.convolution
+        self.weight_length = len(self.decomposed_weights())
 
     def forward_pass(self, input: numpy.ndarray):
         self.dimensions = numpy.shape(input)

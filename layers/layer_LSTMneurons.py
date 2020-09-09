@@ -18,6 +18,7 @@ class LSTMLayer(ILayer):
         self.size = size
         self.weights = self.init_weights(in_shape, size)
         self.type = Layer.LSTM
+        self.weight_length = len(self.decomposed_weights())
 
     def forward_pass(self, input) -> numpy.ndarray:
         input = tf.reshape(input, self.in_shape)

@@ -6,6 +6,7 @@ class ILayer(object):
         self.out_shape = out_shape
         self.weights = None
         self.type = None
+        self.weight_length = None
 
     def forward_pass(self, input):
         """"""

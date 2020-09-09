@@ -17,6 +17,7 @@ class SimpleLayer(ILayer):
         self.biases_weights = self.init_weights((1,), size)
         self.weights = self.init_weights(in_shape, size)
         self.type = Layer.basic_neuron
+        self.weight_length = len(self.decomposed_weights())
 
     def forward_pass(self, input) -> numpy.ndarray:
         self.output = tf.reshape(input, self.in_shape)

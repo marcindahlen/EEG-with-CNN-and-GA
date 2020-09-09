@@ -7,6 +7,8 @@ from layers.layer_convolution import Convolution
 from layers.layer_maxPool import MaxPool
 from layers.layer_simpleNeurons import SimpleLayer
 from networks.inetwork import INetwork
+from utils import variables
+from utils.utility import rmse, get_time
 
 
 class Network(INetwork):
@@ -15,15 +17,19 @@ class Network(INetwork):
         self.layers = self.initialize(layer_types, ins_outs_shapes)
         self.output = None
         self.score = None
+        self.weight_lengths_by_layer = self.get_weight_lengths_by_layer()
 
     def forward_pass(self, input):
         self.output = input
         for layer in self.layers:
             if layer.type == Layer.convolution:
                 if len(numpy.shape(input)) == 1:
-                    pass
+                    new_shape = (1, 1, len(input), 1)
                 else:
-                    pass
+                    shape = numpy.shape(input)
+                    new_shape = (1, 1, shape[0], shape[1], 1)
+                self.output = numpy.reshape(self.output, new_shape)
+                self.output = layer.forward_pass(self.output)
             else:
                 self.output = layer.forward_pass(self.output)
 
@@ -59,32 +65,49 @@ class Network(INetwork):
 
     def evaluate_self(self, target):
         if isinstance(target, list) or isinstance(target, numpy.ndarray):
-            pass
+            self.score = rmse(self.output, target)
         else:
-            pass
+            self.score = rmse([self.output], [target])
 
     def get_score(self):
-        pass
+        return self.score
 
-    def get_id(self):
-        pass
+    def get_weight_lengths_by_layer(self) -> list:
+        weight_lengths = []
+        for layer in self.layers:
+            new_pair = (layer.type, layer.weight_length)
+            weight_lengths.append(new_pair)
+        return weight_lengths
 
-    def save_state_binary(self):
-        pass
+    def set_weights(self, weights):
+        for i, layer in self.layers:
+            if i == 0:
+                new_weights = weights[0:self.weight_lengths_by_layer[i][1]]
+                layer.set_all_weights(new_weights)
+            else:
+                new_weights = weights[self.weight_lengths_by_layer[i-1][1]:self.weight_lengths_by_layer[i][1]]
+                layer.set_all_weights(new_weights)
 
-    def load_state_binary(self):
-        pass
+    def get_weights(self):
+        weights = []
+        for layer in self.layers:
+            weights.append(layer.decomposed_weights())
+        return weights
 
-    def save_state_text(self):
-        pass
+    def save_weights(self):
+        weights = self.get_weights()
+        file = open(variables.net_memory_path + "_" + get_time() + "_" + self.score )
+        for val in weights:
+            file.write(str(val))
+        file.close()
 
-    def load_state_text(self):
+    def load_weights(self, filename):
         pass
 
     def mutate(self):
         pass
 
-    def create_single_child(self):
+    def create_single_child(self, other):
         pass
 
     def multiplication_by_budding(self):

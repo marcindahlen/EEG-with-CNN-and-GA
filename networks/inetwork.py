@@ -5,6 +5,7 @@ class INetwork(object):
         self.layers = None
         self.output = None
         self.score = None
+        self.weight_lengths_by_layer = None
 
     def forward_pass(self, input):
         """"""
@@ -22,31 +23,23 @@ class INetwork(object):
         """"""
         pass
 
-    def get_id(self):
-        """"""
+    def set_weights(self, weights):
         pass
 
-    def save_state_binary(self):
-        """"""
+    def get_weights(self):
         pass
 
-    def load_state_binary(self):
-        """"""
+    def save_weights(self):
         pass
 
-    def save_state_text(self):
-        """"""
-        pass
-
-    def load_state_text(self):
-        """"""
+    def load_weights(self, filename):
         pass
 
     def mutate(self):
         """"""
         pass
 
-    def create_single_child(self):
+    def create_single_child(self, other):
         """"""
         pass
 
