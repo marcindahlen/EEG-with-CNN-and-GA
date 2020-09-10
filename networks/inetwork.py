@@ -35,22 +35,10 @@ class INetwork(object):
     def load_weights(self, filename):
         pass
 
-    def mutate(self):
+    def mutate(self, probability: float):
         """"""
         pass
 
-    def create_single_child(self, other):
-        """"""
-        pass
-
-    def multiplication_by_budding(self):
-        """"""
-        pass
-
-    def decompose_weights(self):
-        """"""
-        pass
-
-    def rebuild_weights(self, flat_weights):
+    def create_single_child(self, other, mutate_prob):
         """"""
         pass

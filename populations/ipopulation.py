@@ -18,11 +18,11 @@ class IPopulation(object):
         """"""
         pass
 
-    def calculate(self, inputdata):
+    def calculate(self, input_data):
         """
         After receiving datapoints of all persons and channels
         feeds all networks and saves their RMSEs
-        :param inputdata:
+        :param input_data:
         :return: list of RMSE
         """
         pass

@@ -54,10 +54,11 @@ class Convolution(ILayer):
     def init_weights(self, kernels_out: int, kernels_in: int, dimensions: Tuple, filter_len: int) -> numpy.ndarray:
         if len(dimensions) == 4:  # first conv layer
             # [filter_height, filter_width, in_channels, out_channels]
-            return numpy.random.rand(1, filter_len, 1, kernels_out)
+            return numpy.random.normal(loc=0, scale=0.25, size=(1, filter_len, 1, kernels_out))
         elif len(dimensions) == 5:  # nth conv layer or layer in "herded" data
             # [filter_depth, filter_height, filter_width, in_channels, out_channels]
-            return numpy.random.rand(filter_len, filter_len, filter_len, kernels_in, kernels_out)
+            return numpy.random.normal(loc=0, scale=0.32, size=(filter_len, filter_len, filter_len, kernels_in,
+                                                                kernels_out))
         else:
             raise Exception("Invalid input shape in convolution layer::init_weights. Dimensions: " +
                             str(len(dimensions)) + ". Expected: 4 or 5.")

@@ -45,8 +45,8 @@ class LSTMLayer(ILayer):
         output_gates = [sigmoid(s) for s in output_gates]
 
         self.outputs = [tanh(self.memories[cell]) * output_gates[cell] for cell in range(self.size)]
-        self.previous_outputs = self.outputs
-        return self.outputs
+        self.previous_outputs = numpy.asarray(self.outputs, dtype=numpy.float64)
+        return numpy.asarray(self.outputs, dtype=numpy.float64)
 
     def get_all_weights(self) -> numpy.ndarray:
         return self.weights
@@ -68,4 +68,4 @@ class LSTMLayer(ILayer):
         self.in_shape = reduce(lambda x, y: x * y, in_shape)
         # size = (no_of_neurons, no_of_gates, no_of_weights + bias + previous_outputs)
         size = (size, 4, self.in_shape + 1 + 1 * size)
-        return numpy.random.normal(loc=0, scale=0.25, size=size)
+        return numpy.random.normal(loc=0, scale=0.32, size=size)

@@ -22,9 +22,12 @@ limit_tests = True
 channels_for_person = 10
 
 # this is the number of input eeg examinations
-population_quantity = 32
+population_quantity = 64
 how_many_networks_to_save = floor(population_quantity / 4)
+# auto tuned evolution parameters will be affected by this
 mutation_probability_factor = 1
+# how many points to cut 'dna' for networks to exchange weights
+multi_crossovers_limit = 2
 
 single_channel_network_layers_LSTM = [Layer.AvgPool, Layer.convolution, Layer.AvgPool, Layer.convolution,
                                       Layer.convolution, Layer.LSTM, Layer.LSTM, Layer.LSTM]

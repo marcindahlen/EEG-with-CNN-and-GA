@@ -9,10 +9,13 @@ from layers.layer_simpleNeurons import SimpleLayer
 from networks.inetwork import INetwork
 from utils import variables
 from utils.utility import rmse, get_time
+from utils.variables import mutation_probability_factor, multi_crossovers_limit
 
 
 class Network(INetwork):
     def __init__(self, layer_types, ins_outs_shapes):
+        self.layer_types = layer_types
+        self.ins_outs_shapes = ins_outs_shapes
         self.structure = ins_outs_shapes
         self.layers = self.initialize(layer_types, ins_outs_shapes)
         self.output = None
@@ -69,7 +72,7 @@ class Network(INetwork):
         else:
             self.score = rmse([self.output], [target])
 
-    def get_score(self):
+    def get_score(self) -> float:
         return self.score
 
     def get_weight_lengths_by_layer(self) -> list:
@@ -88,7 +91,7 @@ class Network(INetwork):
                 new_weights = weights[self.weight_lengths_by_layer[i-1][1]:self.weight_lengths_by_layer[i][1]]
                 layer.set_all_weights(new_weights)
 
-    def get_weights(self):
+    def get_weights(self) -> list:
         weights = []
         for layer in self.layers:
             weights.append(layer.decomposed_weights())
@@ -96,25 +99,45 @@ class Network(INetwork):
 
     def save_weights(self):
         weights = self.get_weights()
-        file = open(variables.net_memory_path + "_" + get_time() + "_" + self.score )
+        file = open(variables.net_memory_path + "_" + str(get_time()) + "_" + str(self.score) + ".csv")
         for val in weights:
             file.write(str(val))
         file.close()
 
     def load_weights(self, filename):
+        # TODO
         pass
 
-    def mutate(self):
-        pass
+    def mutate(self, probability: float):
+        probability = probability * mutation_probability_factor
+        new_weights = []
+        for w in self.get_weights():
+            p = numpy.random.random() < probability
+            if p:
+                new_weights.append(numpy.random.normal(loc=0, scale=0.32))
+            else:
+                new_weights.append(w)
+        self.set_weights(new_weights)
 
-    def create_single_child(self, other):
-        pass
+    def create_single_child(self, other: INetwork, mutate_prob) -> INetwork:
+        mutate_prob = mutate_prob * mutation_probability_factor
+        length = 0
+        for key, val in self.weight_lengths_by_layer:
+            length += val
+        this_weights = self.get_weights()
+        other_weights = other.get_weights()
+        breakpoints = numpy.random.randint(0, length, size=multi_crossovers_limit)
+        new_weights = []
+        flag = True
+        for i in range(length):
+            if i in breakpoints:
+                flag = not flag
+            if flag:
+                new_weights.append(this_weights[i])
+            else:
+                new_weights.append(other_weights[i])
+        new_network = Network(self.layer_types, self.ins_outs_shapes)   # Yes, it's not efficient I know </3
+        new_network.set_weights(new_weights)
+        new_network.mutate(mutate_prob)
 
-    def multiplication_by_budding(self):
-        pass
-
-    def decompose_weights(self):
-        pass
-
-    def rebuild_weights(self, flat_weights):
-        pass
+        return new_network

@@ -46,4 +46,4 @@ class SimpleLayer(ILayer):
 
     def init_weights(self, in_shape: Tuple, size: int) -> numpy.ndarray:
         self.in_shape = reduce(lambda x, y: x * y, in_shape)
-        return numpy.random.normal(loc=0, scale=0.25, size=(size, self.in_shape + 1))      # + 1 bias weight
+        return numpy.random.normal(loc=0, scale=0.32, size=(size, self.in_shape + 1))      # + 1 bias weight
