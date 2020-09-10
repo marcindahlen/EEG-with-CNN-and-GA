@@ -45,14 +45,14 @@ class Network(INetwork):
                 layers.append(MaxPool())
             if layer == Layer.AvgPool:
                 layers.append(AvgPool())
-            if layer == Layer.Convolution:
+            if layer == Layer.convolution:
                 # (kernels_out: int, kernels_in: int, dimensions: Tuple, filter_len: int)
-                kernels_in = shape_in[0] if len(shape_in) != 1 else 1
+                kernels_in = shape_in[0] if type(shape_in) is not int else 1
                 kernels_out = shape_out[0]
                 filter_len = 5
-                dimensions = (1, filter_len, 1, kernels_out) if len(shape_in) == 1 else (filter_len, filter_len,
-                                                                                         filter_len, kernels_in,
-                                                                                         kernels_out)
+                dimensions = (1, filter_len, 1, kernels_out) if type(shape_in) is int else (filter_len, filter_len,
+                                                                                            filter_len, kernels_in,
+                                                                                            kernels_out)
                 conv = Convolution(kernels_out, kernels_in, dimensions, filter_len)
                 layers.append(conv)
             if layer == Layer.basic_neuron:
@@ -88,7 +88,7 @@ class Network(INetwork):
                 new_weights = weights[0:self.weight_lengths_by_layer[i][1]]
                 layer.set_all_weights(new_weights)
             else:
-                new_weights = weights[self.weight_lengths_by_layer[i-1][1]:self.weight_lengths_by_layer[i][1]]
+                new_weights = weights[self.weight_lengths_by_layer[i - 1][1]:self.weight_lengths_by_layer[i][1]]
                 layer.set_all_weights(new_weights)
 
     def get_weights(self) -> list:
@@ -136,7 +136,7 @@ class Network(INetwork):
                 new_weights.append(this_weights[i])
             else:
                 new_weights.append(other_weights[i])
-        new_network = Network(self.layer_types, self.ins_outs_shapes)   # Yes, it's not efficient I know </3
+        new_network = Network(self.layer_types, self.ins_outs_shapes)  # Yes, it's not efficient I know </3
         new_network.set_weights(new_weights)
         new_network.mutate(mutate_prob)
 

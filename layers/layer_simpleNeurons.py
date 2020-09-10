@@ -38,12 +38,16 @@ class SimpleLayer(ILayer):
             self.weights = self.rebuild_weights(new_weights)
 
     def decomposed_weights(self):
-        flat_length = reduce(lambda x, y: x * y, self.weights)
+        shape = numpy.shape(self.weights)
+        flat_length = reduce(lambda x, y: x * y, shape)
         return tf.reshape(self.weights, flat_length)
 
     def rebuild_weights(self, flat_weights):
         return tf.reshape(flat_weights, numpy.shape(self.weights))
 
     def init_weights(self, in_shape: Tuple, size: int) -> numpy.ndarray:
-        self.in_shape = reduce(lambda x, y: x * y, in_shape)
+        if type(in_shape) is int:
+            self.in_shape = in_shape
+        else:
+            self.in_shape = reduce(lambda x, y: x * y, in_shape)
         return numpy.random.normal(loc=0, scale=0.32, size=(size, self.in_shape + 1))      # + 1 bias weight
