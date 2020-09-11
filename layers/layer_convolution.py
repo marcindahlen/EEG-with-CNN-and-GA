@@ -16,18 +16,18 @@ class Convolution(ILayer):
         self.type = Layer.convolution
         self.weight_length = len(self.decomposed_weights())
 
-    def forward_pass(self, input: numpy.ndarray):
-        self.dimensions = numpy.shape(input)
-        if len(self.dimensions) == 4:
+    def forward_pass(self, input: numpy.ndarray) -> numpy.ndarray:
+        input_shape = numpy.shape(input)
+        if len(input_shape) == 4:
             self.output = tf.nn.conv2d(
                 input, self.weights, strides=[1, 5, 5, 1], padding='SAME', data_format='NHWC', dilations=None, name=None
             )
-        elif len(self.dimensions) == 5 or len(self.dimensions) == 12:
+        elif len(input_shape) == 5:
             self.output = tf.nn.conv3d(
                 input, self.weights, strides=[1, 5, 5, 5, 1], padding='SAME', data_format='NDHWC', dilations=None, name=None
             )
         else:
-            raise Exception("Invalid input shape in convolution layer. Input: " + str(len(self.dimensions)) +
+            raise Exception("Invalid input shape in convolution layer. Input: " + str(len(input_shape)) +
                             ". Weights: " + str(len(self.weights)))
 
         return self.output
@@ -45,7 +45,8 @@ class Convolution(ILayer):
                             " expected: " + str(self.dimensions))
 
     def decomposed_weights(self) -> numpy.ndarray:
-        flat_length = reduce(lambda x, y: x * y, self.dimensions)
+        shape = numpy.shape(self.weights)
+        flat_length = reduce(lambda x, y: x * y, shape)
         return tf.reshape(self.weights, flat_length)
 
     def rebuild_weights(self, flat_weights) -> numpy.ndarray:

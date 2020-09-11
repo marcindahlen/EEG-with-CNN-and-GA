@@ -17,6 +17,9 @@ class AvgPool(ILayer):
         if self.dimensions == 1:
             self.output = input[None][:, :, None]
             self.output = tensorflow.nn.avg_pool1d(self.output, 5, 5, padding='SAME')
+        elif self.dimensions == 2:
+            self.output = input[None][:, :, None]
+            self.output = tensorflow.nn.avg_pool2d(self.output, ksize=[5, 5], strides=[5, 5], padding='SAME')
         elif self.dimensions == 3:
             self.output = input[None][:, :, None]
             self.output = tensorflow.nn.avg_pool3d(self.output, [5, 5, 5], [5, 5, 5], padding='SAME')

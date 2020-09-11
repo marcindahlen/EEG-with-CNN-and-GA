@@ -11,6 +11,8 @@ from utils import variables
 from utils.utility import rmse, get_time
 from utils.variables import mutation_probability_factor, multi_crossovers_limit
 
+FILTER_LEN = 5
+
 
 class Network(INetwork):
     def __init__(self, layer_types, ins_outs_shapes):
@@ -26,15 +28,19 @@ class Network(INetwork):
         self.output = input
         for layer in self.layers:
             if layer.type == Layer.convolution:
-                if len(numpy.shape(input)) == 1:
-                    new_shape = (1, 1, len(input), 1)
+                if len(numpy.shape(self.output)) == 1:
+                    pass
+                elif len(numpy.shape(self.output)) == 2:
+                    pass
                 else:
-                    shape = numpy.shape(input)
-                    new_shape = (1, 1, shape[0], shape[1], 1)
-                self.output = numpy.reshape(self.output, new_shape)
+                    raise Exception("Network::forward_pass: wrong input shape - input: " +
+                                    str(numpy.shape(self.output)) + " in layer " + layer.type)
+                self.output = numpy.reshape(self.output, layer.dimensions)
                 self.output = layer.forward_pass(self.output)
             else:
                 self.output = layer.forward_pass(self.output)
+
+        return self.output
 
     def initialize(self, layer_types, ins_outs_shapes):
         layers = []
@@ -49,11 +55,10 @@ class Network(INetwork):
                 # (kernels_out: int, kernels_in: int, dimensions: Tuple, filter_len: int)
                 kernels_in = shape_in[0] if type(shape_in) is not int else 1
                 kernels_out = shape_out[0]
-                filter_len = 5
-                dimensions = (1, filter_len, 1, kernels_out) if type(shape_in) is int else (filter_len, filter_len,
-                                                                                            filter_len, kernels_in,
+                dimensions = (1, FILTER_LEN, 1, kernels_out) if type(shape_in) is int else (FILTER_LEN, FILTER_LEN,
+                                                                                            FILTER_LEN, kernels_in,
                                                                                             kernels_out)
-                conv = Convolution(kernels_out, kernels_in, dimensions, filter_len)
+                conv = Convolution(kernels_out, kernels_in, dimensions, FILTER_LEN)
                 layers.append(conv)
             if layer == Layer.basic_neuron:
                 # (in_shape: Tuple, size: int)

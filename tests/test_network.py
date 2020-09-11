@@ -35,3 +35,8 @@ class TestNetwork:
         output = network.forward_pass(data_2d)
         print(output)
         assert numpy.shape(output) == (1,)
+
+        # Network::forward_pass:
+        # błąd: próbuję reshape z kształtu input bezpośrednio na kształt output.
+        # a mam input_1d -> input_4d
+        # albo input_2d -> input_5d
