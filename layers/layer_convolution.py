@@ -10,17 +10,20 @@ from layers.ilayer import ILayer
 
 class Convolution(ILayer):
     def __init__(self, kernels_out: int, kernels_in: int, dimensions: Tuple, filter_len: int):
+        print("Convolution::init input - " + str(kernels_out) + ", " + str(kernels_in) + ", " + str(dimensions) + ", " + str(filter_len))
         self.output = None
         self.dimensions = dimensions
         self.weights = self.init_weights(kernels_out, kernels_in, dimensions, filter_len)
+        print("Convolution::init weights - " + str(numpy.shape(self.weights)))
         self.type = Layer.convolution
         self.weight_length = len(self.decomposed_weights())
 
     def forward_pass(self, input: numpy.ndarray) -> numpy.ndarray:
         input_shape = numpy.shape(input)
+        print("Convolution::forward_pass input_shape - " + str(input_shape))
         if len(input_shape) == 4:
             self.output = tf.nn.conv2d(
-                input, self.weights, strides=[1, 5, 5, 1], padding='SAME', data_format='NHWC', dilations=None, name=None
+                input, self.weights, strides=5, padding='SAME', data_format='NHWC', dilations=None, name=None
             )
         elif len(input_shape) == 5:
             self.output = tf.nn.conv3d(
@@ -55,9 +58,13 @@ class Convolution(ILayer):
     def init_weights(self, kernels_out: int, kernels_in: int, dimensions: Tuple, filter_len: int) -> numpy.ndarray:
         if len(dimensions) == 4:  # first conv layer
             # [filter_height, filter_width, in_channels, out_channels]
+            print("Convolution::init_weights input_shape - [filter_height, filter_width, in_channels, out_channels]")
+            print("Convolution::init_weights input_shape - " + str(1) + ", " + str(filter_len) + ", " + str(1) + ", " + str(kernels_out))
             return numpy.random.normal(loc=0, scale=0.25, size=(1, filter_len, 1, kernels_out))
         elif len(dimensions) == 5:  # nth conv layer or layer in "herded" data
             # [filter_depth, filter_height, filter_width, in_channels, out_channels]
+            print("Convolution::init_weights input_shape - [filter_depth, filter_height, filter_width, in_channels, out_channels]")
+            print("Convolution::init_weights input_shape - " + str(filter_len) + ", " + str(filter_len) + ", " + str(filter_len) + ", " + str(kernels_in) + ", " + str(kernels_out))
             return numpy.random.normal(loc=0, scale=0.32, size=(filter_len, filter_len, filter_len, kernels_in,
                                                                 kernels_out))
         else:

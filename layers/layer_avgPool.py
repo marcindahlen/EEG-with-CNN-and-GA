@@ -10,6 +10,7 @@ class AvgPool(ILayer):
         self.output = None
         self.dimensions = None
         self.type = Layer.AvgPool
+        self.weight_length = 0
 
     def forward_pass(self, input):
         self.dimensions = len(numpy.shape(input))

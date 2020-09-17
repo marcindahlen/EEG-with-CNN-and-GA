@@ -22,6 +22,12 @@ class TestPooling:
 
         print("")
         print("")
+        output = pooling_layer.forward_pass(data_2d)
+        print(output)
+        assert numpy.shape(output) == (1, 3, 1, 15)
+
+        print("")
+        print("")
         output = pooling_layer.forward_pass(data_3d)
         print(output)
         assert numpy.shape(output) == (1, 3, 1, 3, 15)
