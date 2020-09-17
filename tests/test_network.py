@@ -10,18 +10,18 @@ class TestNetwork:
         data_2d = numpy.random.rand(150, 150)
         data_3d = numpy.random.rand(150, 150, 150)
 
-        # tricky part: convolution layer have to work without preceding pooling layer
-        """layers = [Layer.convolution, Layer.convolution, Layer.basic_neuron, Layer.basic_neuron]
-        layers_1d_shape = [(150, (6, 30)),
-                           ((6, 30), (12, 6)),
-                           ((12, 6), 6),
+        # Pooling layer at the beginning
+        layers = [Layer.AvgPool, Layer.convolution, Layer.basic_neuron, Layer.basic_neuron]
+        layers_1d_shape = [(150, 30),
+                           (30, (6, 6)),
+                           ((6, 6), 6),
                            (6, 1)]
-        layers_2d_shape = [((150, 150), (12, 30)),   # -> (2x6, 30)
+        layers_2d_shape = [((150, 150), (30, 150)),  # -> (2x6, 30)
                            ((12, 30), (24, 6)),
                            ((24, 6), 6),
                            (6, 1)]
-        layers_3d_shape = [((150, 150, 150), (18, 30)),   # -> (3x6, 30)
-                           ((18, 30), (36, 30)),
+        layers_3d_shape = [((150, 150, 150), (30, 30, 150)),  # -> (3x6, 30)
+                           ((30, 30, 150), (36, 30)),
                            ((36, 30), 6),
                            (6, 1)]
 
@@ -49,18 +49,19 @@ class TestNetwork:
         output = network.forward_pass(data_2d)
         print(output)
         assert numpy.shape(output) == (1,)
-        """
-        # And following with pooling layer at the beginning
-        layers = [Layer.AvgPool, Layer.convolution, Layer.basic_neuron, Layer.basic_neuron]
+
+
+        # Convolution layer have to work without preceding pooling layer
+        layers = [Layer.convolution, Layer.convolution, Layer.basic_neuron, Layer.basic_neuron]
         layers_1d_shape = [(150, (6, 30)),
                            ((6, 30), (12, 6)),
                            ((12, 6), 6),
                            (6, 1)]
-        layers_2d_shape = [((150, 150), (12, 30)),  # -> (2x6, 30)
+        layers_2d_shape = [((150, 150), (12, 30)),   # -> (2x6, 30)
                            ((12, 30), (24, 6)),
                            ((24, 6), 6),
                            (6, 1)]
-        layers_3d_shape = [((150, 150, 150), (18, 30)),  # -> (3x6, 30)
+        layers_3d_shape = [((150, 150, 150), (18, 30)),   # -> (3x6, 30)
                            ((18, 30), (36, 30)),
                            ((36, 30), 6),
                            (6, 1)]
