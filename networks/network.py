@@ -27,21 +27,7 @@ class Network(INetwork):
     def forward_pass(self, input):
         self.output = input
         for layer in self.layers:
-            if layer.type == Layer.convolution:
-                if len(numpy.shape(self.output)) == 1:
-                    print("Network::forward_pass - " + str(layer.dimensions))
-                    self.output = numpy.reshape(self.output, [1, 1, numpy.shape(self.output)[0], 1])
-                elif len(numpy.shape(self.output)) == 2:
-                    print("Network::forward_pass - " + str(layer.dimensions))
-                    self.output = numpy.reshape(self.output, [1, 1, numpy.shape(self.output)[0], numpy.shape(self.output)[1], 1])
-                elif len(numpy.shape(self.output)) == 4:
-                    print("Network::forward_pass - " + str(layer.dimensions))
-                else:
-                    raise Exception("Network::forward_pass: wrong input shape - input: " +
-                                    str(numpy.shape(self.output)) + " in layer " + str(layer.type))
-                self.output = layer.forward_pass(self.output)
-            else:
-                self.output = layer.forward_pass(self.output)
+            self.output = layer.forward_pass(self.output)
 
         return self.output
 
@@ -51,17 +37,11 @@ class Network(INetwork):
             shape_in = ins_outs_shapes[i][0]
             shape_out = ins_outs_shapes[i][1]
             if layer == Layer.MaxPool:
-                layers.append(MaxPool())
+                layers.append(MaxPool(shape_in, shape_out))
             if layer == Layer.AvgPool:
-                layers.append(AvgPool())
+                layers.append(AvgPool(shape_in, shape_out))
             if layer == Layer.convolution:
-                # (kernels_out: int, kernels_in: int, dimensions: Tuple, filter_len: int)
-                kernels_in = shape_in[0] if type(shape_in) is not int else 1
-                kernels_out = shape_out[0]
-                dimensions = (1, FILTER_LEN, 1, kernels_out) if type(shape_in) is int else (FILTER_LEN, FILTER_LEN,
-                                                                                            kernels_in, kernels_out)
-                # above dimension are only cases for 1D and 2D input
-                conv = Convolution(kernels_out, kernels_in, dimensions, FILTER_LEN)
+                conv = Convolution(shape_in, shape_out, FILTER_LEN)
                 layers.append(conv)
             if layer == Layer.basic_neuron:
                 # (in_shape: Tuple, size: int)

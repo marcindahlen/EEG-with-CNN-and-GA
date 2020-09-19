@@ -9,25 +9,31 @@ from layers.ilayer import ILayer
 
 
 class Convolution(ILayer):
-    def __init__(self, kernels_out: int, kernels_in: int, dimensions: Tuple, filter_len: int):
-        print("Convolution::init input - " + str(kernels_out) + ", " + str(kernels_in) + ", " + str(dimensions) + ", " + str(filter_len))
+    def __init__(self, in_shape: Tuple, out_shape: Tuple, filter_len: int):
+        if len(in_shape) != len(out_shape):
+            raise Exception("Convolution::init - input shape and output shape doesn't match!")
         self.output = None
-        self.dimensions = dimensions
-        self.weights = self.init_weights(kernels_out, kernels_in, dimensions, filter_len)
-        print("Convolution::init weights - " + str(numpy.shape(self.weights)))
+        self.in_shape = in_shape
+        self.out_shape = out_shape
+        self.weights = self.init_weights(in_shape, out_shape, filter_len)
         self.type = Layer.convolution
         self.weight_length = len(self.decomposed_weights())
 
     def forward_pass(self, input: numpy.ndarray) -> numpy.ndarray:
         input_shape = numpy.shape(input)
-        print("Convolution::forward_pass input_shape - " + str(input_shape))
-        if len(input_shape) == 4:
+        input = input[None][:, :, None]
+        if len(input_shape) == 2:
             self.output = tf.nn.conv2d(
                 input, self.weights, strides=5, padding='SAME', data_format='NHWC', dilations=None, name=None
             )
-        elif len(input_shape) == 5:
+        elif len(input_shape) == 3:
+            self.output = tf.nn.conv2d(
+                input, self.weights, strides=5, padding='SAME', data_format='NHWC', dilations=None, name=None
+            )
+        elif len(input_shape) == 4:
             self.output = tf.nn.conv3d(
-                input, self.weights, strides=[1, 5, 5, 5, 1], padding='SAME', data_format='NDHWC', dilations=None, name=None
+                input, self.weights, strides=[1, 5, 5, 5, 1], padding='SAME', data_format='NDHWC', dilations=None,
+                name=None
             )
         else:
             raise Exception("Invalid input shape in convolution layer. Input: " + str(len(input_shape)) +
@@ -39,13 +45,13 @@ class Convolution(ILayer):
         return self.weights
 
     def set_all_weights(self, new_weights):
-        if numpy.shape(new_weights) == self.dimensions:
+        if numpy.shape(new_weights) == self.out_shape:
             self.weights = new_weights
         elif len(numpy.shape(new_weights)) == 1:
             self.weights = self.rebuild_weights(new_weights)
         else:
             raise Exception("Invalid new_weights shape in convolution layer: " + str(numpy.shape(new_weights)) +
-                            " expected: " + str(self.dimensions))
+                            " expected: " + str(self.out_shape))
 
     def decomposed_weights(self) -> numpy.ndarray:
         shape = numpy.shape(self.weights)
@@ -53,20 +59,19 @@ class Convolution(ILayer):
         return tf.reshape(self.weights, flat_length)
 
     def rebuild_weights(self, flat_weights) -> numpy.ndarray:
-        return tf.reshape(flat_weights, self.dimensions)
+        return tf.reshape(flat_weights, self.weights)
 
-    def init_weights(self, kernels_out: int, kernels_in: int, dimensions: Tuple, filter_len: int) -> numpy.ndarray:
-        if len(dimensions) == 4:  # first conv layer
+    def init_weights(self, in_shape: Tuple, out_shape: Tuple, filter_len: int) -> numpy.ndarray:
+        if len(out_shape) == 2:  # 1-D input plus kernels
             # [filter_height, filter_width, in_channels, out_channels]
-            print("Convolution::init_weights input_shape - [filter_height, filter_width, in_channels, out_channels]")
-            print("Convolution::init_weights input_shape - " + str(1) + ", " + str(filter_len) + ", " + str(1) + ", " + str(kernels_out))
-            return numpy.random.normal(loc=0, scale=0.25, size=(1, filter_len, 1, kernels_out))
-        elif len(dimensions) == 5:  # nth conv layer or layer in "herded" data
-            # [filter_depth, filter_height, filter_width, in_channels, out_channels]
-            print("Convolution::init_weights input_shape - [filter_depth, filter_height, filter_width, in_channels, out_channels]")
-            print("Convolution::init_weights input_shape - " + str(filter_len) + ", " + str(filter_len) + ", " + str(filter_len) + ", " + str(kernels_in) + ", " + str(kernels_out))
-            return numpy.random.normal(loc=0, scale=0.32, size=(filter_len, filter_len, filter_len, kernels_in,
-                                                                kernels_out))
+            return numpy.random.normal(loc=0, scale=0.25, size=(1, filter_len, in_shape[1], out_shape[1]))
+        elif len(out_shape) == 3:  # 2-D input plus kernels
+            # [filter_height, filter_width, in_channels, out_channels]
+            return numpy.random.normal(loc=0, scale=0.25, size=(filter_len, filter_len, in_shape[2], out_shape[2]))
+        elif len(out_shape) == 4:  # 3-D input plus kernels
+            # [filter_height, filter_width, in_channels, out_channels]
+            return numpy.random.normal(loc=0, scale=0.25, size=(filter_len, filter_len, filter_len, in_shape[3],
+                                                                out_shape[3]))
         else:
             raise Exception("Invalid input shape in convolution layer::init_weights. Dimensions: " +
-                            str(len(dimensions)) + ". Expected: 4 or 5.")
+                            str(len(in_shape)) + ". Expected: 2 to 5.")

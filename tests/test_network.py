@@ -1,4 +1,5 @@
 import numpy
+from tensorflow import reshape
 
 from layers.available_layers import Layer
 from networks.network import Network
@@ -10,20 +11,24 @@ class TestNetwork:
         data_2d = numpy.random.rand(150, 150)
         data_3d = numpy.random.rand(150, 150, 150)
 
-        # tricky part: convolution layer have to work without preceding pooling layer
-        """layers = [Layer.convolution, Layer.convolution, Layer.basic_neuron, Layer.basic_neuron]
-        layers_1d_shape = [(150, (6, 30)),
-                           ((6, 30), (12, 6)),
-                           ((12, 6), 6),
+        # convolution layer have to work without preceding pooling layer
+        layers = [Layer.convolution, Layer.convolution, Layer.basic_neuron, Layer.basic_neuron]
+        layers_1d_shape = [((150, 1), (30, 6)),
+                           ((30, 6), (6, 12)),
+                           ((6, 12), 12),
+                           (12, 1)]
+        layers_2d_shape = [((150, 150, 1), (150, 30, 6)),  # -> (2x6, 30)
+                           ((150, 30, 6), (150, 6, 12)),
+                           ((150, 6, 12), 6),
                            (6, 1)]
-        layers_2d_shape = [((150, 150), (12, 30)),   # -> (2x6, 30)
-                           ((12, 30), (24, 6)),
-                           ((24, 6), 6),
-                           (6, 1)]
-        layers_3d_shape = [((150, 150, 150), (18, 30)),   # -> (3x6, 30)
-                           ((18, 30), (36, 30)),
-                           ((36, 30), 6),
-                           (6, 1)]
+        layers_3d_shape = [((150, 150, 150, 1), (150, 30, 30, 4)),  # -> (3x6, 30)
+                           ((150, 30, 30, 4), (150, 6, 6, 8)),
+                           ((150, 6, 6, 8), 12),
+                           (12, 1)]
+
+        data_1d = reshape(data_1d, (150, 1))
+        data_2d = reshape(data_2d, (150, 150, 1))
+        data_3d = reshape(data_3d, (150, 150, 150, 1))
 
         print(numpy.shape(data_1d))
         print(numpy.shape(data_2d))
@@ -46,24 +51,24 @@ class TestNetwork:
         print("")
         print("")
         network = Network(layers, layers_3d_shape)
-        output = network.forward_pass(data_2d)
+        output = network.forward_pass(data_3d)
         print(output)
         assert numpy.shape(output) == (1,)
-        """
+
         # And following with pooling layer at the beginning
         layers = [Layer.AvgPool, Layer.convolution, Layer.basic_neuron, Layer.basic_neuron]
-        layers_1d_shape = [(150, (6, 30)),
-                           ((6, 30), (12, 6)),
-                           ((12, 6), 6),
+        layers_1d_shape = [(150, (30,)),
+                           ((30, 1), (6, 6)),
+                           ((6, 6), 6),
                            (6, 1)]
-        layers_2d_shape = [((150, 150), (12, 30)),  # -> (2x6, 30)
-                           ((12, 30), (24, 6)),
-                           ((24, 6), 6),
+        layers_2d_shape = [((150, 150), (150, 30)),  # -> (2x6, 30)
+                           ((150, 30, 1), (150, 6, 8)),
+                           ((150, 6, 8), 6),
                            (6, 1)]
-        layers_3d_shape = [((150, 150, 150), (18, 30)),  # -> (3x6, 30)
-                           ((18, 30), (36, 30)),
-                           ((36, 30), 6),
-                           (6, 1)]
+        layers_3d_shape = [((150, 150, 150), (150, 30, 30)),  # -> (3x6, 30)
+                           ((150, 30, 30, 1), (150, 6, 6, 8)),
+                           ((150, 6, 6, 8), 12),
+                           (12, 1)]
 
         print(numpy.shape(data_1d))
         print(numpy.shape(data_2d))
@@ -86,6 +91,6 @@ class TestNetwork:
         print("")
         print("")
         network = Network(layers, layers_3d_shape)
-        output = network.forward_pass(data_2d)
+        output = network.forward_pass(data_3d)
         print(output)
         assert numpy.shape(output) == (1,)

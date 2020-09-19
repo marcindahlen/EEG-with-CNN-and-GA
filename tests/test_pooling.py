@@ -1,7 +1,7 @@
 import numpy
 
-from layers.available_layers import Layer
 from layers.layer_avgPool import AvgPool
+from layers.layer_maxPool import MaxPool
 
 
 class TestPooling:
@@ -12,22 +12,24 @@ class TestPooling:
         print(data_1d)
         print(data_3d)
 
-        pooling_layer = AvgPool()
+        pooling_1d_layer = AvgPool((15,), (3,))
+        pooling_2d_layer = MaxPool((15, 15), (3, 15))
+        pooling_3d_layer = AvgPool((15, 15, 15), (3, 3, 15))
 
         print("")
         print("")
-        output = pooling_layer.forward_pass(data_1d)
+        output = pooling_1d_layer.forward_pass(data_1d)
         print(output)
-        assert numpy.shape(output) == (1, 3, 1)
+        assert numpy.shape(output) == (3,)
 
         print("")
         print("")
-        output = pooling_layer.forward_pass(data_2d)
+        output = pooling_2d_layer.forward_pass(data_2d)
         print(output)
-        assert numpy.shape(output) == (1, 3, 1, 15)
+        assert numpy.shape(output) == (3, 15)
 
         print("")
         print("")
-        output = pooling_layer.forward_pass(data_3d)
+        output = pooling_3d_layer.forward_pass(data_3d)
         print(output)
-        assert numpy.shape(output) == (1, 3, 1, 3, 15)
+        assert numpy.shape(output) == (3, 3, 15)

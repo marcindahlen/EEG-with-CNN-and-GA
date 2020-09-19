@@ -58,7 +58,8 @@ class LSTMLayer(ILayer):
             self.weights = self.rebuild_weights(new_weights)
 
     def decomposed_weights(self):
-        flat_length = reduce(lambda x, y: x * y, self.weights)
+        shape = numpy.shape(self.weights)
+        flat_length = reduce(lambda x, y: x * y, shape)
         return tf.reshape(self.weights, flat_length)
 
     def rebuild_weights(self, flat_weights):

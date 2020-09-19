@@ -6,7 +6,9 @@ from layers.ilayer import ILayer
 
 
 class MaxPool(ILayer):
-    def __init__(self):
+    def __init__(self, in_shape, out_shape):
+        self.in_shape = in_shape
+        self.out_shape = out_shape
         self.output = None
         self.dimensions = None
         self.type = Layer.MaxPool
@@ -29,4 +31,5 @@ class MaxPool(ILayer):
         else:
             raise Exception("Invalid input shape in AvgPool layer: " + str(self.dimensions))
 
+        self.output = tensorflow.reshape(self.output, self.out_shape)
         return self.output
