@@ -39,6 +39,7 @@ class Convolution(ILayer):
             raise Exception("Invalid input shape in convolution layer. Input: " + str(len(input_shape)) +
                             ". Weights: " + str(len(self.weights)))
 
+        self.output = tf.reshape(self.output, self.out_shape)
         return self.output
 
     def get_all_weights(self) -> numpy.ndarray:
@@ -69,7 +70,7 @@ class Convolution(ILayer):
             # [filter_height, filter_width, in_channels, out_channels]
             return numpy.random.normal(loc=0, scale=0.25, size=(filter_len, filter_len, in_shape[2], out_shape[2]))
         elif len(out_shape) == 4:  # 3-D input plus kernels
-            # [filter_height, filter_width, in_channels, out_channels]
+            # [filter_height, filter_width, filter_depth, in_channels, out_channels]
             return numpy.random.normal(loc=0, scale=0.25, size=(filter_len, filter_len, filter_len, in_shape[3],
                                                                 out_shape[3]))
         else:

@@ -17,11 +17,11 @@ class TestNetwork:
                            ((30, 6), (6, 12)),
                            ((6, 12), 12),
                            (12, 1)]
-        layers_2d_shape = [((150, 150, 1), (150, 30, 6)),  # -> (2x6, 30)
+        layers_2d_shape = [((150, 150, 1), (150, 30, 6)),
                            ((150, 30, 6), (150, 6, 12)),
                            ((150, 6, 12), 6),
                            (6, 1)]
-        layers_3d_shape = [((150, 150, 150, 1), (150, 30, 30, 4)),  # -> (3x6, 30)
+        layers_3d_shape = [((150, 150, 150, 1), (150, 30, 30, 4)),
                            ((150, 30, 30, 4), (150, 6, 6, 8)),
                            ((150, 6, 6, 8), 12),
                            (12, 1)]
@@ -56,16 +56,20 @@ class TestNetwork:
         assert numpy.shape(output) == (1,)
 
         # And following with pooling layer at the beginning
+        data_1d = reshape(data_1d, (150,))
+        data_2d = reshape(data_2d, (150, 150))
+        data_3d = reshape(data_3d, (150, 150, 150))
+
         layers = [Layer.AvgPool, Layer.convolution, Layer.basic_neuron, Layer.basic_neuron]
-        layers_1d_shape = [(150, (30,)),
+        layers_1d_shape = [((150, 1), (30, 1)),
                            ((30, 1), (6, 6)),
                            ((6, 6), 6),
                            (6, 1)]
-        layers_2d_shape = [((150, 150), (150, 30)),  # -> (2x6, 30)
+        layers_2d_shape = [((150, 150), (150, 30, 1)),
                            ((150, 30, 1), (150, 6, 8)),
                            ((150, 6, 8), 6),
                            (6, 1)]
-        layers_3d_shape = [((150, 150, 150), (150, 30, 30)),  # -> (3x6, 30)
+        layers_3d_shape = [((150, 150, 150), (150, 30, 30, 1)),
                            ((150, 30, 30, 1), (150, 6, 6, 8)),
                            ((150, 6, 6, 8), 12),
                            (12, 1)]
