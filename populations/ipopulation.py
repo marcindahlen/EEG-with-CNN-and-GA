@@ -1,16 +1,26 @@
+
 class IPopulation(object):
     """"""
 
-    def __init__(self, examination_no):
-        self.nodeType = nodeType
-        self.examination_no = examination_no
-        self.savedRMSEs = []
+    def __init__(self, nets_layers: list, nets_shape: list, data_source, data_target, test_data,
+                 population_quantity: int):
+        self.population_quantity = population_quantity
+        self.test_data = test_data
+        self.data_target = data_target
+        self.data_source = data_source
+        self.nets_shape = nets_shape
+        self.nets_layers = nets_layers
+        self.networks = self.init_networks(nets_layers, nets_shape, population_quantity)
 
-    def get_network_code(self, network_no):
+    def init_networks(self, nets_layers, nets_shape, population_quantity) -> list:
         """"""
         pass
 
-    def save_network_code_tofile(self, network_code):
+    def forward_pass(self):
+        """"""
+        pass
+
+    def sort_by_score(self):
         """"""
         pass
 
@@ -18,19 +28,6 @@ class IPopulation(object):
         """"""
         pass
 
-    def calculate(self, input_data):
-        """
-        After receiving datapoints of all persons and channels
-        feeds all networks and saves their RMSEs
-        :param input_data:
-        :return: list of RMSE
-        """
-        pass
-
-    def sort_networks_by_RMSEs(self):
-        """"""
-        pass
-
-    def set_averages_for_RMSEs(self):
+    def get_best_rmse(self):
         """"""
         pass
