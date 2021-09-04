@@ -21,11 +21,15 @@ I assume following files hierarchy:
 
         python/
             dataIO/
+            layers/
             networks/
+            nodes/
+            populations/
             tests/
             utils/
-            notepad.py
             main.py
+            notepad.py
+            requirements.txt
         net_memory/
 
 """
