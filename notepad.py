@@ -14,20 +14,22 @@ I assume following files hierarchy:
             .
             .
             P32Ch14
+
         out_raw/
             main_alpha-index_base.xls
             out_absData.xls
-        out_wykresy/
+        out_charts/
 
         python/
             dataIO/
+            layers/
             networks/
+            nodes/
+            populations/
             tests/
             utils/
             notepad.py
             main.py
-        net_memory/
-
 """
 
 """
