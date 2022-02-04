@@ -1,5 +1,5 @@
 
-from dataIO.datastorage_uksw import Datastorage
+from dataIO.datastorage_uksw import UkswData
 
 """                                         EEG -> Depressive disorder                                              """
 

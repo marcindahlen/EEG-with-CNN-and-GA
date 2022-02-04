@@ -14,17 +14,17 @@ import os
 import os.path
 
 
-class Datastorage(object):
+class UkswData(object):
 
     def __init__(self):
         self.input_examined = dict()            # main holder of data, nested dictionary: input_examined[examined_no][channel][datapoints]
         self.output_ranges_x10 = dict()         # output_ranges_x10[examined_no][test_no][10x value 0 or 1]
         self.remember_output_reversal = dict()  # saved mins and maxs to be able to restore values in scale remember_output_reversal[test_no][minmax_tuple]
         self.output_single_x1 = dict()          # output_single_x1[examined_no][test_no]
-        self.files_list = [name for name in os.listdir(variables.in_raw_path)]
+        self.files_list = [name for name in os.listdir(variables.uksw_in_raw_path)]
         self.files_no = len(self.files_list)
         self.examined_no = self.files_no / variables.channels_for_person
-        print('   Znaleziono ' + str(self.files_no) + ' plików.')
+        print(f'   Znaleziono {str(self.files_no)} plików.')
         self.channels_stats = dict()            # proper description in method: prepare_inputdata_insights()
 
     def load_channels(self):
@@ -49,7 +49,7 @@ class Datastorage(object):
                 self.load_particular_channel(file, current_channel_no, examined_person)
 
     def load_particular_channel(self, file, current_channel_no, examined_person):
-        loaded_data = numpy.genfromtxt(variables.in_raw_path + file, delimiter=',', dtype=numpy.float32)
+        loaded_data = numpy.genfromtxt(variables.uksw_in_raw_path + file, delimiter=',', dtype=numpy.float32)
         data_to_save = numpy.delete(loaded_data, slice(0, variables.how_many_to_drop), axis=None)
         if not examined_person in self.input_examined:
             self.input_examined[examined_person] = {}
@@ -161,10 +161,10 @@ class Datastorage(object):
             header = "Channel no. " + str(key)
             print()
             print(header.center(40, '*'))
-            print('Average length: ' + str(self.channels_stats[key]['avg_length']) + ' with deviation: ' + str(self.channels_stats[key]['stddev_length']))
-            print('Mean value: ' + str(self.channels_stats[key]['mean_value']) + ' with \'mean\' deviation: ' + str(self.channels_stats[key]['mean_stddev_value']))
-            print('Channel\'s global  minimum: ' + str(self.channels_stats[key]['mean_minmax'][0]) + ', and average maximum: ' + str(self.channels_stats[key]['mean_minmax'][1]))
-            print('Average minimum: ' + str(self.channels_stats[key]['mean_minmax'][0]) + ', and average maximum: ' + str(self.channels_stats[key]['mean_minmax'][1]))
+            print(f'Average length: {str(self.channels_stats[key]["avg_length"])} with deviation: {str(self.channels_stats[key]["stddev_length"])}')
+            print(f'Mean value: {str(self.channels_stats[key]["mean_value"])} with \'mean\' deviation: {str(self.channels_stats[key]["mean_stddev_value"])}')
+            print(f'Channel\'s global  minimum: {str(self.channels_stats[key]["mean_minmax"][0])}, and average maximum: {str(self.channels_stats[key]["mean_minmax"][1])}')
+            print(f'Average minimum: {str(self.channels_stats[key]["mean_minmax"][0])}, and average maximum: {str(self.channels_stats[key]["mean_minmax"][1])}')
 
     def adjust_input_data_lengths(self):
         """

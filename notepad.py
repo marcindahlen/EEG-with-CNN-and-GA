@@ -1,12 +1,16 @@
 """
 I assume following files hierarchy:
     root/
-        in_raw/
+        uksw_in_raw/
             P01.txt
             .
             .
             .
             P32.txt
+        swps_in_raw/
+            .
+            .
+            .
         in_raw_channels/
             P01CH01
             P01CH02
@@ -14,7 +18,6 @@ I assume following files hierarchy:
             .
             .
             P32Ch14
-
         out_raw/
             main_alpha-index_base.xls
             out_absData.xls

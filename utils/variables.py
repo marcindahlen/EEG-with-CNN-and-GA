@@ -58,7 +58,8 @@ random_guessing_test_network_layers = [Layer.AvgPool, Layer.MaxPool, Layer.convo
 
 single_LSTM_for_all_channels_layers = []
 
-in_raw_path = "../../in_raw/"
+uksw_in_raw_path = "../../uksw_in_raw/"
+swps_in_raw_path = "../../swps_in_raw/"
 net_memory_path = "../../net_memory/"
 out_raw_filepath = "../../out_raw/out_absData.xls"
 out_charts_path = "../../out_wykresy/"

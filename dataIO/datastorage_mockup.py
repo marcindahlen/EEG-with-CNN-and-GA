@@ -15,7 +15,7 @@ class Datamockup(object):
     def __init__(self):
         self.input_examined = dict()
         self.output_examined = dict()
-        self.files_list = [name for name in os.listdir(variables.in_raw_path)]
+        self.files_list = [name for name in os.listdir(variables.uksw_in_raw_path)]
         self.files_no = len(self.files_list)
         print('   Znaleziono ' + str(self.files_no) + ' badanych.')
         self.isDataInitialised = False
