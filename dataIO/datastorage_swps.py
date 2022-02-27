@@ -13,8 +13,8 @@ import os.path
 class SwpsData(object):
 
     def __init__(self):
-        self.input_data_filename = variables.uksw_in_raw_path + "psd_study-C_eyes-open_space-avg_winlen-2.0_step-0.5_tmin-2.0_tmax-60.0"
-        self.output_data_filename = variables.uksw_in_raw_path + "bdi"
+        self.input_data_filename = variables.swps_in_raw_path + "psd_study-C_eyes-open_space-avg_winlen-2.0_step-0.5_tmin-2.0_tmax-60.0"
+        self.output_data_filename = variables.swps_in_raw_path + "bdi"
         self.input_examined = dict()            # main holder of data, nested dictionary: input_examined[examined_no][channel][datapoints]
         self.output_ranges_x10 = dict()         # output_ranges_x10[examined_no][test_no][10x value 0 or 1]
         self.load_input()

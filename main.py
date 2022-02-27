@@ -1,19 +1,51 @@
+"""
+I assume following files hierarchy:
+    root/
+        uksw_in_raw/
+            P01.txt
+            .
+            .
+            .
+            P32.txt
+        swps_in_raw/
+            .
+            .
+            .
+        in_raw_channels/
+            P01CH01
+            P01CH02
+            .
+            .
+            .
+            P32Ch14
+        uksw_out_raw/
+            main_alpha-index_base.xls
+            out_absData.xls
+        out_charts/
 
+        python/
+            dataIO/
+            layers/
+            networks/
+            nodes/
+            populations/
+            tests/
+            utils/
+            notepad.py
+            main.py
+"""
+
+# imports
 from dataIO.datastorage_uksw import UkswData
-
-"""                                         EEG -> Depressive disorder                                              """
-
-
-"""                                   EEG -> variables.examination_test_names                                       """
 
 """
 # load input data
-data_eeg = Datastorage()
-data_eeg.load_channels()
-data_eeg.fourier_transform()
-data_eeg.prepare_inputdata_insights()
-data_eeg.print_inputdata_insights()
-data_eeg.normalise_channel_data()
+input_data_uksw = Datastorage()
+input_data_uksw.load_channels()
+input_data_uksw.fourier_transform()
+input_data_uksw.prepare_inputdata_insights()
+input_data_uksw.print_inputdata_insights()
+input_data_uksw.normalise_channel_data()
 
 # load output data
 target_data = data_eeg.prepare_target_ranges()
