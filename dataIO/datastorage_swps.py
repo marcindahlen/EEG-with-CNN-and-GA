@@ -2,12 +2,11 @@
 Class created to initialize source data
 regarding depression only once.
 """
+
 from scipy.io import loadmat
 from utils import variables
 import math
 import numpy
-import os
-import os.path
 
 
 class SwpsData(object):

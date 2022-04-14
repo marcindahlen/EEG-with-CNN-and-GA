@@ -15,7 +15,7 @@ class Singleton(type):
         return cls._instances[cls]
 
 
-class LogHandler(object):
+class Logger(object):
     __metaclass__ = Singleton
 
     def __init__(self):
@@ -25,18 +25,21 @@ class LogHandler(object):
         return datetime.fromtimestamp(time.time())
 
     def log_entry(self, entry):
-        self.entries[self.timestamp()] = entry
+        # TODO
+        pass
 
     def save_log(self):
         file = open(variables.output_path + self.entries.keys()[0].strftime("%H_%M_%S"))
-        for key, val in self.entries:
-            file.write(key.strftime("%H_%M_%S") + " : " + val)
-            file.write("\r\n")
         file.close()
+        # TODO
+        pass
 
     def send_findings(self):
         if not variables.should_send_mail:
             return
+
+        # TODO
+        return
 
         msg = EmailMessage()
         msg['Subject'] = ''

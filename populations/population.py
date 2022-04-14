@@ -35,5 +35,7 @@ class Population(IPopulation):
 
     def get_best_rmse(self):
         self.sort_by_score()
-        return self.
+        newest_rmse = self.rmse_list[-1]
+        newest_rmse = sorted(newest_rmse)
+        return newest_rmse[-1]
 

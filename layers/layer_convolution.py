@@ -10,6 +10,7 @@ from layers.ilayer import ILayer
 
 class Convolution(ILayer):
     def __init__(self, in_shape: Tuple, out_shape: Tuple, filter_len: int):
+        super().__init__(in_shape, out_shape)
         if len(in_shape) != len(out_shape):
             raise Exception("Convolution::init - input shape and output shape doesn't match!")
         self.output = None

@@ -31,12 +31,12 @@ I assume following files hierarchy:
             populations/
             tests/
             utils/
-            notepad.py
             main.py
 """
 
 # imports
 from dataIO.datastorage_uksw import UkswData
+from dataIO.datastorage_swps import SwpsData
 
 """
 # load input data

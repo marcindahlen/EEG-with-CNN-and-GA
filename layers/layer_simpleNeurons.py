@@ -10,7 +10,8 @@ from utils.utility import sigmoid
 
 
 class SimpleLayer(ILayer):
-    def __init__(self, in_shape: Tuple, size: int):
+    def __init__(self, in_shape: Tuple, size: int, out_shape):
+        super().__init__(in_shape, out_shape)
         self.output = None
         self.in_shape = None
         self.size = size
@@ -26,7 +27,7 @@ class SimpleLayer(ILayer):
         self.output = [numpy.sum(e) for e in self.output]
         self.output = [sigmoid(s) for s in self.output]
 
-        return self.output
+        return self.output   # TODO type mismatch
 
     def get_all_weights(self) -> numpy.ndarray:
         return self.weights
@@ -45,7 +46,7 @@ class SimpleLayer(ILayer):
     def rebuild_weights(self, flat_weights):
         return tf.reshape(flat_weights, numpy.shape(self.weights))
 
-    def init_weights(self, in_shape: Tuple, size: int) -> numpy.ndarray:
+    def init_weights(self, in_shape: Tuple, size: int) -> numpy.ndarray:    # TODO signature mismatch
         if type(in_shape) is int:
             self.in_shape = in_shape
         else:

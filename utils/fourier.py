@@ -14,5 +14,7 @@ def fft(x):
            [even[k] - T[k] for k in range(N // 2)]
 
 def ifft(self, x):
-    """@TODO Inverse recursive fast Fourier transform."""
+    """
+    TODO Inverse recursive fast Fourier transform.
+    """
     pass

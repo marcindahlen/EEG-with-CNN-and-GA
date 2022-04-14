@@ -16,6 +16,7 @@ FILTER_LEN = 5
 
 class Network(INetwork):
     def __init__(self, layer_types, ins_outs_shapes):
+        super().__init__(layer_types, ins_outs_shapes)
         self.layer_types = layer_types
         self.ins_outs_shapes = ins_outs_shapes
         self.structure = ins_outs_shapes

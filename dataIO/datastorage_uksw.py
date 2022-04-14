@@ -24,7 +24,7 @@ class UkswData(object):
         self.files_list = [name for name in os.listdir(variables.uksw_in_raw_path)]
         self.files_no = len(self.files_list)
         self.examined_no = self.files_no / variables.channels_for_person
-        print(f'   Znaleziono {str(self.files_no)} plików.')
+        print(f'   Found {str(self.files_no)} files.')
         self.channels_stats = dict()            # proper description in method: prepare_inputdata_insights()
 
     def load_channels(self):
@@ -208,7 +208,7 @@ class UkswData(object):
         # → https://en.wikipedia.org/wiki/Feature_scaling
         :return void
         """
-        print('   Wczytywanie target data do przedziałów', end='...')
+        print('   Loading target data for bins', end='...')
         target_data = pandas.read_excel(variables.out_raw_filepath)
         target_data.drop(columns='badany')                            # drop first column
 
@@ -224,7 +224,7 @@ class UkswData(object):
             for test_no in self.remember_output_reversal[examined_no].keys():
                 self.output_ranges_x10[examined_no][test_no] = self.get_ranged_list_outputs(self.remember_output_reversal[examined_no][test_no], target_data.iloc[examined_no, test_no])
 
-        print(' zakończone.')
+        print(' finished.')
 
     def prepare_target_number(self, examination_no):
         """
@@ -237,7 +237,7 @@ class UkswData(object):
         → https://www.mantidproject.org/Working_With_Functions:_Return_Values
         :return void
         """
-        print('   Wczytywanie target data jako liczbę', end='...')
+        print('   Loading target data as a number', end='...')
         target_data = pandas.read_excel(variables.out_raw_filepath)
         target_data.drop(columns='badany')                            # drop first column
 
@@ -253,7 +253,7 @@ class UkswData(object):
             for test_no in self.remember_output_reversal[examined_no].keys():
                 self.output_single_x1[examined_no][test_no] = (target_data.iloc[examined_no, test_no] - self.remember_output_reversal[examined_no][test_no][0]) / (self.remember_output_reversal[examined_no][test_no][0] - self.remember_output_reversal[examined_no][test_no][1])
 
-    print(' zakończone.')
+    print(' finished.')
 
     def get_ranged_list_outputs(self, minmax, score):
         """

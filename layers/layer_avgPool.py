@@ -7,6 +7,7 @@ from layers.ilayer import ILayer
 
 class AvgPool(ILayer):
     def __init__(self, in_shape, out_shape):
+        super().__init__(in_shape, out_shape)
         self.in_shape = in_shape
         self.out_shape = out_shape
         self.output = None
