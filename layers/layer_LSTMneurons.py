@@ -10,7 +10,8 @@ from utils.utility import sigmoid, tanh
 
 
 class LSTMLayer(ILayer):
-    def __init__(self, in_shape: Tuple, size: int):
+    def __init__(self, in_shape: Tuple, size: int, out_shape):
+        super().__init__(in_shape, out_shape)
         self.outputs = None
         self.previous_outputs = numpy.zeros(size)
         self.memories = numpy.zeros(size)

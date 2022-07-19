@@ -1,21 +1,25 @@
 """
 Variables used across the experiment
 """
+
 from math import floor
 from layers.available_layers import Layer
 
 # only these particular channels will be considered
 channels_to_consider = [3, 7]
+
 # if True, only channels_to_consider are loaded
 limit_channels = False
 
 # only these particular people will be considered
 people_to_consider = [4, 5]
+
 # if True, only people_to_consider will be considered
 limit_people = False
 
 # only these test will be processed and learned (this is a list of test's numbers)
 testscale_to_consider = [2]
+
 # if True, only testscale_to_consider will be considered
 limit_tests = True
 
@@ -24,8 +28,10 @@ channels_for_person = 10
 # this is the number of input eeg examinations
 population_quantity = 64
 how_many_networks_to_save = floor(population_quantity / 4)
+
 # auto tuned evolution parameters will be affected by this
 mutation_probability_factor = 1
+
 # how many points to cut 'dna' for networks to exchange weights
 multi_crossovers_limit = 2
 
@@ -58,9 +64,10 @@ random_guessing_test_network_layers = [Layer.AvgPool, Layer.MaxPool, Layer.convo
 
 single_LSTM_for_all_channels_layers = []
 
-in_raw_path = "../../in_raw/"
+uksw_in_raw_path = "../../uksw_in_raw/"
+swps_in_raw_path = "../../swps_in_raw/"
 net_memory_path = "../../net_memory/"
-out_raw_filepath = "../../out_raw/out_absData.xls"
+out_raw_filepath = "../../uksw_out_raw/out_absData.xls"
 out_charts_path = "../../out_wykresy/"
 output_path = "../../output_basic/"
 

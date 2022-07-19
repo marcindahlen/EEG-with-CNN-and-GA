@@ -2,7 +2,7 @@ import numpy
 
 
 class TestEvolution:
-    def test_evo(self):
+    def test_evolution(self):
         sample_length = 100
         samples_no = 100
         domain = [x for x in range(sample_length)]
