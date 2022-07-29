@@ -1,44 +1,36 @@
 """
 I assume following files hierarchy:
     root/
-        uksw_in_raw/
-            P01.txt
-            .
-            .
-            .
-            P32.txt
-        swps_in_raw/
-            .
-            .
-            .
-        in_raw_channels/
-            P01CH01
-            P01CH02
-            .
-            .
-            .
-            P32Ch14
-        uksw_out_raw/
-            main_alpha-index_base.xls
-            out_absData.xls
-        out_charts/
-
-        python/
-            dataIO/
-            layers/
-            networks/
-            nodes/
-            populations/
-            tests/
-            utils/
-            main.py
+        data/
+            out_charts/
+            reports/
+            swps_in_raw/
+                .
+                .
+                .
+            uksw_in_raw/
+                P01.txt
+                .
+                .
+                .
+                P32.txt
+            uksw_out_raw/
+                main_alpha-index_base.xls
+                out_absData.xls
+        dataIO/
+        layers/
+        networks/
+        nodes/
+        populations/
+        tests/
+        utils/
+        main.py
 """
 
 # imports
 from dataIO.datastorage_uksw import UkswData
 from dataIO.datastorage_swps import SwpsData
 
-"""
 # load input data
 input_data_uksw = Datastorage()
 input_data_uksw.load_channels()
@@ -88,6 +80,3 @@ target_data = data_eeg.prepare_target_ranges()
 # print and save stats                                                                                                 6
 
 # generate and save charts, send emails if needed                                                                      7
-"""
-
-
