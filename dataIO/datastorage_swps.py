@@ -2,7 +2,8 @@
 Class created to initialize source data
 regarding depression only once.
 """
-
+import sys
+import gc
 from scipy.io import loadmat
 from utils import variables
 import math
@@ -18,6 +19,8 @@ class SwpsData(object):
         self.output_ranges_x10 = dict()         # output_ranges_x10[examined_no][test_no][10x value 0 or 1]
         self.load_input()
         self.load_output()
+
+        print(f'SWPS data loaded successfully, taking {self.get_actual_size() / 1048576:.2f}MBs')
 
     def load_input(self):
         psds_mat = loadmat(self.input_data_filename)
@@ -35,5 +38,20 @@ class SwpsData(object):
         data_in = numpy.genfromtxt(self.output_data_filename + '.csv', delimiter=',', dtype=numpy.float32)
         print(len(data_in))
 
+    def get_actual_size(self):
+        """
 
-storage = SwpsData()
+        :return:
+        """
+        memory_size = 0
+        ids = set()
+        objects = [self]
+        while objects:
+            new = []
+            for obj in objects:
+                if id(obj) not in ids:
+                    ids.add(id(obj))
+                    memory_size += sys.getsizeof(obj)
+                    new.append(obj)
+            objects = gc.get_referents(*new)
+        return memory_size

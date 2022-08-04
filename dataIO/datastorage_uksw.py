@@ -12,7 +12,8 @@ import numpy
 import pandas
 import os
 import os.path
-
+import sys
+import gc
 
 class UkswData(object):
 
@@ -26,6 +27,8 @@ class UkswData(object):
         self.examined_no = self.files_no / variables.channels_for_person
         print(f'   Found {str(self.files_no)} files.')
         self.channels_stats = dict()            # proper description in method: prepare_inputdata_insights()
+
+        print(f'UKSW data loaded successfully, taking {self.get_actual_size() / 1048576:.2f}MBs')
 
     def load_channels(self):
         """
@@ -290,3 +293,23 @@ class UkswData(object):
 
     def interprete_prediction_from_number(self, minmax, prediction):
         return prediction * (minmax[1] - minmax[0]) + (minmax[0] * (minmax[1] - minmax[0]))
+
+    def get_actual_size(self):
+        """
+        sys.getsizeof(object) returns size of object with attached memory addresses,
+        but not attached objects' size in memory
+
+        :return: amount of bytes taken in memory by this class' instance
+        """
+        memory_size = 0
+        ids = set()
+        objects = [self]
+        while objects:
+            new = []
+            for obj in objects:
+                if id(obj) not in ids:
+                    ids.add(id(obj))
+                    memory_size += sys.getsizeof(obj)
+                    new.append(obj)
+            objects = gc.get_referents(*new)
+        return memory_size
