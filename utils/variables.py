@@ -64,14 +64,12 @@ random_guessing_test_network_layers = [Layer.AvgPool, Layer.MaxPool, Layer.convo
 
 single_LSTM_for_all_channels_layers = []
 
-uksw_in_raw_path = "../../uksw_in_raw/"
-swps_in_raw_path = "../../swps_in_raw/"
-net_memory_path = "../../net_memory/"
-out_raw_filepath = "../../uksw_out_raw/out_absData.xls"
-out_charts_path = "../../out_wykresy/"
-output_path = "../../output_basic/"
+uksw_in_raw_path = "data/uksw_in_raw/"
+swps_in_raw_path = "data/swps_in_raw/"
+uksw_out_raw_path = "data/uksw_out_raw/out_absData.xls"
+out_charts_path = "data/out_charts/"
 
-# I was told to drop this amount of initial data, so i'm dropping it (for each channel)
+# I was told to drop this amount of initial data, so I'm dropping it (for each channel)
 how_many_to_drop = 20000
 # By rule of thumb, I set this number as a max length for input data (networks need standardisation)
 desired_data_length = 100000

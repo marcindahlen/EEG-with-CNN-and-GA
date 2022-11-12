@@ -28,9 +28,15 @@ class UkswData(object):
         print(f'   Found {str(self.files_no)} files.')
         self.channels_stats = dict()            # proper description in method: prepare_inputdata_insights()
 
+        self.__load_channels()
+        self.__fourier_transform()
+        self.__prepare_inputdata_insights()
+        self.print_inputdata_insights()
+        self.__normalise_channel_data()
+
         print(f'UKSW data loaded successfully, taking {self.get_actual_size() / 1048576:.2f}MBs')
 
-    def load_channels(self):
+    def __load_channels(self):
         """
         The data is in form of nested dictionaries: input_examined[examined_no][channel][datapoints]
                                                     input_examined[0 → 33][1 → 10][0 → 100k++]
@@ -65,7 +71,7 @@ class UkswData(object):
         """
         pass
 
-    def fourier_transform(self):
+    def __fourier_transform(self):
         """
         Alpha waves have frequency between 8Hz and 12Hz
         → https://en.wikipedia.org/wiki/Alpha_wave
@@ -94,7 +100,7 @@ class UkswData(object):
                 self.input_examined[examined_keys][channel_keys] = numpy.real(numpy.fft.ifft(channel_vals))   # TODO trim unnecessary parts (zeros from line above)
                 # self.input_examined[examined_keys][channel_keys] = numpy.imag(channel_vals)
 
-    def normalise_channel_data(self):
+    def __normalise_channel_data(self):
         """
         Min-max feature scaling (each single channel separately)
         → https://en.wikipedia.org/wiki/Normalization_(statistics)
@@ -109,7 +115,7 @@ class UkswData(object):
                     channel_vals[i] = ((channel_vals[i] - minimum) / (maximum - minimum)).astype(dtype=numpy.float32)
                 self.input_examined[examined_keys][channel_keys] = channel_vals
 
-    def prepare_inputdata_insights(self):
+    def __prepare_inputdata_insights(self):
         """
         Method meant to give some insights about input data.
         It calculates channels averages with deviations.

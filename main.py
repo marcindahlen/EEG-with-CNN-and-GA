@@ -3,7 +3,7 @@ I assume following files hierarchy:
     root/
         data/
             out_charts/
-            reports/
+            out_networks/
             swps_in_raw/
                 .
                 .
@@ -32,17 +32,11 @@ from dataIO.datastorage_uksw import UkswData
 from dataIO.datastorage_swps import SwpsData
 
 # load input data
-input_data_uksw = UkswData()
-input_data_uksw.load_channels()
-input_data_uksw.fourier_transform()
-input_data_uksw.prepare_inputdata_insights()
-input_data_uksw.print_inputdata_insights()
-input_data_uksw.normalise_channel_data()
+# input_data_uksw = UkswData()
 
 input_data_swps = SwpsData()
 
 # load output data
-target_data = data_eeg.prepare_target_ranges()
 
 # test system by spawning networks and single pass each for test, note results for comparison                          1
 
