@@ -1,5 +1,5 @@
 """
-I assume following files hierarchy:
+I assume following files' hierarchy:
     root/
         data/
             out_charts/
